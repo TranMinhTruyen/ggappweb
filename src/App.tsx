@@ -1,26 +1,41 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useEffect, useState} from 'react';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import {useAppSelector, useAppDispatch} from "./redux/hooks";
+import {setToken, TokenState} from "./redux/slices/TokenSlice";
+import {PrimaryButton} from "@fluentui/react";
+
+const App = () => {
+	const token = useAppSelector(state => state.tokenSlice);
+	const dispatch = useAppDispatch();
+	const initToken: TokenState = {
+		token: '',
+		role: '',
+		authorities: []
+	}
+	const [tokenObject, setTokenObject] = useState(initToken);
+	
+	useEffect(() => {
+		console.log('Token object:', tokenObject);
+	}, []);
+	
+	const testSetToken = () => {
+		setTokenObject(tokenObject => ({
+			...tokenObject,
+			token: 'test token',
+			role: 'ROLE_ADMIN',
+			authorities: ['CREATED', 'DELETED']
+		}))
+		
+		dispatch(setToken(tokenObject));
+		console.log('Token object:', tokenObject);
+	}
+	
+	return (
+		<div className="App">
+			<PrimaryButton text={'Set Token'} onClick={testSetToken}/>
+		</div>
+	);
 }
 
 export default App;
