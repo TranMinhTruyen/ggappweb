@@ -13,7 +13,7 @@ const initialState: TokenState = {
 	authorities: []
 };
 
-export const TokenSlice = createSlice({
+export const tokenSlice = createSlice({
 	name: 'tokenSlice',
 	initialState,
 	reducers: {
@@ -25,8 +25,8 @@ export const TokenSlice = createSlice({
 	}
 });
 
-export const { setToken } = TokenSlice.actions;
+export const { setToken } = tokenSlice.actions;
 
 export const selectToken = ( state: RootState ) => state.tokenSlice;
 
-export default TokenSlice.reducer;
+export default tokenSlice.reducer;

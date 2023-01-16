@@ -1,5 +1,5 @@
 import {configureStore} from "@reduxjs/toolkit";
-import tokenSlice from "./slices/TokenSlice";
+import tokenSlice from "./slices/tokenSlice";
 import thunk from 'redux-thunk';
 
 export const store = configureStore({

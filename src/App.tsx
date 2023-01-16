@@ -1,13 +1,12 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import './App.css';
 
 import {useAppSelector, useAppDispatch} from "./redux/hooks";
-import {setToken, TokenState} from "./redux/slices/TokenSlice";
-import {Button} from "@mui/material";
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import {setToken, TokenState} from "./redux/slices/tokenSlice";
+import {Button, Container, Grid} from "@mui/material";
 
 const App = () => {
-	let token = useAppSelector(state => state.tokenSlice);
+	const token = useAppSelector(state => state.tokenSlice);
 	const dispatch = useAppDispatch();
 	const initToken: TokenState = {
 		token: '',
@@ -16,15 +15,10 @@ const App = () => {
 	}
 
 	useEffect(() => {
-		console.log('Token object before:', token);
-	}, []);
-
-	useEffect(() => {
-		console.log('Token object after:', token);
+		console.log('Token object:', token);
 	}, [token]);
 
 	const testSetToken = () => {
-
 		initToken.token = 'test token';
 		initToken.role = 'ROLE_ADMIN';
 		initToken.authorities = ['CREATED', 'DELETED'];
@@ -34,14 +28,11 @@ const App = () => {
 
 
 	return (
-		<BrowserRouter>
-			<Routes>
-				<Route path={"/page1"} element={<div><p>Page1</p></div>}/>
-				<Route path={"/page2"} element={<div><p>Hello Page 2</p></div>}/>
-				<Route path={"/page3"} element={<div><p>Page3</p></div>}/>
-				<Route path={"/page4"} element={<div><p>Page4</p></div>}/>
-			</Routes>
-		</BrowserRouter>
+		<div className={"App"}>
+			<Container fixed={true}>
+				<Button variant="contained" onClick={() => {testSetToken()}}>Test button</Button>
+			</Container>
+		</div>
 	);
 }
 
