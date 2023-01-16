@@ -3,38 +3,45 @@ import './App.css';
 
 import {useAppSelector, useAppDispatch} from "./redux/hooks";
 import {setToken, TokenState} from "./redux/slices/TokenSlice";
-import {PrimaryButton} from "@fluentui/react";
+import {Button} from "@mui/material";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 
 const App = () => {
-	const token = useAppSelector(state => state.tokenSlice);
+	let token = useAppSelector(state => state.tokenSlice);
 	const dispatch = useAppDispatch();
 	const initToken: TokenState = {
 		token: '',
 		role: '',
 		authorities: []
 	}
-	const [tokenObject, setTokenObject] = useState(initToken);
-	
+
 	useEffect(() => {
-		console.log('Token object:', tokenObject);
+		console.log('Token object before:', token);
 	}, []);
-	
+
+	useEffect(() => {
+		console.log('Token object after:', token);
+	}, [token]);
+
 	const testSetToken = () => {
-		setTokenObject(tokenObject => ({
-			...tokenObject,
-			token: 'test token',
-			role: 'ROLE_ADMIN',
-			authorities: ['CREATED', 'DELETED']
-		}))
-		
-		dispatch(setToken(tokenObject));
-		console.log('Token object:', tokenObject);
+
+		initToken.token = 'test token';
+		initToken.role = 'ROLE_ADMIN';
+		initToken.authorities = ['CREATED', 'DELETED'];
+
+		dispatch(setToken(initToken));
 	}
-	
+
+
 	return (
-		<div className="App">
-			<PrimaryButton text={'Set Token'} onClick={testSetToken}/>
-		</div>
+		<BrowserRouter>
+			<Routes>
+				<Route path={"/page1"} element={<div><p>Page1</p></div>}/>
+				<Route path={"/page2"} element={<div><p>Hello Page 2</p></div>}/>
+				<Route path={"/page3"} element={<div><p>Page3</p></div>}/>
+				<Route path={"/page4"} element={<div><p>Page4</p></div>}/>
+			</Routes>
+		</BrowserRouter>
 	);
 }
 

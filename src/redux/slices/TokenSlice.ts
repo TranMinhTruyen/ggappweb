@@ -18,7 +18,9 @@ export const TokenSlice = createSlice({
 	initialState,
 	reducers: {
 		setToken: (state, action: PayloadAction<TokenState>) => {
-			state = action.payload;
+			state.token = action.payload.token;
+			state.role = action.payload.role;
+			state.authorities = action.payload.authorities;
 		}
 	}
 });
