@@ -8,14 +8,16 @@ import Toolbar from '@mui/material/Toolbar';
 import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button'
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import {Container, Tab, Tabs} from "@mui/material";
-import Mail from "./Mail";
-import PhoneIcon from '@mui/icons-material/Phone';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import PersonPinIcon from '@mui/icons-material/PersonPin';
+import HomeComponent from "./components/Home/HomeComponent";
+import {AccountCircleRounded, Home} from "@mui/icons-material";
+import LoginDialog from "./components/Login/LoginDialog";
 
 const drawerWidth = 240;
 
@@ -138,7 +140,8 @@ export default function App() {
         setOpen(false);
     };
 
-    return (
+    // @ts-ignore
+	return (
         <Box sx={{display: 'flex'}}>
             <CssBaseline/>
             <AppBar position="fixed" open={open}>
@@ -153,11 +156,12 @@ export default function App() {
                             ...(open && {display: 'none'}),
                         }}
                     >
-                        <MenuIcon/>
+	                    <MenuIcon/>
                     </IconButton>
-                    <Typography variant="h6" noWrap component="div">
+                    <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
                         Mini variant drawer
                     </Typography>
+	                <Button color={"inherit"} startIcon={<AccountCircleRounded/>}>Login</Button>
                 </Toolbar>
             </AppBar>
             <Drawer variant="permanent" open={open}>
@@ -171,15 +175,15 @@ export default function App() {
 					  value={value}
 					  onChange={handleChange}
 				>
-					<Tab icon={<PhoneIcon />} iconPosition="start" label={ open ? "Item One" : ""} {...a11yProps(0)}/>
+					<Tab icon={<Home />} iconPosition="start" label={ open ? "Home" : ""} {...a11yProps(0)}/>
 					<Tab icon={<FavoriteIcon />} iconPosition="start" label={ open ? "Item Two" : ""} {...a11yProps(1)}/>
 					<Tab icon={<PersonPinIcon />} iconPosition="start" label={ open ? "Item Three" : ""} {...a11yProps(2)}/>
 				</Tabs>
             </Drawer>
 			<Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-				<DrawerHeader />
+				<DrawerHeader/>
 				<TabPanel value={value} index={0}>
-					<Mail/>
+					<HomeComponent></HomeComponent>
 				</TabPanel>
 				<TabPanel value={value} index={1}>
 					<Container>
@@ -191,6 +195,7 @@ export default function App() {
 						<Typography>Item 2</Typography>
 					</Container>
 				</TabPanel>
+				<LoginDialog openDialog={true}/>
 			</Box>
         </Box>
     );
