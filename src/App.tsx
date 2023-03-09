@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {SyntheticEvent, useState} from 'react';
+import {SyntheticEvent, useEffect, useState} from 'react';
 import {CSSObject, styled, Theme, useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -126,6 +126,7 @@ function a11yProps(index: number) {
 export default function App() {
     const theme = useTheme();
     const [open, setOpen] = useState(false);
+    const [openLoginDialog, setOpenLoginDialog] = useState(false);
 	const [value, setValue] = useState(0);
 
 	const handleChange = (event: SyntheticEvent, newValue: number) => {
@@ -140,9 +141,16 @@ export default function App() {
         setOpen(false);
     };
 
-    // @ts-ignore
+    const handleOpenLoginDialog = (isOpen: boolean) => {
+      setOpenLoginDialog(isOpen);
+    }
+
 	return (
         <Box sx={{display: 'flex'}}>
+            <LoginDialog
+                open={openLoginDialog}
+                title={"Login Modal"}
+                onClose={() => handleOpenLoginDialog(false)}/>
             <CssBaseline/>
             <AppBar position="fixed" open={open}>
                 <Toolbar>
@@ -161,7 +169,13 @@ export default function App() {
                     <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
                         Mini variant drawer
                     </Typography>
-	                <Button color={"inherit"} startIcon={<AccountCircleRounded/>}>Login</Button>
+	                <Button
+                        color={"inherit"}
+                        startIcon={<AccountCircleRounded/>}
+                        onClick={() => handleOpenLoginDialog(true)}
+                    >
+                        Login
+                    </Button>
                 </Toolbar>
             </AppBar>
             <Drawer variant="permanent" open={open}>
@@ -195,7 +209,6 @@ export default function App() {
 						<Typography>Item 2</Typography>
 					</Container>
 				</TabPanel>
-				<LoginDialog openDialog={true}/>
 			</Box>
         </Box>
     );
