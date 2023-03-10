@@ -11,40 +11,20 @@ import Draggable from 'react-draggable';
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from '@mui/icons-material/Close';
 import axios from "axios";
-import qs from "qs";
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import InputAdornment from '@mui/material/InputAdornment';
+import {LoginRequest} from "../../common/dto/request/LoginRequest";
+import {BaseResponse} from "../../common/dto/response/BaseResponse";
+import {LoginResponse} from "../../common/dto/response/LoginResponse";
+import {useDispatch} from "react-redux";
+import {setToken} from "../../redux/slices/tokenSlice";
+import LoginApi from "../../common/api/LoginApi";
 
 interface IModalProps {
 	open: boolean
 	title?: string
 	description?: string
 	onClose: (isOpen: boolean) => void
-}
-
-interface LoginRequest {
-	account: string,
-	password: string,
-	deviceInfo: {
-		deviceOperationSystem: "string",
-		deviceName: "string",
-		deviceMac: "string",
-		deviceIp: "string"
-	},
-	remember: boolean
-}
-
-interface BaseResponse {
-	timestamp: string,
-	status: number,
-	statusname: string,
-	message: string,
-	payload: LoginResponse
-}
-
-interface LoginResponse {
-	accessToken: string,
-	role: string,
-	authorities: [],
-	accountSettingsResponse: null
 }
 
 const PaperComponent: FC<PaperProps> = (props: PaperProps) => {
@@ -58,14 +38,14 @@ const PaperComponent: FC<PaperProps> = (props: PaperProps) => {
 	);
 }
 
-const ModalTitle: FC<IModalProps> = (props: IModalProps) => {
+const ModalTitle: FC<IModalProps> = ({open, title, onClose}: IModalProps) => {
 	return (
 		<DialogTitle style={{ cursor: 'move' }} id="draggable-dialog-title">
-			{props.title}
-			{props.open ? (
+			{title}
+			{open ? (
 				<IconButton
 					aria-label="close"
-					onClick={() => props.onClose(false)}
+					onClick={() => onClose(false)}
 					sx={{
 						position: 'absolute',
 						right: 8,
@@ -80,10 +60,11 @@ const ModalTitle: FC<IModalProps> = (props: IModalProps) => {
 	)
 }
 
-const LoginDialog: FC<IModalProps> = (props: IModalProps) => {
+const LoginDialog: FC<IModalProps> = ({open, title, onClose, description}: IModalProps) => {
 
 	const [username, setUsername] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
+	const dispatch = useDispatch();
 
 	const loginHandle = async () => {
 		let request: LoginRequest = {
@@ -96,54 +77,70 @@ const LoginDialog: FC<IModalProps> = (props: IModalProps) => {
 				deviceIp: "string"
 			},
 			remember: true
-		}
-		const {data, status} = await axios.post<BaseResponse>(
-			'http://localhost:8080/api/account/login',
-			request
-		);
-		if (data.status === 200) {
-			console.log(data)
-			props.onClose(false)
+		};
+
+		const response = await LoginApi.login(request);
+
+		if (response.status === 200) {
+			await dispatch(setToken(response.payload));
+			onClose(false);
 		}
 	}
 
 	return (
 		<Dialog
-			open={props.open}
-			onClose={() => props.onClose(false)}
+			open={open}
+			onClose={() => onClose(false)}
 			PaperComponent={PaperComponent}
-			aria-labelledby="draggable-dialog-title"
+			aria-labelledby={"draggable-dialog-title"}
 		>
-			<ModalTitle open={props.open} title={props.title} onClose={props.onClose}/>
+			<ModalTitle open={open} title={title} onClose={onClose}/>
 			<DialogContent>
-				<DialogContentText>{props.description}</DialogContentText>
+				<DialogContentText>{description}</DialogContentText>
 				<TextField
 					autoFocus
 					margin="dense"
-					id="name"
-					label="Username or Email"
-					type="email"
+					label="Username or email"
 					fullWidth
-					variant="standard"
+					variant="outlined"
+					placeholder="Username or email"
+					InputProps={{
+						startAdornment: (
+							<InputAdornment position="start">
+								<AccountCircle />
+							</InputAdornment>
+						),
+					}}
 					onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
 						setUsername(event.target.value);
 					}}
 				/>
 				<TextField
-					autoFocus
 					margin="dense"
 					id="name"
 					label="Password"
-					type="email"
 					fullWidth
-					variant="standard"
+					variant="outlined"
+					placeholder="Password"
+					InputProps={{
+						startAdornment: (
+							<InputAdornment position="start">
+								<AccountCircle />
+							</InputAdornment>
+						),
+						endAdornment : (
+							<InputAdornment position="end">
+								<AccountCircle />
+							</InputAdornment>
+						)
+					}}
 					onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
 						setPassword(event.target.value);
 					}}
 				/>
 			</DialogContent>
 			<DialogActions>
-				<Button variant="contained" onClick={() => props.onClose(false)}>Cancel</Button>
+				<Button variant="contained" onClick={() => onClose(false)}>Cancel</Button>
 				<Button variant="contained" onClick={() => loginHandle()}>Login</Button>
 			</DialogActions>
 		</Dialog>

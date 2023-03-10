@@ -1,11 +1,22 @@
-import React from 'react';
-import {Container} from "@mui/material";
+import React, {useEffect} from 'react';
 import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import {useAppSelector} from "../../redux/hooks";
+import {selectToken} from "../../redux/slices/tokenSlice";
 
-export default function homeComponent() {
+const HomeComponent = () => {
+	const userToken = useAppSelector(selectToken);
+
+	useEffect(() => {
+		console.log("Redux: ", userToken);
+	},[userToken]);
+
 	return (
-		<Container>
+		<Box>
 			<Typography>Home</Typography>
-		</Container>
+			<Typography>Hello world</Typography>
+		</Box>
 	)
 }
+
+export default HomeComponent;

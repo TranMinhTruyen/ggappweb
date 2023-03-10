@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {SyntheticEvent, useEffect, useState} from 'react';
+import {SyntheticEvent, useState} from 'react';
 import {CSSObject, styled, Theme, useTheme} from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
@@ -18,6 +18,9 @@ import PersonPinIcon from '@mui/icons-material/PersonPin';
 import HomeComponent from "./components/Home/HomeComponent";
 import {AccountCircleRounded, Home} from "@mui/icons-material";
 import LoginDialog from "./components/Login/LoginDialog";
+import Grid2 from "@mui/material/Unstable_Grid2";
+import Divider from '@mui/material/Divider';
+import ListTab from "./components/ListTab/ListTab";
 
 const drawerWidth = 240;
 
@@ -47,7 +50,6 @@ const DrawerHeader = styled('div')(({theme}) => ({
     alignItems: 'center',
     justifyContent: 'flex-end',
     padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
     ...theme.mixins.toolbar,
 }));
 
@@ -96,6 +98,8 @@ interface TabPanelProps {
 	value: number;
 }
 
+
+
 function TabPanel(props: TabPanelProps) {
 	const { children, value, index, ...other } = props;
 
@@ -108,24 +112,16 @@ function TabPanel(props: TabPanelProps) {
 			{...other}
 		>
 			{value === index && (
-				<Box sx={{ p: 3 }}>
-					<Typography>{children}</Typography>
-				</Box>
+				<Container sx={{ p: 3 }}>{children}</Container>
 			)}
 		</div>
 	);
 }
 
-function a11yProps(index: number) {
-	return {
-		id: `vertical-tab-${index}`,
-		'aria-controls': `vertical-tabpanel-${index}`,
-	};
-}
 
 export default function App() {
     const theme = useTheme();
-    const [open, setOpen] = useState(false);
+    const [openDrawer, setOpenDrawer] = useState(true);
     const [openLoginDialog, setOpenLoginDialog] = useState(false);
 	const [value, setValue] = useState(0);
 
@@ -134,11 +130,11 @@ export default function App() {
 	};
 
     const handleDrawerOpen = () => {
-        setOpen(true);
+        setOpenDrawer(true);
     };
 
     const handleDrawerClose = () => {
-        setOpen(false);
+        setOpenDrawer(false);
     };
 
     const handleOpenLoginDialog = (isOpen: boolean) => {
@@ -152,7 +148,7 @@ export default function App() {
                 title={"Login Modal"}
                 onClose={() => handleOpenLoginDialog(false)}/>
             <CssBaseline/>
-            <AppBar position="fixed" open={open}>
+            <AppBar position="fixed" open={openDrawer}>
                 <Toolbar>
                     <IconButton
                         color="inherit"
@@ -161,12 +157,12 @@ export default function App() {
                         edge="start"
                         sx={{
                             marginRight: 5,
-                            ...(open && {display: 'none'}),
+                            ...(openDrawer && {display: 'none'}),
                         }}
                     >
 	                    <MenuIcon/>
                     </IconButton>
-                    <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+                    <Typography variant="h6" noWrap component="span" sx={{ flexGrow: 1 }}>
                         Mini variant drawer
                     </Typography>
 	                <Button
@@ -178,38 +174,27 @@ export default function App() {
                     </Button>
                 </Toolbar>
             </AppBar>
-            <Drawer variant="permanent" open={open}>
+            <Drawer variant="permanent" open={openDrawer}>
                 <DrawerHeader>
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
                     </IconButton>
                 </DrawerHeader>
-				<Tabs orientation="vertical"
-					  variant="scrollable"
-					  value={value}
-					  onChange={handleChange}
-				>
-					<Tab icon={<Home />} iconPosition="start" label={ open ? "Home" : ""} {...a11yProps(0)}/>
-					<Tab icon={<FavoriteIcon />} iconPosition="start" label={ open ? "Item Two" : ""} {...a11yProps(1)}/>
-					<Tab icon={<PersonPinIcon />} iconPosition="start" label={ open ? "Item Three" : ""} {...a11yProps(2)}/>
-				</Tabs>
+                <Divider/>
+				<ListTab value={value} onChange={handleChange} isDrawerOpen={openDrawer}></ListTab>
             </Drawer>
-			<Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+			<Grid2 component="main" sx={{ flexGrow: 1, p: 3 }}>
 				<DrawerHeader/>
 				<TabPanel value={value} index={0}>
 					<HomeComponent></HomeComponent>
 				</TabPanel>
 				<TabPanel value={value} index={1}>
-					<Container>
-						<Typography>Item 1</Typography>
-					</Container>
+                    <Typography component="span">Item 1</Typography>
 				</TabPanel>
 				<TabPanel value={value} index={2}>
-					<Container>
-						<Typography>Item 2</Typography>
-					</Container>
+                    <Typography component="span">Item 2</Typography>
 				</TabPanel>
-			</Box>
+			</Grid2>
         </Box>
     );
 }
