@@ -12,6 +12,6 @@ code {
     monospace;
 }
 
-.MuiButtonBase-root.MuiTab-root {
-  min-width: 0;
+.MuiContainer-root {
+  margin-top: 80px;
 }
