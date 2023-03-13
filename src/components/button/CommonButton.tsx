@@ -3,20 +3,23 @@ import {OverridableStringUnion} from "@mui/types";
 import {ButtonPropsSizeOverrides, ButtonPropsVariantOverrides} from "@mui/material/Button/Button";
 import Button from "@mui/material/Button";
 import {styled} from "@mui/material/styles";
+import {CircularProgress} from "@mui/material";
 
 
 interface ICustomButtonProps {
-	label: string
-	width?: number
+	label: string;
+	height?: number;
+	width?: number;
 	disabled?: boolean;
 	endIcon?: React.ReactNode;
-	onClick: () => void
+	loading?: boolean;
+	onClick: () => void;
 	size?: OverridableStringUnion<'small' | 'medium' | 'large', ButtonPropsSizeOverrides>;
 	startIcon?: React.ReactNode;
 	variant?: OverridableStringUnion<'text' | 'outlined' | 'contained', ButtonPropsVariantOverrides>;
 }
 
-const BootstrapButton = styled(Button)({
+const CustomButton = styled(Button)({
 	boxShadow: '#a8a8a8',
 	textTransform: 'none',
 	fontSize: 16,
@@ -48,20 +51,36 @@ const BootstrapButton = styled(Button)({
 	}
 });
 
-const CommonButton = ({ label, onClick, disabled, size = 'medium', width = 100, variant = 'contained', startIcon, endIcon }: ICustomButtonProps) => {
+const CommonButton = (props: ICustomButtonProps) => {
+
+	const {
+		label,
+		onClick,
+		disabled,
+		loading,
+		size = 'medium',
+		width = 100,
+		height,
+		variant = 'contained',
+		startIcon,
+		endIcon
+	} = props;
+
 	return (
-		<BootstrapButton
+		<CustomButton
 			disabled={disabled}
 			onClick={onClick}
 			size={size}
 			variant={variant}
 			startIcon={startIcon}
 			endIcon={endIcon}
-			style={{ width: width }}
+			style={{ width: width, height: height }}
 			disableRipple
 		>
-			{label}
-		</BootstrapButton>
+			{
+				loading ? <CircularProgress /> : label
+			}
+		</CustomButton>
 	)
 }
 export default CommonButton;

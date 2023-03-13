@@ -3,7 +3,7 @@ import {CSSObject, styled, Theme, useTheme} from "@mui/material/styles";
 import MuiDrawer from "@mui/material/Drawer";
 import {AppBarProps as MuiAppBarProps} from "@mui/material/AppBar/AppBar";
 import MuiAppBar from "@mui/material/AppBar";
-import LoginModal from "../../screens/Login/LoginModal";
+import LoginModal from "../../screens/login/LoginModal";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Toolbar from "@mui/material/Toolbar";
@@ -93,21 +93,21 @@ const Drawer = () => {
 	const theme = useTheme();
 	const [openDrawer, setOpenDrawer] = useState(true);
 	const [openLoginDialog, setOpenLoginDialog] = useState(false);
-	
+
 	const navigate = useNavigate();
-	
+
 	const handleDrawerOpen = () => {
 		setOpenDrawer(true);
 	};
-	
+
 	const handleDrawerClose = () => {
 		setOpenDrawer(false);
 	};
-	
+
 	const handleOpenLoginDialog = (isOpen: boolean) => {
 		setOpenLoginDialog(isOpen);
 	}
-	
+
 	return (
 		<Box sx={{ display: 'flex' }}>
 			<LoginModal

@@ -4,7 +4,7 @@ import HomeComponent from "../../screens/HomeComponent";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import Farvorite from "../../screens/Farvorite";
-import DashBoardComponent from "../../screens/DashBoard/DashBoardComponent";
+import DashBoardComponent from "../../screens/dashboard/DashBoardComponent";
 
 export interface ComponentTabItem {
     componentKey: number;
