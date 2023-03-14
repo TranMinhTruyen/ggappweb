@@ -3,8 +3,14 @@ import {Home} from "@mui/icons-material";
 import HomeComponent from "../../screens/HomeComponent";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import Farvorite from "../../screens/Farvorite";
+import ApiIcon from '@mui/icons-material/Api';
+import BarChartIcon from '@mui/icons-material/BarChart';
+import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
+import FavoriteComponent from "../../screens/FavoriteComponent";
 import DashBoardComponent from "../../screens/dashboard/DashBoardComponent";
+import ChartComponent from "../../screens/ChartComponent";
+import ApiComponent from "../../screens/ApiComponent";
+import LogChangeComponent from "../../screens/LogChangeComponent";
 
 export interface ComponentTabItem {
     componentKey: number;
@@ -13,6 +19,7 @@ export interface ComponentTabItem {
     componentLabel: string;
     componentPath: string;
     componentRole: Array<string> | null;
+    componentChild: Array<ComponentTabItem> | null;
 }
 
 const ComponentRouters: Array<ComponentTabItem> = [
@@ -22,7 +29,8 @@ const ComponentRouters: Array<ComponentTabItem> = [
         componentNode: <HomeComponent/>,
         componentLabel: "Home",
         componentPath: "/",
-        componentRole: null
+        componentRole: null,
+        componentChild: null
     },
     {
         componentKey: 1,
@@ -30,15 +38,45 @@ const ComponentRouters: Array<ComponentTabItem> = [
         componentNode: <DashBoardComponent/>,
         componentLabel: "DashBoard",
         componentPath: "/dashboard",
-        componentRole: ["ROLE_ADMIN", "ROLE_EMP"]
+        componentRole: ["ROLE_ADMIN", "ROLE_EMP"],
+        componentChild: [
+            {
+                componentKey: 1.1,
+                componentIcon: <ApiIcon/>,
+                componentNode: <ApiComponent/>,
+                componentLabel: "App API",
+                componentPath: "/dashboard/api",
+                componentRole: ["ROLE_ADMIN", "ROLE_EMP"],
+                componentChild: null
+            },
+            {
+                componentKey: 1.2,
+                componentIcon: <BarChartIcon/>,
+                componentNode: <ChartComponent/>,
+                componentLabel: "Chart",
+                componentPath: "/dashboard/chart",
+                componentRole: ["ROLE_ADMIN", "ROLE_EMP"],
+                componentChild: null
+            },
+            {
+                componentKey: 1.3,
+                componentIcon: <ChangeCircleIcon/>,
+                componentNode: <LogChangeComponent/>,
+                componentLabel: "Change",
+                componentPath: "/dashboard/log",
+                componentRole: ["ROLE_ADMIN", "ROLE_EMP"],
+                componentChild: null
+            }
+        ]
     },
     {
         componentKey: 2,
         componentIcon: <FavoriteIcon />,
-        componentNode: <Farvorite/>,
+        componentNode: <FavoriteComponent/>,
         componentLabel: "Favorite",
         componentPath: "/favorite",
-        componentRole: null
+        componentRole: null,
+        componentChild: null
     },
 ];
 

@@ -1,5 +1,4 @@
 import React from "react";
-import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Dialog from "@mui/material/Dialog";
@@ -14,20 +13,22 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Grid2 from "@mui/material/Unstable_Grid2";
 
 interface ICommonModalProps {
-	open: boolean
-	back?: boolean
-	size?: Breakpoint
-	description?: string
-	onClose: (isOpen: boolean) => void
-	dialogContent: React.ReactNode
-	dialogAction: React.ReactNode
+	open: boolean;
+	back?: boolean;
+	size?: Breakpoint;
+	description?: string;
+	onClose: (isOpen: boolean) => void;
+	onBack?: () => void;
+	dialogContent: React.ReactNode;
+	dialogAction: React.ReactNode;
 }
 
 interface IModalTitleProps {
-	open: boolean
-	back?: boolean
-	description?: string
-	onClose: (isOpen: boolean) => void
+	open: boolean;
+	back?: boolean;
+	description?: string;
+	onClose: (isOpen: boolean) => void;
+	onBack?: () => void;
 }
 
 const PaperComponent = (props: PaperProps) => {
@@ -74,7 +75,7 @@ const ModalTitle = ({ open, back = false, onClose }: IModalTitleProps) => {
 	)
 }
 
-const CommonModal = ({ open, back, onClose, size = 'xs', description, dialogContent, dialogAction }: ICommonModalProps) => {
+const CommonModal = ({ open, back, onClose, onBack, size = 'xs', description, dialogContent, dialogAction }: ICommonModalProps) => {
 
 	const theme = useTheme();
 	const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -88,7 +89,7 @@ const CommonModal = ({ open, back, onClose, size = 'xs', description, dialogCont
 			maxWidth={size}
 			fullScreen={fullScreen}
 		>
-			<ModalTitle open={open} back={back} onClose={onClose} />
+			<ModalTitle open={open} back={back} onClose={onClose} onBack={onBack} />
 			<Divider/>
 			<DialogContent>
 				<DialogContentText>{description}</DialogContentText>

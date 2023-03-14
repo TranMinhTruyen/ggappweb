@@ -8,6 +8,10 @@ const RouterList = () => {
 	return (
 		<Routes>
 			{componentRouter.map(item => (
+				item.componentChild ?
+					item.componentChild.map(child => (
+						<Route key={child.componentKey} path={child.componentPath} element={child.componentNode} />
+					)) :
 				<Route key={item.componentKey} path={item.componentPath} element={item.componentNode} />
 			))}
 		</Routes>

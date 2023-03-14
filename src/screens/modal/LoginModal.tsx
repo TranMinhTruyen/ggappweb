@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import TextField from '@mui/material/TextField';
 import IconButton from "@mui/material/IconButton";
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -15,7 +14,7 @@ import CommonModal from "../../components/modal/CommonModal";
 import Grid2 from "@mui/material/Unstable_Grid2";
 import CommonButton from "../../components/button/CommonButton";
 import CommonTextInput from "../../components/CommonTextInput";
-import {Avatar, Checkbox, FormControlLabel} from "@mui/material";
+import {Avatar, Checkbox, FormControlLabel, Link} from "@mui/material";
 import Typography from "@mui/material/Typography";
 
 interface ILoginModalActionProps {
@@ -26,16 +25,19 @@ interface ILoginModalActionProps {
 }
 
 interface ILoginModalProps {
-	open: boolean
-	title: string
-	onClose: (isOpen: boolean) => void
+	open: boolean;
+	title: string;
+	onClose: (isOpen: boolean) => void;
+	openRegister: (isOpen: boolean) => void;
 }
 
 interface ILoginModalContentProps {
-	open: boolean
-	setUsername: (username: string) => void
-	setPassword: (password: string) => void
-	setRememberChecked: (checked: boolean) => void
+	open: boolean;
+	onClose: (isOpen: boolean) => void;
+	setUsername: (username: string) => void;
+	setPassword: (password: string) => void;
+	openRegister: (isOpen: boolean) => void;
+	setRememberChecked: (checked: boolean) => void;
 }
 
 const LoginModalAction = ({ username, password, remember, onClose }: ILoginModalActionProps) => {
@@ -77,7 +79,7 @@ const LoginModalAction = ({ username, password, remember, onClose }: ILoginModal
 	)
 }
 
-const LoginModalContent = ({ open, setUsername, setPassword, setRememberChecked }: ILoginModalContentProps) => {
+const LoginModalContent = ({ open, onClose, setUsername, setPassword, openRegister, setRememberChecked }: ILoginModalContentProps) => {
 
 	const [showPassword, setShowPassword] = useState<boolean>(false);
 
@@ -144,31 +146,37 @@ const LoginModalContent = ({ open, setUsername, setPassword, setRememberChecked 
 						(event: React.ChangeEvent<HTMLInputElement>) => setRememberChecked(event.target.checked)}
 					/>} label="Remember me" />
 			</Grid2>
+			<Grid2 container justifyContent="center" xs={12}>
+				<Typography>If you don't have account: <Link onClick={() => openRegister(true)}>Register</Link></Typography>
+			</Grid2>
 		</Grid2>
 	)
 }
 
-const LoginModal = ({ open, onClose }: ILoginModalProps) => {
+const LoginModal = ({ open, onClose, openRegister }: ILoginModalProps) => {
 
 	const [username, setUsername] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 	const [rememberChecked, setRememberChecked] = React.useState<boolean>(false);
 
 	return (
-		<CommonModal
-			open={open}
-			back={true}
-			onClose={onClose}
-			size={'sm'}
-			dialogContent={
-			<LoginModalContent
+		<Box>
+			<CommonModal
 				open={open}
-				setUsername={(value) => setUsername(value)}
-				setPassword={(value) => setPassword(value)}
-				setRememberChecked={(value) => setRememberChecked(value)}
-			/>}
-			dialogAction={<LoginModalAction username={username} password={password} remember={rememberChecked} onClose={onClose} />}
-		/>
+				onClose={onClose}
+				size={'sm'}
+				dialogContent={
+					<LoginModalContent
+						open={open}
+						onClose={onClose}
+						openRegister={(value) => openRegister(value)}
+						setUsername={(value) => setUsername(value)}
+						setPassword={(value) => setPassword(value)}
+						setRememberChecked={(value) => setRememberChecked(value)}
+					/>}
+				dialogAction={<LoginModalAction username={username} password={password} remember={rememberChecked} onClose={onClose} />}
+			/>
+		</Box>
 	)
 }
 

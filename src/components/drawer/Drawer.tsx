@@ -3,7 +3,7 @@ import {CSSObject, styled, Theme, useTheme} from "@mui/material/styles";
 import MuiDrawer from "@mui/material/Drawer";
 import {AppBarProps as MuiAppBarProps} from "@mui/material/AppBar/AppBar";
 import MuiAppBar from "@mui/material/AppBar";
-import LoginModal from "../../screens/login/LoginModal";
+import LoginModal from "../../screens/modal/LoginModal";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Toolbar from "@mui/material/Toolbar";
@@ -16,8 +16,11 @@ import Divider from "@mui/material/Divider";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import {useNavigate} from "react-router-dom";
-import Menu from "./Menu";
+import DrawerMenu from "./DrawerMenu";
 import RouterList from "./RouterList";
+import {useAppSelector} from "../../redux/hooks";
+import {selectToken} from "../../redux/slices/tokenSlice";
+import RegisterModal from "../../screens/modal/RegisterModal";
 
 const drawerWidth = 240;
 
@@ -36,9 +39,9 @@ const closedMixin = (theme: Theme): CSSObject => ({
 		duration: theme.transitions.duration.leavingScreen,
 	}),
 	overflowX: 'hidden',
-	width: `calc(${theme.spacing(7)} + 1px)`,
+	width: `calc(${theme.spacing(7)} + 6px)`,
 	[theme.breakpoints.up('sm')]: {
-		width: `calc(${theme.spacing(8)} + 1px)`,
+		width: `calc(${theme.spacing(8)} + 6px)`,
 	},
 });
 
@@ -85,7 +88,7 @@ const CustomDrawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'o
 		...(!open && {
 			...closedMixin(theme),
 			'& .MuiDrawer-paper': closedMixin(theme),
-		}),
+		})
 	}),
 );
 
@@ -93,6 +96,9 @@ const Drawer = () => {
 	const theme = useTheme();
 	const [openDrawer, setOpenDrawer] = useState(true);
 	const [openLoginDialog, setOpenLoginDialog] = useState(false);
+	const [openRegisterDialog, setOpenRegisterDialog] = useState(false);
+
+	const userToken = useAppSelector(selectToken);
 
 	const navigate = useNavigate();
 
@@ -108,14 +114,28 @@ const Drawer = () => {
 		setOpenLoginDialog(isOpen);
 	}
 
+	const handleOpenRegisterDialog = (isOpen: boolean) => {
+		setOpenLoginDialog(!openLoginDialog);
+		setOpenRegisterDialog(isOpen);
+	}
+
 	return (
 		<Box sx={{ display: 'flex' }}>
 			<LoginModal
 				open={openLoginDialog}
+				openRegister={(value) => handleOpenRegisterDialog(value)}
 				title={"Login Modal"}
-				onClose={() => handleOpenLoginDialog(false)}/>
+				onClose={(value) => handleOpenLoginDialog(value)}
+			/>
+			<RegisterModal
+				open={openRegisterDialog}
+				back={true}
+				title={"Register Modal"}
+				onClose={(value) => {handleOpenLoginDialog(true); handleOpenRegisterDialog(value)}}
+				onBack={() => {handleOpenLoginDialog(true); handleOpenRegisterDialog(false)}}
+			/>
 			<CssBaseline/>
-			<AppBar position="fixed" open={openDrawer}>
+			<AppBar position="fixed" open={openDrawer} style={userToken.role === "ROLE_ADMIN" || userToken.role === "ROLE_EMP" ? {} : {backgroundColor: "#ff0000"}}>
 				<Toolbar>
 					<IconButton
 						color="inherit"
@@ -148,7 +168,16 @@ const Drawer = () => {
 					</IconButton>
 				</DrawerHeader>
 				<Divider/>
-				<Menu isDrawerOpen={openDrawer} />
+				<DrawerMenu
+					isDrawerOpen={openDrawer}
+					handleOpenDrawer={(value) =>
+						{
+							if (value) {
+								handleDrawerOpen()
+							}
+						}
+					}
+				/>
 			</CustomDrawer>
 			<RouterList/>
 		</Box>
