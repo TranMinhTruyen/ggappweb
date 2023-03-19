@@ -10,9 +10,9 @@ import {useDispatch} from "react-redux";
 import {setToken} from "../../redux/slices/tokenSlice";
 import LoginApi from "../../common/api/LoginApi";
 import Box from "@mui/material/Box";
-import CommonModal from "../../components/modal/CommonModal";
+import CommonModal from "../../components/CommonModal";
 import Grid2 from "@mui/material/Unstable_Grid2";
-import CommonButton from "../../components/button/CommonButton";
+import CommonButton from "../../components/CommonButton";
 import CommonTextInput from "../../components/CommonTextInput";
 import {Avatar, Checkbox, FormControlLabel, Link} from "@mui/material";
 import Typography from "@mui/material/Typography";
@@ -99,6 +99,7 @@ const LoginModalContent = ({ open, onClose, setUsername, setPassword, openRegist
 			</Grid2>
 			<Grid2 xs={12}>
 				<CommonTextInput
+					isRequire={true}
 					autoFocus
 					placeholder="Username or email"
 					InputProps={{
@@ -108,13 +109,14 @@ const LoginModalContent = ({ open, onClose, setUsername, setPassword, openRegist
 							</InputAdornment>
 						),
 					}}
-					onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-						setUsername(event.target.value);
+					onChange={(value) => {
+						setUsername(value);
 					}}
 				/>
 			</Grid2>
 			<Grid2 xs={12}>
 				<CommonTextInput
+					isRequire={true}
 					placeholder="Password"
 					type={showPassword ? 'text' : 'password'}
 					InputProps={{
@@ -135,8 +137,8 @@ const LoginModalContent = ({ open, onClose, setUsername, setPassword, openRegist
 							</InputAdornment>
 						)
 					}}
-					onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-						setPassword(event.target.value);
+					onChange={(value) => {
+						setPassword(value);
 					}}
 				/>
 			</Grid2>

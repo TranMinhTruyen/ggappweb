@@ -140,7 +140,7 @@ const Drawer = () => {
 					<IconButton
 						color="inherit"
 						aria-label="open drawer"
-						onClick={handleDrawerOpen}
+						onClick={() => handleDrawerOpen()}
 						edge="start"
 						sx={{
 							marginRight: 5,
@@ -163,7 +163,7 @@ const Drawer = () => {
 			</AppBar>
 			<CustomDrawer variant="permanent" open={openDrawer}>
 				<DrawerHeader>
-					<IconButton onClick={handleDrawerClose}>
+					<IconButton onClick={() => handleDrawerClose()}>
 						{theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
 					</IconButton>
 				</DrawerHeader>

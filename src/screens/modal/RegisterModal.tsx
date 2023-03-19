@@ -1,4 +1,4 @@
-import CommonModal from "../../components/modal/CommonModal";
+import CommonModal from "../../components/CommonModal";
 import React from "react";
 import Typography from "@mui/material/Typography";
 
