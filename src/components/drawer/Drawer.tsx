@@ -125,13 +125,13 @@ const Drawer = () => {
 				open={openLoginDialog}
 				openRegister={(value) => handleOpenRegisterDialog(value)}
 				title={"Login Modal"}
-				onClose={(value) => handleOpenLoginDialog(value)}
+				onClose={() => handleOpenLoginDialog(false)}
 			/>
 			<RegisterModal
 				open={openRegisterDialog}
 				back={true}
 				title={"Register Modal"}
-				onClose={(value) => {handleOpenLoginDialog(true); handleOpenRegisterDialog(value)}}
+				onClose={() => {handleOpenLoginDialog(true); handleOpenRegisterDialog(false)}}
 				onBack={() => {handleOpenLoginDialog(true); handleOpenRegisterDialog(false)}}
 			/>
 			<CssBaseline/>

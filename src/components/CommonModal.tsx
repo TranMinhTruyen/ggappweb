@@ -12,7 +12,7 @@ import Divider from "@mui/material/Divider";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Grid2 from "@mui/material/Unstable_Grid2";
 
-interface ICommonModalProps {
+interface CommonModalProps {
 	open: boolean;
 	back?: boolean;
 	size?: Breakpoint;
@@ -23,7 +23,7 @@ interface ICommonModalProps {
 	dialogAction: React.ReactNode;
 }
 
-interface IModalTitleProps {
+interface ModalTitleProps {
 	open: boolean;
 	back?: boolean;
 	description?: string;
@@ -42,7 +42,7 @@ const PaperComponent = (props: PaperProps) => {
 	);
 }
 
-const ModalTitle = ({ open, back = false, onClose }: IModalTitleProps) => {
+const ModalTitle = ({ open, back = false, onClose }: ModalTitleProps) => {
 	return (
 		<Grid2 container direction={"row"} style={{ cursor: 'move' }} id="draggable-dialog-title">
 			<Grid2 xs={6} container justifyContent={"flex-start"}>
@@ -75,7 +75,7 @@ const ModalTitle = ({ open, back = false, onClose }: IModalTitleProps) => {
 	)
 }
 
-const CommonModal = ({ open, back, onClose, onBack, size = 'xs', description, dialogContent, dialogAction }: ICommonModalProps) => {
+const CommonModal = ({ open, back, onClose, onBack, size = 'xs', description, dialogContent, dialogAction }: CommonModalProps) => {
 
 	const theme = useTheme();
 	const fullScreen = useMediaQuery(theme.breakpoints.down('md'));

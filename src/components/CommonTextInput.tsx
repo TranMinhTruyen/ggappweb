@@ -40,7 +40,7 @@ const CustomTextFieldInvalid = styled(TextField)({
 	},
 });
 
-interface CommonTextInputProps {
+type CommonTextInputProps = {
 	autoComplete?: string;
 	isRequire?: boolean;
 	helpText?: string;

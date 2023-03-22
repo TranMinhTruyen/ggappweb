@@ -1,3 +1,12 @@
+
+type CommonFormControlProps = {
+
+}
+
+const CommonFormControl = () => {
+
+}
+export default CommonFormControl;
 import Box from "@mui/material/Box";
 import CommonTextInput from "./CommonTextInput";
 import {OverridableStringUnion} from "@mui/types";

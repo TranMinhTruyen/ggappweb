@@ -5,8 +5,7 @@ import Button from "@mui/material/Button";
 import {styled} from "@mui/material/styles";
 import {CircularProgress} from "@mui/material";
 
-
-interface ICustomButtonProps {
+type CustomButtonProps = {
 	label: string;
 	height?: number;
 	width?: number;
@@ -51,7 +50,7 @@ const CustomButton = styled(Button)({
 	}
 });
 
-const CommonButton = (props: ICustomButtonProps) => {
+const CommonButton = (props: CustomButtonProps) => {
 
 	const {
 		label,

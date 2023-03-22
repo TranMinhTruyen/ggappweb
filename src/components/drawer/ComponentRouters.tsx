@@ -7,7 +7,7 @@ import ApiIcon from '@mui/icons-material/Api';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
 import FavoriteComponent from "../../screens/FavoriteComponent";
-import DashBoardComponent from "../../screens/dashboard/DashBoardComponent";
+import DashBoardComponent from "../../screens/DashBoardComponent";
 import ChartComponent from "../../screens/ChartComponent";
 import ApiComponent from "../../screens/ApiComponent";
 import LogChangeComponent from "../../screens/LogChangeComponent";

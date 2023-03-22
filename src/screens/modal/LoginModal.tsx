@@ -17,21 +17,21 @@ import CommonTextInput from "../../components/CommonTextInput";
 import {Avatar, Checkbox, FormControlLabel, Link} from "@mui/material";
 import Typography from "@mui/material/Typography";
 
-interface ILoginModalActionProps {
+type LoginModalActionProps = {
 	username: string;
 	password: string;
 	remember: boolean;
 	onClose: (isOpen: boolean) => void;
 }
 
-interface ILoginModalProps {
+type LoginModalProps = {
 	open: boolean;
 	title: string;
-	onClose: (isOpen: boolean) => void;
+	onClose: () => void;
 	openRegister: (isOpen: boolean) => void;
 }
 
-interface ILoginModalContentProps {
+type LoginModalContentProps = {
 	open: boolean;
 	onClose: (isOpen: boolean) => void;
 	setUsername: (username: string) => void;
@@ -40,7 +40,7 @@ interface ILoginModalContentProps {
 	setRememberChecked: (checked: boolean) => void;
 }
 
-const LoginModalAction = ({ username, password, remember, onClose }: ILoginModalActionProps) => {
+const LoginModalAction = ({ username, password, remember, onClose }: LoginModalActionProps) => {
 
 	const dispatch = useDispatch();
 
@@ -79,7 +79,7 @@ const LoginModalAction = ({ username, password, remember, onClose }: ILoginModal
 	)
 }
 
-const LoginModalContent = ({ open, onClose, setUsername, setPassword, openRegister, setRememberChecked }: ILoginModalContentProps) => {
+const LoginModalContent = ({ open, onClose, setUsername, setPassword, openRegister, setRememberChecked }: LoginModalContentProps) => {
 
 	const [showPassword, setShowPassword] = useState<boolean>(false);
 
@@ -155,7 +155,7 @@ const LoginModalContent = ({ open, onClose, setUsername, setPassword, openRegist
 	)
 }
 
-const LoginModal = ({ open, onClose, openRegister }: ILoginModalProps) => {
+const LoginModal = ({ open, onClose, openRegister }: LoginModalProps) => {
 
 	const [username, setUsername] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
