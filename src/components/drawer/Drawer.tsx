@@ -125,7 +125,7 @@ const Drawer = () => {
 				open={openLoginDialog}
 				openRegister={(value) => handleOpenRegisterDialog(value)}
 				title={"Login Modal"}
-				onClose={() => handleOpenLoginDialog(false)}
+				onClose={(value) => handleOpenLoginDialog(value)}
 			/>
 			<RegisterModal
 				open={openRegisterDialog}

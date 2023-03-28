@@ -56,10 +56,10 @@ const CommonButton = (props: CustomButtonProps) => {
 		label,
 		onClick,
 		disabled,
-		loading,
+		loading = false,
 		size = 'medium',
 		width = 100,
-		height,
+		height = 40,
 		variant = 'contained',
 		startIcon,
 		endIcon
@@ -73,11 +73,18 @@ const CommonButton = (props: CustomButtonProps) => {
 			variant={variant}
 			startIcon={startIcon}
 			endIcon={endIcon}
-			style={{ width: width, height: height }}
+			sx={{ width: width, height: height }}
 			disableRipple
 		>
 			{
-				loading ? <CircularProgress /> : label
+				loading ?
+				<CircularProgress
+					variant="indeterminate"
+					disableShrink
+					size={20}
+					sx={{ color: '#ffffff' }}
+				/>
+				: label
 			}
 		</CustomButton>
 	)

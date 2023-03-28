@@ -14,56 +14,43 @@ import CommonModal from "../../components/CommonModal";
 import Grid2 from "@mui/material/Unstable_Grid2";
 import CommonButton from "../../components/CommonButton";
 import CommonTextInput from "../../components/CommonTextInput";
-import {Avatar, Checkbox, FormControlLabel, Link} from "@mui/material";
+import {Alert, Avatar, Checkbox, FormControlLabel, Link} from "@mui/material";
 import Typography from "@mui/material/Typography";
+
+type AlertProps = {
+	showAlert: boolean;
+	message: string;
+}
 
 type LoginModalActionProps = {
 	username: string;
 	password: string;
 	remember: boolean;
+	showAlert?: (showAlert: boolean) => void;
+	onSummit: () => void;
 	onClose: (isOpen: boolean) => void;
 }
 
 type LoginModalProps = {
 	open: boolean;
 	title: string;
-	onClose: () => void;
+	onClose: (value: boolean) => void;
 	openRegister: (isOpen: boolean) => void;
 }
 
 type LoginModalContentProps = {
 	open: boolean;
-	onClose: (isOpen: boolean) => void;
+	isValid: boolean;
+	showAlert?: AlertProps;
 	setUsername: (username: string) => void;
 	setPassword: (password: string) => void;
 	openRegister: (isOpen: boolean) => void;
 	setRememberChecked: (checked: boolean) => void;
 }
 
-const LoginModalAction = ({ username, password, remember, onClose }: LoginModalActionProps) => {
+const LoginModalAction = (props: LoginModalActionProps) => {
 
-	const dispatch = useDispatch();
-
-	const loginHandle = async () => {
-		let request: LoginRequest = {
-			account: username,
-			password: password,
-			deviceInfo: {
-				deviceOperationSystem: "string",
-				deviceName: "string",
-				deviceMac: "string",
-				deviceIp: "string"
-			},
-			remember: remember
-		};
-
-		const response = await LoginApi.login(request);
-
-		if (response.status === 200) {
-			await dispatch(setToken(response.payload));
-			onClose(false);
-		}
-	}
+	const { onSummit, onClose } = props;
 
 	return (
 		<Box>
@@ -72,15 +59,17 @@ const LoginModalAction = ({ username, password, remember, onClose }: LoginModalA
 					<CommonButton variant="contained" onClick={() => onClose(false)} label={"Cancel"} />
 				</Grid2>
 				<Grid2>
-					<CommonButton variant="contained" onClick={() => loginHandle()} label={"Login"} />
+					<CommonButton variant="contained" onClick={() => onSummit()} label={"Login"} />
 				</Grid2>
 			</Grid2>
 		</Box>
 	)
 }
 
-const LoginModalContent = ({ open, onClose, setUsername, setPassword, openRegister, setRememberChecked }: LoginModalContentProps) => {
+const LoginModalContent = (props: LoginModalContentProps) => {
 
+	const { open, isValid, showAlert, setUsername, setPassword, openRegister, setRememberChecked } = props;
+	
 	const [showPassword, setShowPassword] = useState<boolean>(false);
 
 	const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -91,6 +80,12 @@ const LoginModalContent = ({ open, onClose, setUsername, setPassword, openRegist
 
 	return (
 		<Grid2 container spacing={2}>
+			<Grid2 xs={12} sx={{ marginBottom: 2 }}>
+				{
+					showAlert?.showAlert ? <Alert variant="filled" severity="error">{showAlert.message}</Alert>
+						: null
+				}
+			</Grid2>
 			<Grid2 container justifyContent="center" xs={12}>
 				<Avatar sx={{ width: 150, height: 150 }} />
 			</Grid2>
@@ -99,9 +94,11 @@ const LoginModalContent = ({ open, onClose, setUsername, setPassword, openRegist
 			</Grid2>
 			<Grid2 xs={12}>
 				<CommonTextInput
+					isValid={isValid}
 					isRequire={true}
 					autoFocus
-					placeholder="Username or email"
+					placeholder={"Username or email"}
+					helpText={"This is require!"}
 					InputProps={{
 						startAdornment: (
 							<InputAdornment position="start">
@@ -116,8 +113,10 @@ const LoginModalContent = ({ open, onClose, setUsername, setPassword, openRegist
 			</Grid2>
 			<Grid2 xs={12}>
 				<CommonTextInput
+					isValid={isValid}
 					isRequire={true}
 					placeholder="Password"
+					helpText={"This is require!"}
 					type={showPassword ? 'text' : 'password'}
 					InputProps={{
 						startAdornment: (
@@ -151,15 +150,51 @@ const LoginModalContent = ({ open, onClose, setUsername, setPassword, openRegist
 			<Grid2 container justifyContent="center" xs={12}>
 				<Typography>If you don't have account: <Link onClick={() => openRegister(true)}>Register</Link></Typography>
 			</Grid2>
+		
 		</Grid2>
 	)
 }
 
 const LoginModal = ({ open, onClose, openRegister }: LoginModalProps) => {
-
+	
 	const [username, setUsername] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
-	const [rememberChecked, setRememberChecked] = React.useState<boolean>(false);
+	const [rememberChecked, setRememberChecked] = useState<boolean>(false);
+	const [valid, setValid] = useState<boolean>(true);
+	
+	useEffect(() => {
+		setValid(true);
+	}, [open])
+	
+	const dispatch = useDispatch();
+	
+	const loginHandle = async () => {
+		
+		if (username === "" || password === "" || username === null || password === null) {
+			setValid(false);
+		}  else {
+			setValid(true);
+		}
+		
+		let request: LoginRequest = {
+			account: username,
+			password: password,
+			deviceInfo: {
+				deviceOperationSystem: "string",
+				deviceName: "string",
+				deviceMac: "string",
+				deviceIp: "string"
+			},
+			remember: rememberChecked
+		};
+		
+		const response = await LoginApi.login(request);
+		
+		if (response.status === 200) {
+			onClose(false)
+			await dispatch(setToken(response.payload));
+		}
+	}
 
 	return (
 		<Box>
@@ -169,14 +204,22 @@ const LoginModal = ({ open, onClose, openRegister }: LoginModalProps) => {
 				size={'sm'}
 				dialogContent={
 					<LoginModalContent
+						isValid={valid}
 						open={open}
-						onClose={onClose}
 						openRegister={(value) => openRegister(value)}
 						setUsername={(value) => setUsername(value)}
 						setPassword={(value) => setPassword(value)}
 						setRememberChecked={(value) => setRememberChecked(value)}
 					/>}
-				dialogAction={<LoginModalAction username={username} password={password} remember={rememberChecked} onClose={onClose} />}
+				dialogAction={
+					<LoginModalAction
+						username={username}
+						password={password}
+						remember={rememberChecked}
+						onClose={onClose}
+						onSummit={() => loginHandle()}
+					/>
+				}
 			/>
 		</Box>
 	)

@@ -3,10 +3,12 @@ import TextField from "@mui/material/TextField";
 import {InputProps as StandardInputProps} from "@mui/material/Input/Input";
 import {OverridableStringUnion} from "@mui/types";
 import {TextFieldPropsSizeOverrides} from "@mui/material/TextField/TextField";
-import * as React from "react";
+import React, {useEffect} from "react";
 import Box from "@mui/material/Box";
 import {FormHelperText} from "@mui/material";
 import {useState} from "react";
+import Grid2 from "@mui/material/Unstable_Grid2";
+import ErrorIcon from '@mui/icons-material/Error';
 
 const CustomTextFieldValid = styled(TextField)({
 	'& .MuiOutlinedInput-root': {
@@ -16,28 +18,18 @@ const CustomTextFieldValid = styled(TextField)({
 			borderColor: '#000000'
 		},
 		'&:hover fieldset': {
-			borderColor: '#00b2ff',
+			borderColor: '#00b2ff'
 		},
 		'&.Mui-focused fieldset': {
-			borderColor: '#007fb6',
+			borderColor: '#007fb6'
 		}
 	},
 });
 
-const CustomTextFieldInvalid = styled(TextField)({
-	'& .MuiOutlinedInput-root': {
-		'& fieldset': {
-			borderWidth: 2,
-			borderRadius: 50,
-			borderColor: '#ff0000'
-		},
-		'&:hover fieldset': {
-			borderColor: '#00b2ff',
-		},
-		'&.Mui-focused fieldset': {
-			borderColor: '#007fb6',
-		}
-	},
+const CustomFormHelperText = styled(FormHelperText)({
+	marginLeft: 5,
+	fontSize: 15,
+	color: '#ff0000'
 });
 
 type CommonTextInputProps = {
@@ -50,7 +42,6 @@ type CommonTextInputProps = {
 	width?: number;
 	autoFocus?: boolean;
 	onChange: (value: string) => void;
-	onBlur?: () => void;
 	size?: OverridableStringUnion<'small' | 'medium', TextFieldPropsSizeOverrides>;
 	placeholder?: string;
 	type?: React.InputHTMLAttributes<unknown>['type'];
@@ -67,77 +58,69 @@ const CommonTextInput = (props: CommonTextInputProps) => {
 		isValid = true,
 		height,
 		width,
-		autoFocus,
+		autoFocus = false,
 		onChange,
-		onBlur,
 		size = 'medium',
 		placeholder,
 		type = 'text',
 		InputProps
 	} = props;
 	
-	const [showHelpText, setShowHelpText] = useState<boolean>(false);
-	const [valid, setValid] = useState<boolean>(true);
+	const [valid, setValid] = useState<boolean>();
 	const [value, setValue] = useState<any>();
 	
-	const handleOnBlur = () => {
+	useEffect(() => {
+		setValid(isValid);
+	}, [isValid])
+	
+	const handleCheckValid = () => {
 		if (isRequire && (value === undefined || value === null || value === "")) {
 			setValid(false);
-			setShowHelpText(true);
 		} else {
 			setValid(true);
-			setShowHelpText(false);
 		}
 	}
 
 	return (
 		<Box>
+			<CustomTextFieldValid
+				error={!isValid}
+				required={isRequire}
+				margin="dense"
+				autoComplete={autoComplete}
+				fullWidth={fullWidth}
+				style={{
+					height: height,
+					width: width,
+				}}
+				autoFocus={autoFocus}
+				variant={'outlined'}
+				onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+					onChange(event.target.value);
+					setValue(event.target.value);
+					if (!valid) {
+						setValid(true)
+					}
+				}}
+				onBlur={() => {
+					handleCheckValid();
+				}}
+				size={size}
+				placeholder={placeholder}
+				InputProps={InputProps}
+				type={type}
+			/>
 			{
-				valid ? <CustomTextFieldValid
-					required={isRequire}
-					margin="dense"
-					autoComplete={autoComplete}
-					fullWidth={fullWidth}
-					style={{
-						height: height,
-						width: width,
-					}}
-					autoFocus={autoFocus}
-					variant={'outlined'}
-					onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-							onChange(event.target.value);setValue(event.target.value)}}
-					onBlur={() => {handleOnBlur()}}
-					size={size}
-					placeholder={placeholder}
-					InputProps={InputProps}
-					type={type}
-				/> : <CustomTextFieldInvalid
-					margin="dense"
-					autoComplete={autoComplete}
-					fullWidth={fullWidth}
-					style={{
-						height: height,
-						width: width,
-					}}
-					autoFocus={autoFocus}
-					variant={'outlined'}
-					onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-						if (onChange) {
-							onChange(event.target.value);
-						} setValue(event.target.value)}}
-					onBlur={() => {
-						if (onBlur) {
-							onBlur();
-						}; handleOnBlur()}}
-					size={size}
-					placeholder={placeholder}
-					value={value}
-					InputProps={InputProps}
-					type={type}
-				/>
+				!valid ?
+				<Grid2 container sx={{justify: "flex-end", alignItems: "center", marginLeft: 1}}>
+					<ErrorIcon sx={{ color: '#ff0000', fontSize: 15 }}/>
+					<CustomFormHelperText>
+						{ helpText === "" || helpText === null || helpText === undefined ? "Error" : helpText}
+					</CustomFormHelperText>
+				</Grid2>
+				: null
 			}
-			<FormHelperText>{helpText}</FormHelperText>
 		</Box>
 	)
-}
+};
 export default CommonTextInput;
