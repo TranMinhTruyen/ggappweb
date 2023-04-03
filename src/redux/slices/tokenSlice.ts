@@ -20,11 +20,18 @@ export const tokenSlice = createSlice({
 			state.role = action.payload.role;
 			state.authorities = action.payload.authorities;
 			state.accountSettingsResponse = action.payload.accountSettingsResponse;
+		},
+		clearToken: (state) => {
+			state.accessToken = "";
+			state.userFullName = "";
+			state.role = "";
+			state.authorities = [];
+			state.accountSettingsResponse = null;
 		}
 	}
 });
 
-export const { setToken } = tokenSlice.actions;
+export const { setToken, clearToken} = tokenSlice.actions;
 
 export const selectToken = ( state: RootState ) => state.tokenSlice;
 

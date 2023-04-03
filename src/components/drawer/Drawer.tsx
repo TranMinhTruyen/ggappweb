@@ -18,9 +18,10 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import {useNavigate} from "react-router-dom";
 import DrawerMenu from "./DrawerMenu";
 import RouterList from "./RouterList";
-import {useAppSelector} from "../../redux/hooks";
-import {selectToken} from "../../redux/slices/tokenSlice";
+import {useAppDispatch, useAppSelector} from "../../redux/hooks";
+import {clearToken, selectToken, setToken} from "../../redux/slices/tokenSlice";
 import RegisterModal from "../../screens/modal/RegisterModal";
+import {useDispatch} from "react-redux";
 
 const drawerWidth = 240;
 
@@ -99,6 +100,7 @@ const Drawer = () => {
 	const [openRegisterDialog, setOpenRegisterDialog] = useState(false);
 
 	const userToken = useAppSelector(selectToken);
+	const dispatch = useAppDispatch();
 
 	const navigate = useNavigate();
 
@@ -118,6 +120,10 @@ const Drawer = () => {
 		setOpenLoginDialog(!openLoginDialog);
 		setOpenRegisterDialog(isOpen);
 	}
+	
+	const handleLogout = () => {
+		dispatch(clearToken())
+	}
 
 	return (
 		<Box sx={{ display: 'flex' }}>
@@ -135,7 +141,10 @@ const Drawer = () => {
 				onBack={() => {handleOpenLoginDialog(true); handleOpenRegisterDialog(false)}}
 			/>
 			<CssBaseline/>
-			<AppBar position="fixed" open={openDrawer} style={userToken.role === "ROLE_ADMIN" || userToken.role === "ROLE_EMP" ? {} : {backgroundColor: "#ff0000"}}>
+			<AppBar position="fixed"
+			        open={openDrawer}
+			        style={userToken.role === "ROLE_ADMIN" || userToken.role === "ROLE_EMP" ? {} : {backgroundColor: "#ff0000"}}
+			>
 				<Toolbar>
 					<IconButton
 						color="inherit"
@@ -152,13 +161,22 @@ const Drawer = () => {
 					<Typography variant="h6" noWrap component="span" sx={{ flexGrow: 1 }} onClick={() => navigate("/")}>
 						Gaming gear website
 					</Typography>
-					<Button
-						color={"inherit"}
-						startIcon={<AccountCircleRounded/>}
-						onClick={() => handleOpenLoginDialog(true)}
-					>
-						Login
-					</Button>
+					{
+						userToken.accessToken === "" ?
+							<Button
+								color={"inherit"}
+								startIcon={<AccountCircleRounded/>}
+								onClick={() => handleOpenLoginDialog(true)}
+							>
+								Login
+							</Button> : <Button
+								color={"inherit"}
+								startIcon={<AccountCircleRounded/>}
+								onClick={() => handleLogout()}
+							>
+								Logout
+							</Button>
+					}
 				</Toolbar>
 			</AppBar>
 			<CustomDrawer variant="permanent" open={openDrawer}>

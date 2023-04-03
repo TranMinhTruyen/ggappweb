@@ -1,6 +1,6 @@
 import {LoginRequest} from "../dto/request/LoginRequest";
 import axios from "axios";
-import {BaseResponse} from "../dto/response/BaseResponse";
+import BaseResponse, {errorBaseResponse} from "../dto/response/BaseResponse";
 import {LoginResponse} from "../dto/response/LoginResponse";
 
 const LOGIN_URL: string = "http://localhost:8080/api/account/login";
@@ -19,7 +19,7 @@ const LoginApi = {
             );
             return response.data;
         } catch (error) {
-            console.log(error);
+            return errorBaseResponse;
         }
     }
 }

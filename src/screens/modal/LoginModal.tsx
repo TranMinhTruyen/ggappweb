@@ -6,7 +6,6 @@ import KeyIcon from '@mui/icons-material/Key';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import {LoginRequest} from "../../common/dto/request/LoginRequest";
-import {useDispatch} from "react-redux";
 import {setToken} from "../../redux/slices/tokenSlice";
 import LoginApi from "../../common/api/LoginApi";
 import Box from "@mui/material/Box";
@@ -14,12 +13,16 @@ import CommonModal from "../../components/CommonModal";
 import Grid2 from "@mui/material/Unstable_Grid2";
 import CommonButton from "../../components/CommonButton";
 import CommonTextInput from "../../components/CommonTextInput";
-import {Alert, Avatar, Checkbox, FormControlLabel, Link} from "@mui/material";
+import {Avatar, Checkbox, FormControlLabel, Link} from "@mui/material";
 import Typography from "@mui/material/Typography";
+import {useAppDispatch} from "../../redux/hooks";
+import CommonAlert, {IAlertDetail} from "../../components/CommonAlert";
 
-type AlertProps = {
-	showAlert: boolean;
-	message: string;
+const alertDetail: IAlertDetail = {
+	alertSeverity: "error",
+	title: "",
+	showAlert: false,
+	message: ""
 }
 
 type LoginModalActionProps = {
@@ -40,8 +43,9 @@ type LoginModalProps = {
 
 type LoginModalContentProps = {
 	open: boolean;
-	isValid: boolean;
-	showAlert?: AlertProps;
+	usernameValidCheck: boolean
+	passwordValidCheck: boolean
+	alert?: IAlertDetail;
 	setUsername: (username: string) => void;
 	setPassword: (password: string) => void;
 	openRegister: (isOpen: boolean) => void;
@@ -68,12 +72,21 @@ const LoginModalAction = (props: LoginModalActionProps) => {
 
 const LoginModalContent = (props: LoginModalContentProps) => {
 
-	const { open, isValid, showAlert, setUsername, setPassword, openRegister, setRememberChecked } = props;
+	const {
+		open,
+		usernameValidCheck,
+		passwordValidCheck,
+		alert = {showAlert: false, message: "", title: "", alertSeverity: "error"},
+		setUsername,
+		setPassword,
+		openRegister,
+		setRememberChecked
+	} = props;
 	
 	const [showPassword, setShowPassword] = useState<boolean>(false);
-
+	
 	const handleClickShowPassword = () => setShowPassword((show) => !show);
-
+	
 	useEffect(() => {
 		setShowPassword(false);
 	}, [open])
@@ -81,10 +94,7 @@ const LoginModalContent = (props: LoginModalContentProps) => {
 	return (
 		<Grid2 container spacing={2}>
 			<Grid2 xs={12} sx={{ marginBottom: 2 }}>
-				{
-					showAlert?.showAlert ? <Alert variant="filled" severity="error">{showAlert.message}</Alert>
-						: null
-				}
+				<CommonAlert variant={"filled"} alert={alert}/>
 			</Grid2>
 			<Grid2 container justifyContent="center" xs={12}>
 				<Avatar sx={{ width: 150, height: 150 }} />
@@ -94,9 +104,8 @@ const LoginModalContent = (props: LoginModalContentProps) => {
 			</Grid2>
 			<Grid2 xs={12}>
 				<CommonTextInput
-					isValid={isValid}
+					isValid={usernameValidCheck}
 					isRequire={true}
-					autoFocus
 					placeholder={"Username or email"}
 					helpText={"This is require!"}
 					InputProps={{
@@ -113,7 +122,7 @@ const LoginModalContent = (props: LoginModalContentProps) => {
 			</Grid2>
 			<Grid2 xs={12}>
 				<CommonTextInput
-					isValid={isValid}
+					isValid={passwordValidCheck}
 					isRequire={true}
 					placeholder="Password"
 					helpText={"This is require!"}
@@ -160,39 +169,60 @@ const LoginModal = ({ open, onClose, openRegister }: LoginModalProps) => {
 	const [username, setUsername] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
 	const [rememberChecked, setRememberChecked] = useState<boolean>(false);
-	const [valid, setValid] = useState<boolean>(true);
+	const [usernameValidCheck, setUsernameValidCheck] = useState<boolean>(true);
+	const [passwordValidCheck, setPasswordValidCheck] = useState<boolean>(true);
+	const [alert, setAlert] = useState<IAlertDetail>(alertDetail);
 	
 	useEffect(() => {
-		setValid(true);
-	}, [open])
+		setUsernameValidCheck(true);
+		setPasswordValidCheck(true);
+		setRememberChecked(false);
+		setUsername("");
+		setPassword("");
+		setAlert({...alertDetail, showAlert: false, message: "", title: "", alertSeverity: "error"});
+	}, [open, onClose])
 	
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 	
 	const loginHandle = async () => {
 		
-		if (username === "" || password === "" || username === null || password === null) {
-			setValid(false);
-		}  else {
-			setValid(true);
+		if (username === null || username === "") {
+			setUsernameValidCheck(false);
+			setAlert({...alertDetail, showAlert: true, message: "Please input username!", title: "Warning", alertSeverity: "warning"})
 		}
-		
-		let request: LoginRequest = {
-			account: username,
-			password: password,
-			deviceInfo: {
-				deviceOperationSystem: "string",
-				deviceName: "string",
-				deviceMac: "string",
-				deviceIp: "string"
-			},
-			remember: rememberChecked
-		};
-		
-		const response = await LoginApi.login(request);
-		
-		if (response.status === 200) {
-			onClose(false)
-			await dispatch(setToken(response.payload));
+		if (password === null || password === "") {
+			setPasswordValidCheck(false);
+			setAlert({...alertDetail, showAlert: true, message: "Please input password!", title: "Warning", alertSeverity: "warning"})
+		}
+		if ((username === null || username === "") && (password === null || password === "")) {
+			setUsernameValidCheck(false);
+			setPasswordValidCheck(false);
+			setAlert({...alertDetail, showAlert: true, message: "Please input username and password!", title: "Warning", alertSeverity: "warning"})
+		}
+		if (username !== "" && username !== null && password !== "" && password !== null) {
+			setUsernameValidCheck(true);
+			setPasswordValidCheck(true);
+			
+			let request: LoginRequest = {
+				account: username,
+				password: password,
+				deviceInfo: {
+					deviceOperationSystem: "string",
+					deviceName: "string",
+					deviceMac: "string",
+					deviceIp: "string"
+				},
+				remember: rememberChecked
+			};
+			
+			const response = await LoginApi.login(request);
+			
+			if (response.status === 200) {
+				onClose(false)
+				await dispatch(setToken(response.payload));
+			} else {
+				setAlert({...alertDetail, showAlert: true, message: response.message, title: "Error", alertSeverity: "error"})
+			}
 		}
 	}
 
@@ -204,7 +234,9 @@ const LoginModal = ({ open, onClose, openRegister }: LoginModalProps) => {
 				size={'sm'}
 				dialogContent={
 					<LoginModalContent
-						isValid={valid}
+						usernameValidCheck={usernameValidCheck}
+						passwordValidCheck={passwordValidCheck}
+						alert={alert}
 						open={open}
 						openRegister={(value) => openRegister(value)}
 						setUsername={(value) => setUsername(value)}

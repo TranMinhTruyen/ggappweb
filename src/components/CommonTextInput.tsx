@@ -66,7 +66,7 @@ const CommonTextInput = (props: CommonTextInputProps) => {
 		InputProps
 	} = props;
 	
-	const [valid, setValid] = useState<boolean>();
+	const [valid, setValid] = useState<boolean>(isValid);
 	const [value, setValue] = useState<any>();
 	
 	useEffect(() => {
@@ -74,7 +74,7 @@ const CommonTextInput = (props: CommonTextInputProps) => {
 	}, [isValid])
 	
 	const handleCheckValid = () => {
-		if (isRequire && (value === undefined || value === null || value === "")) {
+		if ((isRequire && (value === undefined || value === null || value === "")) || !valid) {
 			setValid(false);
 		} else {
 			setValid(true);
@@ -84,7 +84,7 @@ const CommonTextInput = (props: CommonTextInputProps) => {
 	return (
 		<Box>
 			<CustomTextFieldValid
-				error={!isValid}
+				error={!valid}
 				required={isRequire}
 				margin="dense"
 				autoComplete={autoComplete}
