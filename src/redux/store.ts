@@ -4,9 +4,13 @@ import thunk from 'redux-thunk';
 
 export const store = configureStore({
 	reducer: {
-		tokenSlice: tokenSlice
+		tokenState: tokenSlice
 	},
 	middleware: [thunk]
+})
+
+store.subscribe(()=> {
+	localStorage.setItem('tokenState', JSON.stringify(store.getState().tokenState))
 })
 
 export type RootState = ReturnType<typeof store.getState>

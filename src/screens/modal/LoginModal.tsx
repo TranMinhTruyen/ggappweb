@@ -57,16 +57,14 @@ const LoginModalAction = (props: LoginModalActionProps) => {
 	const { onSummit, onClose } = props;
 
 	return (
-		<Box>
-			<Grid2 container columnSpacing={2}>
-				<Grid2>
-					<CommonButton variant="contained" onClick={() => onClose(false)} label={"Cancel"} />
-				</Grid2>
-				<Grid2>
-					<CommonButton variant="contained" onClick={() => onSummit()} label={"Login"} />
-				</Grid2>
+		<Grid2 container columnSpacing={2}>
+			<Grid2>
+				<CommonButton variant="contained" onClick={() => onClose(false)} label={"Cancel"} />
 			</Grid2>
-		</Box>
+			<Grid2>
+				<CommonButton variant="contained" onClick={() => onSummit()} label={"Login"} />
+			</Grid2>
+		</Grid2>
 	)
 }
 

@@ -1,31 +1,25 @@
-import React, {useState} from "react";
+import React from "react";
 import {CSSObject, styled, Theme, useTheme} from "@mui/material/styles";
 import MuiDrawer from "@mui/material/Drawer";
-import {AppBarProps as MuiAppBarProps} from "@mui/material/AppBar/AppBar";
-import MuiAppBar from "@mui/material/AppBar";
-import LoginModal from "../../screens/modal/LoginModal";
-import Box from "@mui/material/Box";
-import CssBaseline from "@mui/material/CssBaseline";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import MenuIcon from "@mui/icons-material/Menu";
-import Button from "@mui/material/Button";
-import {AccountCircleRounded} from "@mui/icons-material";
 import IconButton from "@mui/material/IconButton";
 import Divider from "@mui/material/Divider";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import {useNavigate} from "react-router-dom";
 import DrawerMenu from "./DrawerMenu";
-import RouterList from "./RouterList";
-import {useAppDispatch, useAppSelector} from "../../redux/hooks";
-import {clearToken, selectToken, setToken} from "../../redux/slices/tokenSlice";
-import RegisterModal from "../../screens/modal/RegisterModal";
-import {useDispatch} from "react-redux";
+import {DrawerProps} from "@mui/material/Drawer/Drawer";
 
-const drawerWidth = 240;
+type IDrawerProps = {
+	drawerWidth: number;
+	openDrawer: boolean;
+	handleDrawerOpen: () => void;
+	handleDrawerClose: () => void;
+}
 
-const openedMixin = (theme: Theme): CSSObject => ({
+interface CustomDrawerProps extends DrawerProps {
+	drawerWidth?: number;
+}
+
+const openedMixin = (theme: Theme, drawerWidth: number): CSSObject => ({
 	width: drawerWidth,
 	transition: theme.transitions.create('width', {
 		easing: theme.transitions.easing.sharp,
@@ -54,151 +48,48 @@ const DrawerHeader = styled('div')(({theme}) => ({
 	...theme.mixins.toolbar,
 }));
 
-interface AppBarProps extends MuiAppBarProps {
-	open?: boolean;
-}
-
-const AppBar = styled(MuiAppBar, {
-	shouldForwardProp: (prop) => prop !== 'open',
-})<AppBarProps>(({theme, open}) => ({
-	zIndex: theme.zIndex.drawer + 1,
-	transition: theme.transitions.create(['width', 'margin'], {
-		easing: theme.transitions.easing.sharp,
-		duration: theme.transitions.duration.leavingScreen,
-	}),
-	...(open && {
-		marginLeft: drawerWidth,
-		width: `calc(100% - ${drawerWidth}px)`,
-		transition: theme.transitions.create(['width', 'margin'], {
-			easing: theme.transitions.easing.sharp,
-			duration: theme.transitions.duration.enteringScreen,
-		}),
-	}),
-}));
-
-const CustomDrawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})(
-	({theme, open}) => ({
+const CustomDrawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open' && prop !== 'drawerWidth',
+})<CustomDrawerProps>(({theme, open, drawerWidth }) => ({
 		width: drawerWidth,
 		flexShrink: 0,
 		whiteSpace: 'nowrap',
 		boxSizing: 'border-box',
 		...(open && {
-			...openedMixin(theme),
-			'& .MuiDrawer-paper': openedMixin(theme),
+			...openedMixin(theme, drawerWidth !== undefined ? drawerWidth : 250),
+			'& .MuiDrawer-paper': openedMixin(theme, drawerWidth !== undefined ? drawerWidth : 250),
 		}),
 		...(!open && {
 			...closedMixin(theme),
 			'& .MuiDrawer-paper': closedMixin(theme),
 		})
-	}),
+	})
 );
 
-const Drawer = () => {
-	const theme = useTheme();
-	const [openDrawer, setOpenDrawer] = useState(true);
-	const [openLoginDialog, setOpenLoginDialog] = useState(false);
-	const [openRegisterDialog, setOpenRegisterDialog] = useState(false);
-
-	const userToken = useAppSelector(selectToken);
-	const dispatch = useAppDispatch();
-
-	const navigate = useNavigate();
-
-	const handleDrawerOpen = () => {
-		setOpenDrawer(true);
-	};
-
-	const handleDrawerClose = () => {
-		setOpenDrawer(false);
-	};
-
-	const handleOpenLoginDialog = (isOpen: boolean) => {
-		setOpenLoginDialog(isOpen);
-	}
-
-	const handleOpenRegisterDialog = (isOpen: boolean) => {
-		setOpenLoginDialog(!openLoginDialog);
-		setOpenRegisterDialog(isOpen);
-	}
+const Drawer = (props: IDrawerProps) => {
 	
-	const handleLogout = () => {
-		dispatch(clearToken())
-	}
+	const { drawerWidth, openDrawer, handleDrawerOpen, handleDrawerClose } = props;
+	
+	const theme = useTheme();
 
 	return (
-		<Box sx={{ display: 'flex' }}>
-			<LoginModal
-				open={openLoginDialog}
-				openRegister={(value) => handleOpenRegisterDialog(value)}
-				title={"Login Modal"}
-				onClose={(value) => handleOpenLoginDialog(value)}
-			/>
-			<RegisterModal
-				open={openRegisterDialog}
-				back={true}
-				title={"Register Modal"}
-				onClose={() => {handleOpenLoginDialog(true); handleOpenRegisterDialog(false)}}
-				onBack={() => {handleOpenLoginDialog(true); handleOpenRegisterDialog(false)}}
-			/>
-			<CssBaseline/>
-			<AppBar position="fixed"
-			        open={openDrawer}
-			        style={userToken.role === "ROLE_ADMIN" || userToken.role === "ROLE_EMP" ? {} : {backgroundColor: "#ff0000"}}
-			>
-				<Toolbar>
-					<IconButton
-						color="inherit"
-						aria-label="open drawer"
-						onClick={() => handleDrawerOpen()}
-						edge="start"
-						sx={{
-							marginRight: 5,
-							...(openDrawer && {display: 'none'}),
-						}}
-					>
-						<MenuIcon/>
-					</IconButton>
-					<Typography variant="h6" noWrap component="span" sx={{ flexGrow: 1 }} onClick={() => navigate("/")}>
-						Gaming gear website
-					</Typography>
+		<CustomDrawer drawerWidth={drawerWidth} variant="permanent" open={openDrawer}>
+			<DrawerHeader>
+				<IconButton onClick={handleDrawerClose}>
+					{theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
+				</IconButton>
+			</DrawerHeader>
+			<Divider/>
+			<DrawerMenu
+				isDrawerOpen={openDrawer}
+				handleOpenDrawer={(value) =>
 					{
-						userToken.accessToken === "" ?
-							<Button
-								color={"inherit"}
-								startIcon={<AccountCircleRounded/>}
-								onClick={() => handleOpenLoginDialog(true)}
-							>
-								Login
-							</Button> : <Button
-								color={"inherit"}
-								startIcon={<AccountCircleRounded/>}
-								onClick={() => handleLogout()}
-							>
-								Logout
-							</Button>
-					}
-				</Toolbar>
-			</AppBar>
-			<CustomDrawer variant="permanent" open={openDrawer}>
-				<DrawerHeader>
-					<IconButton onClick={() => handleDrawerClose()}>
-						{theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
-					</IconButton>
-				</DrawerHeader>
-				<Divider/>
-				<DrawerMenu
-					isDrawerOpen={openDrawer}
-					handleOpenDrawer={(value) =>
-						{
-							if (value) {
-								handleDrawerOpen()
-							}
+						if (value) {
+							handleDrawerOpen()
 						}
 					}
-				/>
-			</CustomDrawer>
-			<RouterList/>
-		</Box>
+				}
+			/>
+		</CustomDrawer>
 	)
 }
 export default Drawer;

@@ -11,18 +11,23 @@ import Grid2 from "@mui/material/Unstable_Grid2";
 import ErrorIcon from '@mui/icons-material/Error';
 
 const CustomTextFieldValid = styled(TextField)({
+	background: 'rgba(210,210,210,0.8)',
+	color: '#000000',
+	borderRadius: 50,
 	'& .MuiOutlinedInput-root': {
 		'& fieldset': {
-			borderWidth: 2,
+			borderColor: '#ffffff',
 			borderRadius: 50,
-			borderColor: '#000000'
 		},
 		'&:hover fieldset': {
 			borderColor: '#00b2ff'
 		},
-		'&.Mui-focused fieldset': {
+		'& .Mui-focused fieldset': {
 			borderColor: '#007fb6'
-		}
+		},
+		'& .Mui-invalid': {
+			borderColor: '#94f636'
+		},
 	},
 });
 

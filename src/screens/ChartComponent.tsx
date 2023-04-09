@@ -1,13 +1,13 @@
 import React from "react";
-import {Container} from "@mui/material";
 import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 
 const ChartComponent = () => {
     return (
-        <Container>
+        <Box>
             <Typography>Chart</Typography>
             <Typography>Hello world</Typography>
-        </Container>
+        </Box>
     )
 }
 

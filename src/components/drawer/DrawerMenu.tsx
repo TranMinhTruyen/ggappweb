@@ -1,5 +1,4 @@
 import {List, ListItem, ListItemButton, ListItemIcon, ListItemText} from "@mui/material";
-import ComponentRouters, {ComponentTabItem} from "./ComponentRouters";
 import * as React from "react";
 
 import { useNavigate , useLocation } from "react-router-dom";
@@ -10,8 +9,9 @@ import {ExpandLess, ExpandMore} from "@mui/icons-material";
 import Box from "@mui/material/Box";
 import Collapse from '@mui/material/Collapse';
 import Divider from "@mui/material/Divider";
+import DrawerItemList, {DrawerItem} from "./DrawerItems";
 
-const itemList = ComponentRouters;
+const itemList = DrawerItemList;
 
 interface IMenuProps {
 	isDrawerOpen: boolean;
@@ -20,7 +20,7 @@ interface IMenuProps {
 
 interface IMenuItemProps {
 	isDrawerOpen: boolean;
-	item: ComponentTabItem;
+	item: DrawerItem;
 	handleOpenDrawer?: (value: boolean) => void;
 }
 
@@ -89,16 +89,16 @@ const DrawerMenuItemWithChild = ({ isDrawerOpen, item, handleOpenDrawer }: IMenu
 	const navigate = useNavigate();
 	const location = useLocation();
 	const [openChild, setOpenChild] = useState<boolean>(false);
-	const [childPath, setChildPath] = useState<string>("");
+	// const [childPath, setChildPath] = useState<string>("");
 
 	const { pathname } = location;
 
 	const handleRoute = (path: string) => {
 		navigate(path);
-		setChildPath(path);
+		// setChildPath(path);
 	};
 
-	const handleExpand = (item: ComponentTabItem) => {
+	const handleExpand = (item: DrawerItem) => {
 		const childPath = item.componentChild?.at(0);
 		if (childPath !== null && childPath !== undefined) {
 			handleRoute(childPath.componentPath);
@@ -111,11 +111,11 @@ const DrawerMenuItemWithChild = ({ isDrawerOpen, item, handleOpenDrawer }: IMenu
 		setOpenChild(!openChild);
 	};
 
-	useEffect(() => {
-		if (!childPath.includes(pathname) || pathname === "/") {
-			setOpenChild(false);
-		}
-	}, [childPath, pathname]);
+	// useEffect(() => {
+	// 	if (!childPath.includes(pathname) || pathname === "/") {
+	// 		setOpenChild(false);
+	// 	}
+	// }, [childPath, pathname]);
 
 	useEffect(() => {
 		if (!isDrawerOpen) {
@@ -131,7 +131,6 @@ const DrawerMenuItemWithChild = ({ isDrawerOpen, item, handleOpenDrawer }: IMenu
 				sx={{ display: 'block' }}
 			>
 				<ListItemButton
-					style={openChild ? {color: "#ff0000"} : {color: "#7c7c7c"}}
 					sx={{
 						minHeight: 48,
 						justifyContent: isDrawerOpen ? 'initial' : 'center',
@@ -139,11 +138,11 @@ const DrawerMenuItemWithChild = ({ isDrawerOpen, item, handleOpenDrawer }: IMenu
 						":hover": {
 							borderRadius: 25,
 							backgroundColor: "#d9d8d8"
-						}
+						},
+						color: "#7c7c7c"
 					}}
 				>
 					<ListItemIcon
-						style={openChild ? {color: "#ff0000"} : {color: "#7c7c7c"}}
 						sx={{
 							minWidth: 0,
 							mr: isDrawerOpen ? 3 : 'auto',
@@ -164,9 +163,9 @@ const DrawerMenuItemWithChild = ({ isDrawerOpen, item, handleOpenDrawer }: IMenu
 					{
 						item.componentChild?.map(child => (
 							<ListItem
+								key={child.componentKey}
 								onClick={() => handleRoute(child.componentPath)}
 								disablePadding
-								sx={{ display: 'block' }}
 								style={
 									pathname === child.componentPath ?
 										{
@@ -227,8 +226,11 @@ const DrawerMenu = ({ isDrawerOpen, handleOpenDrawer }: IMenuProps) => {
 				item.componentRole != null ?
 					userToken.role !== "" && item.componentRole.includes(userToken.role) ?
 						item.componentChild == null ?
-							<DrawerMenuItem key={item.componentKey} item={item} isDrawerOpen={isDrawerOpen}/>
-							: <DrawerMenuItemWithChild key={item.componentKey} item={item} isDrawerOpen={isDrawerOpen} handleOpenDrawer={handleOpenDrawer}/>
+							<DrawerMenuItem key={item.componentKey} item={item}
+							                isDrawerOpen={isDrawerOpen}/>
+							: <DrawerMenuItemWithChild key={item.componentKey} item={item}
+							                           isDrawerOpen={isDrawerOpen}
+							                           handleOpenDrawer={handleOpenDrawer}/>
 						: null
 					: <DrawerMenuItem key={item.componentKey} item={item} isDrawerOpen={isDrawerOpen}/>
 			))}

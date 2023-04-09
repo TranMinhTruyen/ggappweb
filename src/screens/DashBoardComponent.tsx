@@ -1,13 +1,13 @@
-import {Container} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import React from "react";
+import Box from "@mui/material/Box";
 
 const DashBoardComponent = () => {
 	return (
-		<Container>
+		<Box>
 			<Typography>DashBoard</Typography>
 			<Typography>Hello world</Typography>
-		</Container>
+		</Box>
 	)
 }
 
