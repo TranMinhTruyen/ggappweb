@@ -24,13 +24,7 @@ export const tokenSlice = createSlice({
 			state.authorities = action.payload.authorities;
 			state.accountSettingsResponse = action.payload.accountSettingsResponse;
 		},
-		clearToken: (state) => {
-			state.accessToken = "";
-			state.userFullName = "";
-			state.role = "";
-			state.authorities = [];
-			state.accountSettingsResponse = null;
-		}
+		clearToken: () => initialState
 	}
 });
 

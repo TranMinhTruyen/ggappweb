@@ -25,10 +25,13 @@ const CustomTextFieldValid = styled(TextField)({
 		'& .Mui-focused fieldset': {
 			borderColor: '#007fb6'
 		},
-		'& .Mui-invalid': {
-			borderColor: '#94f636'
-		},
 	},
+	input: {
+		"&:-webkit-autofill": {
+			WebkitBoxShadow: "0 0 0 1000px rgba(210,210,210,0.8) inset",
+			borderRadius: 50,
+		}
+	}
 });
 
 const CustomFormHelperText = styled(FormHelperText)({
@@ -54,7 +57,7 @@ type CommonTextInputProps = {
 }
 
 const CommonTextInput = (props: CommonTextInputProps) => {
-	
+
 	const {
 		autoComplete,
 		isRequire = false,
@@ -70,14 +73,14 @@ const CommonTextInput = (props: CommonTextInputProps) => {
 		type = 'text',
 		InputProps
 	} = props;
-	
+
 	const [valid, setValid] = useState<boolean>(isValid);
 	const [value, setValue] = useState<any>();
-	
+
 	useEffect(() => {
 		setValid(isValid);
 	}, [isValid])
-	
+
 	const handleCheckValid = () => {
 		if ((isRequire && (value === undefined || value === null || value === "")) || !valid) {
 			setValid(false);
