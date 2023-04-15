@@ -103,4 +103,4 @@ const CommonModal = ({ open, back, onClose, onBack, size = 'xs', description, di
 	)
 }
 
-export default CommonModal;
+export default React.memo(CommonModal);

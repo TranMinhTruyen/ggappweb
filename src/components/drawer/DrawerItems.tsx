@@ -27,10 +27,18 @@ const DrawerItemList: Array<DrawerItem> = [
 	{
 		componentKey: 1,
 		componentIcon: <DashboardIcon/>,
-		componentLabel: "DashBoard",
+		componentLabel: "Dash Board",
 		componentPath: "/dashboard",
 		componentRole: ["ROLE_ADMIN", "ROLE_EMP"],
 		componentChild: [
+			{
+				componentKey: 1.0,
+				componentIcon: <DashboardIcon/>,
+				componentLabel: "Dash Board",
+				componentPath: "/dashboard",
+				componentRole: ["ROLE_ADMIN", "ROLE_EMP"],
+				componentChild: null
+			},
 			{
 				componentKey: 1.1,
 				componentIcon: <ApiIcon/>,
@@ -50,11 +58,11 @@ const DrawerItemList: Array<DrawerItem> = [
 			{
 				componentKey: 1.3,
 				componentIcon: <ChangeCircleIcon/>,
-				componentLabel: "Change",
+				componentLabel: "Log Change",
 				componentPath: "/dashboard/log",
 				componentRole: ["ROLE_ADMIN", "ROLE_EMP"],
 				componentChild: null
-			}
+			},
 		]
 	},
 	{

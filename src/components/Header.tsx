@@ -1,10 +1,10 @@
+import React from "react";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import {AccountCircleRounded} from "@mui/icons-material";
-import React from "react";
 import {styled} from "@mui/material/styles";
 import MuiAppBar from "@mui/material/AppBar";
 import {AppBarProps as MuiAppBarProps} from "@mui/material/AppBar/AppBar";
@@ -70,9 +70,11 @@ const Header = (props: IHeaderProps) => {
 				>
 					<MenuIcon/>
 				</IconButton>
-				<Typography variant="h6" noWrap component="span" sx={{ flexGrow: 1 }} onClick={() => navigate("/")}>
-					Gaming gear website
-				</Typography>
+				<>
+					<Typography variant="h6" noWrap component="span" sx={{ flexGrow: 1 }} onClick={() => navigate("/")}>
+						Gaming gear website
+					</Typography>
+				</>
 				{
 					userToken.accessToken === "" ?
 						<Button
@@ -93,4 +95,4 @@ const Header = (props: IHeaderProps) => {
 		</AppBar>
 	)
 }
-export default Header;
+export default React.memo(Header);

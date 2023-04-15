@@ -1,23 +1,29 @@
 import {Route, Routes} from "react-router-dom";
-import React from "react";
-import MainComponent from "../../screens/MainComponent";
+import React, {Suspense} from "react";
+import MainScreen from "../../screens/MainScreen";
 import ComponentRouters from "../../common/ComponentRouters";
+import {Backdrop, CircularProgress} from "@mui/material";
 
 const componentRouter = ComponentRouters;
 
 const RouterList = () => {
 	return (
 		<Routes>
-			<Route key={"main"} path={"/"} element={<MainComponent/>}>
+			<Route key={"main"} path={"/"} element={<MainScreen/>}>
 				{componentRouter.map(item => (
-					item.componentChild ?
-						item.componentChild.map(child => (
-							<Route key={"child-router"} path={child.componentPath} element={child.componentNode} />
-						)) :
-						<Route key={"parent-router"} path={item.componentPath} element={item.componentNode} />
+					<Route
+						key={"router"}
+						path={item.componentPath}
+						element={
+							<Suspense fallback={<Backdrop open={true}><CircularProgress color="inherit" /></Backdrop>}>
+								{item.componentNode}
+							</Suspense>
+						}
+					/>
 				))}
 			</Route>
 		</Routes>
 	)
 }
-export default RouterList;
+export default React.memo(RouterList);
+

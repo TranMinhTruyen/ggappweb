@@ -2,7 +2,7 @@ import Typography from "@mui/material/Typography";
 import React from "react";
 import Box from "@mui/material/Box";
 
-const DashBoardComponent = () => {
+const DashBoardScreen = () => {
 	return (
 		<Box>
 			<Typography>DashBoard</Typography>
@@ -11,4 +11,4 @@ const DashBoardComponent = () => {
 	)
 }
 
-export default DashBoardComponent;
+export default DashBoardScreen;

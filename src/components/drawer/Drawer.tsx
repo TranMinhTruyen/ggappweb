@@ -92,4 +92,4 @@ const Drawer = (props: IDrawerProps) => {
 		</CustomDrawer>
 	)
 }
-export default Drawer;
+export default React.memo(Drawer);

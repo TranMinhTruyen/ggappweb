@@ -131,4 +131,4 @@ const CommonTextInput = (props: CommonTextInputProps) => {
 		</Box>
 	)
 };
-export default CommonTextInput;
+export default React.memo(CommonTextInput);

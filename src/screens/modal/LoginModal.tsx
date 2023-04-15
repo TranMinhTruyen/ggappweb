@@ -255,4 +255,4 @@ const LoginModal = ({ open, onClose, openRegister }: LoginModalProps) => {
 	)
 }
 
-export default LoginModal;
+export default React.memo(LoginModal);

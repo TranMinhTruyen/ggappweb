@@ -89,4 +89,4 @@ const CommonButton = (props: CustomButtonProps) => {
 		</CustomButton>
 	)
 }
-export default CommonButton;
+export default React.memo(CommonButton);

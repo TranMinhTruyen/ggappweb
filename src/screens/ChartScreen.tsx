@@ -2,7 +2,7 @@ import React from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
-const ChartComponent = () => {
+const ChartScreen = () => {
     return (
         <Box>
             <Typography>Chart</Typography>
@@ -11,4 +11,4 @@ const ChartComponent = () => {
     )
 }
 
-export default ChartComponent;
+export default ChartScreen;

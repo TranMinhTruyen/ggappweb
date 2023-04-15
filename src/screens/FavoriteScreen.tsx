@@ -2,7 +2,7 @@ import React from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
-const FavoriteComponent = () => {
+const FavoriteScreen = () => {
 	return (
 		<Box>
 			<Typography>Farvorite</Typography>
@@ -11,4 +11,4 @@ const FavoriteComponent = () => {
 	)
 }
 
-export default FavoriteComponent;
+export default FavoriteScreen;

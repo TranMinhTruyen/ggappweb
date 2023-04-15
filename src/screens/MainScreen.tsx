@@ -40,7 +40,7 @@ const ScreenLayout = styled(Box, {shouldForwardProp: (prop) => prop !== 'openDra
 	}),
 }));
 
-const MainComponent = () => {
+const MainScreen = () => {
 	
 	const [openDrawer, setOpenDrawer] = useState(true);
 	const [openLoginDialog, setOpenLoginDialog] = useState(false);
@@ -104,4 +104,4 @@ const MainComponent = () => {
 	)
 }
 
-export default MainComponent;
+export default MainScreen;

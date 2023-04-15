@@ -61,4 +61,4 @@ const CommonAlert = (props: CommonAlertProps) => {
 		</Collapse>
 	);
 }
-export default CommonAlert;
+export default React.memo(CommonAlert);

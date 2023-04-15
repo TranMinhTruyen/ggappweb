@@ -26,7 +26,7 @@ const rows = [
 	createData('Gingerbread', 356, 16.0, 49, 3.9),
 ];
 
-const HomeComponent = () => {
+const HomeScreen = () => {
 	return (
 		<Box>
 			<Typography>Home</Typography>
@@ -64,4 +64,4 @@ const HomeComponent = () => {
 	)
 }
 
-export default HomeComponent;
+export default HomeScreen;

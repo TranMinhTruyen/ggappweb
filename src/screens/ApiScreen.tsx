@@ -2,13 +2,13 @@ import React from "react";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
-const LogChangeComponent = () => {
+const ApiScreen = () => {
     return (
         <Box>
-            <Typography>Log change</Typography>
+            <Typography>Api</Typography>
             <Typography>Hello world</Typography>
         </Box>
     )
 }
 
-export default LogChangeComponent;
+export default ApiScreen;

@@ -89,33 +89,22 @@ const DrawerMenuItemWithChild = ({ isDrawerOpen, item, handleOpenDrawer }: IMenu
 	const navigate = useNavigate();
 	const location = useLocation();
 	const [openChild, setOpenChild] = useState<boolean>(false);
-	// const [childPath, setChildPath] = useState<string>("");
 
 	const { pathname } = location;
 
 	const handleRoute = (path: string) => {
 		navigate(path);
-		// setChildPath(path);
 	};
 
 	const handleExpand = (item: DrawerItem) => {
-		const childPath = item.componentChild?.at(0);
-		if (childPath !== null && childPath !== undefined) {
-			handleRoute(childPath.componentPath);
-		}
+		setOpenChild(!openChild);
+		handleRoute(item.componentPath);
 		if (!isDrawerOpen) {
 			if (handleOpenDrawer) {
 				handleOpenDrawer(true);
 			}
 		}
-		setOpenChild(!openChild);
 	};
-
-	// useEffect(() => {
-	// 	if (!childPath.includes(pathname) || pathname === "/") {
-	// 		setOpenChild(false);
-	// 	}
-	// }, [childPath, pathname]);
 
 	useEffect(() => {
 		if (!isDrawerOpen) {
@@ -158,10 +147,11 @@ const DrawerMenuItemWithChild = ({ isDrawerOpen, item, handleOpenDrawer }: IMenu
 					{isDrawerOpen ? openChild ? <ExpandLess /> : <ExpandMore /> : null}
 				</ListItemButton>
 			</ListItem>
-			<Collapse in={openChild} unmountOnExit timeout={"auto"}>
+			<Collapse in={openChild} unmountOnExit>
 				<List component="div" disablePadding style={{ marginLeft: 20 }}>
 					{
 						item.componentChild?.map(child => (
+							child.componentChild == null ?
 							<ListItem
 								key={child.componentKey}
 								onClick={() => handleRoute(child.componentPath)}
@@ -206,7 +196,11 @@ const DrawerMenuItemWithChild = ({ isDrawerOpen, item, handleOpenDrawer }: IMenu
 										sx={{ opacity: isDrawerOpen ? 1 : 0 }}
 									/>
 								</ListItemButton>
-							</ListItem>
+							</ListItem> :
+								<DrawerMenuItemWithChild key={child.componentKey} item={child}
+								                         isDrawerOpen={isDrawerOpen}
+								                         handleOpenDrawer={handleOpenDrawer}
+								/>
 						))
 					}
 				</List>
@@ -237,4 +231,4 @@ const DrawerMenu = ({ isDrawerOpen, handleOpenDrawer }: IMenuProps) => {
 		</List>
 	)
 }
-export default DrawerMenu;
+export default React.memo(DrawerMenu);
