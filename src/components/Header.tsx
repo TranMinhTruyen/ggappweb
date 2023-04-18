@@ -11,6 +11,10 @@ import {AppBarProps as MuiAppBarProps} from "@mui/material/AppBar/AppBar";
 import {useAppSelector} from "../redux/hooks";
 import {selectToken} from "../redux/slices/tokenSlice";
 import {useNavigate} from "react-router-dom";
+import CommonFormControl from "./CommonFormControl";
+import {Checkbox, FormControl, ListItemText, MenuItem, Select, SelectChangeEvent} from "@mui/material";
+import {selectStore} from "../redux/slices/storeSlice";
+import {StoreResponse} from "../common/dto/response/StoreResponse";
 
 type IHeaderProps = {
 	drawerWidth: number;
@@ -43,14 +47,62 @@ const AppBar = styled(MuiAppBar, {shouldForwardProp: (prop) => prop !== 'open' &
 	}),
 }));
 
+const StoreSelect = () => {
+
+	const [storeSelect, setStoreSelect] = React.useState<StoreResponse | any>({
+		id: 0,
+		storeCode: "",
+		storeAddress: "",
+		province: null,
+		manageId: 0,
+		productStoreResponseList: null,
+		productStoreIssueResponses: null,
+		createdDate: "",
+		createdBy: "",
+		updateDate: "",
+		updateBy: "",
+		deleteDate: "",
+		deleteBy: "",
+		active: true,
+		deleted: false
+	});
+
+	const handleChange = (id: number) => {
+		let update = storeSlice.data.find((store) => store.id === id)
+		setStoreSelect(update);
+	};
+
+	const storeSlice = useAppSelector(selectStore);
+
+	console.log(storeSlice)
+
+	return (
+		<FormControl sx={{ width: 300 }}>
+			<Select
+				value={storeSelect}
+				onChange={(event: SelectChangeEvent) => handleChange(parseInt(event.target.value))}
+				renderValue={() => storeSelect.storeCode}
+				defaultValue={"1"}
+			>
+				{storeSlice.data.map((item) => (
+					<MenuItem key={item.id} value={item.id}>
+						<Checkbox checked={item.id === storeSelect.id} />
+						<ListItemText primary={item.storeCode} />
+					</MenuItem>
+				))}
+			</Select>
+		</FormControl>
+	)
+}
+
 const Header = (props: IHeaderProps) => {
-	
+
 	const { drawerWidth, openDrawer, handleDrawerOpen, handleLogout, handleOpenLoginDialog } = props;
-	
+
 	const userToken = useAppSelector(selectToken);
-	
+
 	const navigate = useNavigate();
-	
+
 	return (
 		<AppBar drawerWidth={drawerWidth}
 		        position="fixed"
@@ -74,6 +126,9 @@ const Header = (props: IHeaderProps) => {
 					<Typography variant="h6" noWrap component="span" sx={{ flexGrow: 1 }} onClick={() => navigate("/")}>
 						Gaming gear website
 					</Typography>
+				</>
+				<>
+					<StoreSelect/>
 				</>
 				{
 					userToken.accessToken === "" ?

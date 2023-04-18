@@ -1,14 +1,16 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Drawer from "../components/drawer/Drawer";
 import Box from "@mui/material/Box";
 import {Outlet} from "react-router-dom";
 import Header from "../components/Header";
-import {clearToken} from "../redux/slices/tokenSlice";
+import {clearToken, setToken} from "../redux/slices/tokenSlice";
 import {useAppDispatch} from "../redux/hooks";
 import {styled} from "@mui/material/styles";
 import LoginModal from "./modal/LoginModal";
 import RegisterModal from "./modal/RegisterModal";
 import CssBaseline from "@mui/material/CssBaseline";
+import StoreApi from "../common/api/StoreApi";
+import {setStore} from "../redux/slices/storeSlice";
 
 const drawerWidth = 250;
 
@@ -41,33 +43,46 @@ const ScreenLayout = styled(Box, {shouldForwardProp: (prop) => prop !== 'openDra
 }));
 
 const MainScreen = () => {
-	
+
 	const [openDrawer, setOpenDrawer] = useState(true);
 	const [openLoginDialog, setOpenLoginDialog] = useState(false);
 	const [openRegisterDialog, setOpenRegisterDialog] = useState(false);
 	const dispatch = useAppDispatch();
-	
+
 	const handleDrawerOpen = () => {
 		setOpenDrawer(true);
 	};
-	
+
 	const handleDrawerClose = () => {
 		setOpenDrawer(false);
 	};
-	
+
 	const handleOpenLoginDialog = (isOpen: boolean) => {
 		setOpenLoginDialog(isOpen);
 	}
-	
+
 	const handleOpenRegisterDialog = (isOpen: boolean) => {
 		setOpenLoginDialog(!openLoginDialog);
 		setOpenRegisterDialog(isOpen);
 	}
-	
+
 	const handleLogout = () => {
 		dispatch(clearToken())
 	}
-	
+
+	const getAllStore = async () => {
+		const responseData = await StoreApi.fetchAllStore(1);
+		if (responseData.status === 200) {
+			dispatch(setStore(responseData.payload))
+		}
+	}
+
+	useEffect(() => {
+		getAllStore();
+	}, [])
+
+
+
 	return (
 		<Box>
 			<Header drawerWidth={drawerWidth}

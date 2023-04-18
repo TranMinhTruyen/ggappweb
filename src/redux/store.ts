@@ -1,10 +1,12 @@
 import {configureStore} from "@reduxjs/toolkit";
 import tokenSlice from "./slices/tokenSlice";
 import thunk from 'redux-thunk';
+import storeSlice from "./slices/storeSlice";
 
 export const store = configureStore({
 	reducer: {
-		tokenState: tokenSlice
+		tokenState: tokenSlice,
+		storeState: storeSlice
 	},
 	middleware: [thunk]
 })
