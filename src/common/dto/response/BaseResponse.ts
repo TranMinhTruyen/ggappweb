@@ -1,8 +1,8 @@
 export default interface BaseResponse<T> {
-    timestamp: string,
-    status: number,
-    statusname: string,
-    message: string,
+    timestamp: string | null,
+    status: number | null,
+    statusname: string | null,
+    message: string | null,
     payload: T | null
 }
 

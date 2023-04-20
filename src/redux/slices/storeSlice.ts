@@ -1,9 +1,8 @@
 import {StoreResponse} from "../../common/dto/response/StoreResponse";
-import {PaginationResponse} from "../../common/dto/response/PaginationResponse";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {RootState} from "../store";
 
-const initialStore: StoreResponse = {
+const initialState: StoreResponse = {
     id: 0,
     storeCode: "",
     storeAddress: "",
@@ -21,27 +20,29 @@ const initialStore: StoreResponse = {
     deleted: false
 }
 
-const initialState: PaginationResponse<StoreResponse> = {
-    data: [initialStore],
-    totalRecord: 0,
-    page: 0,
-    size: 0,
-    totalPage: 0
-}
-
 export const storeSlice = createSlice({
     name: 'storeState',
     initialState,
     reducers: {
-        hydrate: (state, action: PayloadAction<PaginationResponse<StoreResponse>>) => {
+        hydrate: (state, action: PayloadAction<StoreResponse>) => {
             return action.payload
         },
-        setStore: (state, action: PayloadAction<PaginationResponse<StoreResponse>>) => {
-            state.data = action.payload.data;
-            state.totalRecord = action.payload.totalRecord;
-            state.page = action.payload.page;
-            state.size = action.payload.size;
-            state.totalPage = action.payload.totalPage;
+        setStore: (state, action: PayloadAction<StoreResponse>) => {
+            state.id = action.payload.id;
+            state.storeCode = action.payload.storeCode;
+            state.storeAddress = action.payload.storeAddress;
+            state.province = action.payload.province;
+            state.manageId = action.payload.manageId;
+            state.productStoreResponseList = action.payload.productStoreResponseList;
+            state.productStoreIssueResponses = action.payload.productStoreIssueResponses;
+            state.createdDate = action.payload.createdDate;
+            state.createdBy = action.payload.createdBy;
+            state.updateDate = action.payload.updateDate;
+            state.updateBy = action.payload.updateBy;
+            state.deleteDate = action.payload.deleteDate;
+            state.deleteBy = action.payload.deleteBy;
+            state.active = action.payload.active;
+            state.deleted = action.payload.deleted;
         }
     }
 });

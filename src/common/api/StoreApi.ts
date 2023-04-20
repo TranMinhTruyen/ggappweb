@@ -2,11 +2,12 @@ import BaseResponse, {errorBaseResponse} from "../dto/response/BaseResponse";
 import {PaginationResponse} from "../dto/response/PaginationResponse";
 import {StoreResponse} from "../dto/response/StoreResponse";
 import axios from "axios";
+import {ProductStoreResponse} from "../dto/response/ProductStoreResponse";
 
 const STORE_URL: string = "http://localhost:8080/api/store/";
 
 const StoreApi = {
-    async fetchAllStore (page: number): Promise<BaseResponse<PaginationResponse<StoreResponse>> | any> {
+    async getAllStore(page: number): Promise<BaseResponse<PaginationResponse<StoreResponse>> | any > {
         try {
             const response = await axios.get(
                 STORE_URL + 'getAllStore',
@@ -21,6 +22,9 @@ const StoreApi = {
         } catch (error) {
             return errorBaseResponse;
         }
+    },
+    async getProductFromStore(size: number, page: number, storeId: number): Promise<BaseResponse<PaginationResponse<ProductStoreResponse>> | any > {
+        
     }
 }
 

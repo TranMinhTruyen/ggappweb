@@ -70,19 +70,6 @@ const MainScreen = () => {
 		dispatch(clearToken())
 	}
 
-	const getAllStore = async () => {
-		const responseData = await StoreApi.fetchAllStore(1);
-		if (responseData.status === 200) {
-			dispatch(setStore(responseData.payload))
-		}
-	}
-
-	useEffect(() => {
-		getAllStore();
-	}, [])
-
-
-
 	return (
 		<Box>
 			<Header drawerWidth={drawerWidth}
