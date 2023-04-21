@@ -24,7 +24,21 @@ const StoreApi = {
         }
     },
     async getProductFromStore(size: number, page: number, storeId: number): Promise<BaseResponse<PaginationResponse<ProductStoreResponse>> | any > {
-        
+        try {
+            const response = await axios.get(
+                STORE_URL + 'getProductFromStore',
+                {
+                    params: {
+                        page: page,
+                        size: size,
+                        storeId: storeId
+                    }
+                }
+            );
+            return response.data;
+        } catch (error) {
+            return errorBaseResponse;
+        }
     }
 }
 
