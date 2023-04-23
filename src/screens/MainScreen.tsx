@@ -1,27 +1,25 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import Drawer from "../components/drawer/Drawer";
 import Box from "@mui/material/Box";
 import {Outlet} from "react-router-dom";
 import Header from "../components/Header";
-import {clearToken, setToken} from "../redux/slices/tokenSlice";
+import {clearToken} from "../redux/slices/tokenSlice";
 import {useAppDispatch} from "../redux/hooks";
 import {styled} from "@mui/material/styles";
 import LoginModal from "./modal/LoginModal";
 import RegisterModal from "./modal/RegisterModal";
-import CssBaseline from "@mui/material/CssBaseline";
-import StoreApi from "../common/api/StoreApi";
-import {setStore} from "../redux/slices/storeSlice";
-
 const drawerWidth = 250;
 
 type ScreenLayoutProps = {
 	openDrawer?: boolean
 }
 
-const ScreenLayout = styled(Box, {shouldForwardProp: (prop) => prop !== 'openDrawer'})<ScreenLayoutProps>(({theme, openDrawer}) => ({
+const ScreenLayout = styled(Box, {shouldForwardProp: (prop) => prop !== 'openDrawer'})
+	<ScreenLayoutProps>(({theme, openDrawer}) => ({
 	zIndex: theme.zIndex.drawer + 1,
-	marginTop: 60,
-	padding: 10,
+	marginTop: 75,
+	paddingLeft: 10,
+	paddingRight: 10,
 	transition: theme.transitions.create(['width', 'margin'], {
 		easing: theme.transitions.easing.sharp,
 		duration: theme.transitions.duration.leavingScreen,
@@ -98,7 +96,6 @@ const MainScreen = () => {
 				onClose={() => {handleOpenLoginDialog(true); handleOpenRegisterDialog(false)}}
 				onBack={() => {handleOpenLoginDialog(true); handleOpenRegisterDialog(false)}}
 			/>
-			<CssBaseline/>
 			<ScreenLayout openDrawer={openDrawer}>
 				<Outlet/>
 			</ScreenLayout>

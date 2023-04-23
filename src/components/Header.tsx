@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -8,25 +8,10 @@ import {AccountCircleRounded} from "@mui/icons-material";
 import {styled} from "@mui/material/styles";
 import MuiAppBar from "@mui/material/AppBar";
 import {AppBarProps as MuiAppBarProps} from "@mui/material/AppBar/AppBar";
-import {useAppDispatch, useAppSelector} from "../redux/hooks";
 import {selectToken} from "../redux/slices/tokenSlice";
 import {useNavigate} from "react-router-dom";
-import CommonFormControl from "./CommonFormControl";
-import {
-	Checkbox,
-	FormControl,
-	InputLabel,
-	ListItemText,
-	MenuItem,
-	OutlinedInput,
-	Select,
-	SelectChangeEvent
-} from "@mui/material";
-import {selectStore, setStore} from "../redux/slices/storeSlice";
-import {StoreResponse} from "../common/dto/response/StoreResponse";
-import {PaginationResponse} from "../common/dto/response/PaginationResponse";
-import StoreApi from "../common/api/StoreApi";
 import StoreSelect from "./select/StoreSelect";
+import {useAppSelector} from "../redux/hooks";
 
 type IHeaderProps = {
 	drawerWidth: number;
