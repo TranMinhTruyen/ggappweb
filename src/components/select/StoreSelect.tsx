@@ -49,8 +49,15 @@ const StoreSelect = () => {
             const responseData = await StoreApi.getAllStore(1);
             if (responseData.status === 200) {
                 setStoreData(responseData.payload);
-                dispatch(setStore(responseData.payload.data[0]));
-                setStoreSelect(responseData.payload.data[0])
+            }
+            if (sessionStorage.getItem('storeSelect') === null) {
+                if (responseData.status === 200) {
+                    dispatch(setStore(responseData.payload.data[0]));
+                    setStoreSelect(responseData.payload.data[0])
+                }
+            } else {
+                dispatch(setStore(JSON.parse(sessionStorage.getItem('storeSelect') || '{}')));
+                setStoreSelect(JSON.parse(sessionStorage.getItem('storeSelect') || '{}'))
             }
         }
         getAllStore().then(() => {});
@@ -62,6 +69,7 @@ const StoreSelect = () => {
         if (update !== undefined && storeData.data?.includes(update)) {
             dispatch(setStore(update));
             setStoreSelect(update);
+            sessionStorage.setItem('storeSelect', JSON.stringify(update));
         }
     };
 

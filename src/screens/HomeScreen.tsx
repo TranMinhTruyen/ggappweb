@@ -4,16 +4,10 @@ import {selectStore} from "../redux/slices/storeSlice";
 import React, {memo, useEffect, useState} from "react";
 import StoreApi from "../common/api/StoreApi";
 import {ProductStoreResponse} from "../common/dto/response/ProductStoreResponse";
-import imageSrc from '../static/example.jpg';
-import {
-	Card,
-	CardActionArea,
-	CardContent,
-	CardMedia,
-	TablePagination
-} from "@mui/material";
+import {Card, CardActionArea, CardContent, CardMedia, TablePagination} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import Grid2 from "@mui/material/Unstable_Grid2";
+import placeHolderImage from "../static/placeholder-image.png";
 
 const HomeScreen = () => {
 	const storeSlice = useAppSelector(selectStore);
@@ -21,7 +15,7 @@ const HomeScreen = () => {
 	const [productList, setProductList] = useState<ProductStoreResponse[]>([])
 	const [page, setPage] = useState<number>(1);
 	const [count, setCount] = useState<number>(1);
-	const [rowsPerPage, setRowsPerPage] = useState<number>(12);
+	const [rowsPerPage, setRowsPerPage] = useState<number>(10);
 
 	useEffect(() => {
 		async function getProductFromStore() {
@@ -52,15 +46,24 @@ const HomeScreen = () => {
 		<Box>
 			<Grid2 container spacing={2.5}>
 				{productList.map((product) => (
-					<Grid2 xs={12} md={3}>
+					<Grid2 key={product.id} xs={12} md={3}>
 						<Card>
 							<CardActionArea>
-								<CardMedia
-									component="img"
-									alt="example"
-									height="140"
-									image={imageSrc}
-								/>
+								{
+									product.image !== null && product.image.length > 0 ?
+										<CardMedia
+											component="img"
+											alt="example"
+											height="140"
+											image={`data:image/png;base64,${product.image[0].imageData}`}
+										/> :
+										<CardMedia
+											component="img"
+											alt="example"
+											height="140"
+											image={placeHolderImage}
+										/>
+								}
 								<CardContent>
 									<Typography gutterBottom variant="h5" component="div">
 										{product.name}
@@ -69,7 +72,7 @@ const HomeScreen = () => {
 										Brand: {product.brand}
 									</Typography>
 									<Typography variant="body2" color={'#ff0000'}>
-										Price: {product.price} $
+										Price: {product.price.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
 									</Typography>
 								</CardContent>
 							</CardActionArea>
