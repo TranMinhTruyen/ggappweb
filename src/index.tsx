@@ -5,7 +5,8 @@ import {store} from "./redux/store";
 import './index.css';
 import {BrowserRouter} from "react-router-dom";
 import CssBaseline from "@mui/material/CssBaseline";
-import {hydrate} from "./redux/slices/tokenSlice";
+import {setToken} from "./redux/slices/tokenSlice";
+import {setIsLogin} from "./redux/slices/commonSlice";
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -13,9 +14,17 @@ const root = ReactDOM.createRoot(
 
 const getTokenState = () => {
     try {
-        const persistedState = localStorage.getItem('tokenState')
-        if (persistedState)
-            return JSON.parse(persistedState)
+        let persistedState = localStorage.getItem('tokenState');
+        if (persistedState) {
+            store.dispatch(setIsLogin(true));
+            return JSON.parse(persistedState);
+        }
+
+        persistedState = sessionStorage.getItem('tokenState');
+        if (persistedState) {
+            store.dispatch(setIsLogin(true));
+            return JSON.parse(persistedState);
+        }
     }
     catch (e){
         console.log(e)
@@ -25,7 +34,7 @@ const getTokenState = () => {
 const tokenState = getTokenState()
 
 if (tokenState) {
-    store.dispatch(hydrate(tokenState))
+    store.dispatch(setToken(tokenState))
 }
 
 root.render(

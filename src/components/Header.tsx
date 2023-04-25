@@ -11,14 +11,13 @@ import {AppBarProps as MuiAppBarProps} from "@mui/material/AppBar/AppBar";
 import {selectToken} from "../redux/slices/tokenSlice";
 import {useNavigate} from "react-router-dom";
 import StoreSelect from "./select/StoreSelect";
-import {useAppSelector} from "../redux/hooks";
+import {useAppDispatch, useAppSelector} from "../redux/hooks";
+import {selectCommon, setOpenDrawer, setOpenLoginModal} from "../redux/slices/commonSlice";
+import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import CommonButton from "./CommonButton";
 
 type IHeaderProps = {
 	drawerWidth: number;
-	openDrawer: boolean;
-	handleDrawerOpen: () => void;
-	handleDrawerClose: () => void;
-	handleOpenLoginDialog: (value: boolean) => void;
 	handleLogout: () => void;
 }
 
@@ -46,16 +45,20 @@ const AppBar = styled(MuiAppBar, {shouldForwardProp: (prop) => prop !== 'open' &
 
 const Header = (props: IHeaderProps) => {
 
-	const { drawerWidth, openDrawer, handleDrawerOpen, handleLogout, handleOpenLoginDialog } = props;
-
+	const { drawerWidth, handleLogout } = props;
 	const userToken = useAppSelector(selectToken);
-
+	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
+	const commonState = useAppSelector(selectCommon);
+
+	const handleDrawerOpen = () => {
+		dispatch(setOpenDrawer(true));
+	}
 
 	return (
 		<AppBar drawerWidth={drawerWidth}
 		        position="fixed"
-		        open={openDrawer}
+		        open={commonState.openDrawer}
 		        style={userToken.role === "ROLE_ADMIN" || userToken.role === "ROLE_EMP" ? {} : {backgroundColor: "#ff0000"}}
 		>
 			<Toolbar>
@@ -66,7 +69,7 @@ const Header = (props: IHeaderProps) => {
 					edge="start"
 					sx={{
 						marginRight: 5,
-						...(openDrawer && {display: 'none'}),
+						...(commonState.openDrawer && {display: 'none'}),
 					}}
 				>
 					<MenuIcon/>
@@ -81,19 +84,25 @@ const Header = (props: IHeaderProps) => {
 				</>
 				{
 					userToken.accessToken === "" ?
-						<Button
-							color={"inherit"}
+						<CommonButton
+							width={130}
+							height={35}
+							backgroundColor={"#ffffff"}
+							labelColor={"#000000"}
 							startIcon={<AccountCircleRounded/>}
-							onClick={() => handleOpenLoginDialog(true)}
-						>
-							Login
-						</Button> : <Button
-							color={"inherit"}
+							variant="contained" onClick={() => dispatch(setOpenLoginModal(true))}
+							label={"Login"}
+						/>
+						:
+						<CommonButton
+							width={130}
+							height={35}
+							backgroundColor={"#ffffff"}
+							labelColor={"#000000"}
 							startIcon={<AccountCircleRounded/>}
-							onClick={() => handleLogout()}
-						>
-							Logout
-						</Button>
+							variant="contained" onClick={() => handleLogout()}
+							label={"Logout"}
+						/>
 				}
 			</Toolbar>
 		</AppBar>

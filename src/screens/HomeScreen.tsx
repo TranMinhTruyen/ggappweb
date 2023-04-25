@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box";
-import {useAppSelector} from "../redux/hooks";
+import {useAppDispatch, useAppSelector} from "../redux/hooks";
 import {selectStore} from "../redux/slices/storeSlice";
 import React, {memo, useEffect, useState} from "react";
 import StoreApi from "../common/api/StoreApi";
@@ -8,6 +8,12 @@ import {Card, CardActionArea, CardContent, CardMedia, TablePagination} from "@mu
 import Typography from "@mui/material/Typography";
 import Grid2 from "@mui/material/Unstable_Grid2";
 import placeHolderImage from "../static/placeholder-image.png";
+import CommonButton from "../components/CommonButton";
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import {selectCommon, setOpenLoginModal} from "../redux/slices/commonSlice";
+import CartApi from "../common/api/CartApi";
+import {selectToken} from "../redux/slices/tokenSlice";
 
 const HomeScreen = () => {
 	const storeSlice = useAppSelector(selectStore);
@@ -16,6 +22,10 @@ const HomeScreen = () => {
 	const [page, setPage] = useState<number>(1);
 	const [count, setCount] = useState<number>(1);
 	const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+	const commonState = useAppSelector(selectCommon);
+	const storeState = useAppSelector(selectStore);
+	const userToken = useAppSelector(selectToken);
+	const dispatch = useAppDispatch();
 
 	useEffect(() => {
 		async function getProductFromStore() {
@@ -42,19 +52,38 @@ const HomeScreen = () => {
 		setPage(1);
 	};
 
+	const handleAddToCart = async (productId: number) => {
+		if (commonState.isLogin && userToken.accessToken !== null) {
+			const response = await CartApi.createCartAndAddProductToCart(productId, storeState.id, 1, userToken.accessToken);
+			if (response.status === 200) {
+				console.log(response);
+			}
+		} else {
+			dispatch(setOpenLoginModal(true));
+		}
+	}
+
+	const handleBuyNow = () => {
+		if (commonState.isLogin) {
+
+		} else {
+			dispatch(setOpenLoginModal(true));
+		}
+	}
+
 	return (
 		<Box>
 			<Grid2 container spacing={2.5}>
 				{productList.map((product) => (
-					<Grid2 key={product.id} xs={12} md={3}>
+					<Grid2 key={product.id} xs={4}>
 						<Card>
 							<CardActionArea>
 								{
 									product.image !== null && product.image.length > 0 ?
 										<CardMedia
 											component="img"
-											alt="example"
-											height="140"
+											alt={product.name}
+											height="300"
 											image={`data:image/png;base64,${product.image[0].imageData}`}
 										/> :
 										<CardMedia
@@ -76,6 +105,27 @@ const HomeScreen = () => {
 									</Typography>
 								</CardContent>
 							</CardActionArea>
+							<Box padding={1}>
+								<Grid2 container>
+									<Grid2 xs={6} display="flex" justifyContent="center" alignItems="center">
+										<CommonButton
+											width={200}
+											startIcon={<AddShoppingCartIcon/>}
+											variant="contained" onClick={() => handleAddToCart(product.id)}
+											label={"Add to cart"}
+										/>
+									</Grid2>
+									<Grid2 xs={6} display="flex" justifyContent="center" alignItems="center">
+										<CommonButton
+											width={200}
+											startIcon={<ShoppingCartIcon/>}
+											variant="contained"
+											onClick={handleBuyNow}
+											label={"Buy now"}
+										/>
+									</Grid2>
+								</Grid2>
+							</Box>
 						</Card>
 					</Grid2>
 				))}

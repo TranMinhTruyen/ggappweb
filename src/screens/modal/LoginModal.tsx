@@ -17,6 +17,7 @@ import {Avatar, Checkbox, FormControlLabel, Link} from "@mui/material";
 import Typography from "@mui/material/Typography";
 import {useAppDispatch} from "../../redux/hooks";
 import CommonAlert, {IAlertDetail} from "../../components/CommonAlert";
+import {setIsLogin, setOpenLoginModal, setOpenRegisterModal} from "../../redux/slices/commonSlice";
 
 const alertDetail: IAlertDetail = {
 	alertSeverity: "error",
@@ -31,14 +32,12 @@ type LoginModalActionProps = {
 	remember: boolean;
 	showAlert?: (showAlert: boolean) => void;
 	onSummit: () => void;
-	onClose: (isOpen: boolean) => void;
 }
 
 type LoginModalProps = {
 	open: boolean;
 	title: string;
 	onClose: (value: boolean) => void;
-	openRegister: (isOpen: boolean) => void;
 }
 
 type LoginModalContentProps = {
@@ -48,18 +47,18 @@ type LoginModalContentProps = {
 	alert?: IAlertDetail;
 	setUsername: (username: string) => void;
 	setPassword: (password: string) => void;
-	openRegister: (isOpen: boolean) => void;
 	setRememberChecked: (checked: boolean) => void;
 }
 
 const LoginModalAction = (props: LoginModalActionProps) => {
 
-	const { onSummit, onClose } = props;
+	const { onSummit } = props;
+	const dispatch = useAppDispatch();
 
 	return (
 		<Grid2 container columnSpacing={2}>
 			<Grid2>
-				<CommonButton variant="contained" onClick={() => onClose(false)} label={"Cancel"} />
+				<CommonButton variant="contained" onClick={() => dispatch(setOpenLoginModal(false))} label={"Cancel"} />
 			</Grid2>
 			<Grid2>
 				<CommonButton variant="contained" onClick={() => onSummit()} label={"Login"} />
@@ -77,13 +76,12 @@ const LoginModalContent = (props: LoginModalContentProps) => {
 		alert = {showAlert: false, message: "", title: "", alertSeverity: "error"},
 		setUsername,
 		setPassword,
-		openRegister,
 		setRememberChecked
 	} = props;
 	
 	const [showPassword, setShowPassword] = useState<boolean>(false);
-	
 	const handleClickShowPassword = () => setShowPassword((show) => !show);
+	const dispatch = useAppDispatch();
 	
 	useEffect(() => {
 		setShowPassword(false);
@@ -155,14 +153,19 @@ const LoginModalContent = (props: LoginModalContentProps) => {
 					/>} label="Remember me" />
 			</Grid2>
 			<Grid2 container justifyContent="center" xs={12}>
-				<Typography>If you don't have account: <Link onClick={() => openRegister(true)}>Register</Link></Typography>
+				<Typography>If you don't have account:
+					<Link onClick={() => {
+						dispatch(setOpenRegisterModal(true))
+						dispatch(setOpenLoginModal(false))
+					}}>Register</Link>
+				</Typography>
 			</Grid2>
 		
 		</Grid2>
 	)
 }
 
-const LoginModal = ({ open, onClose, openRegister }: LoginModalProps) => {
+const LoginModal = ({ open, onClose }: LoginModalProps) => {
 	
 	const [username, setUsername] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
@@ -217,7 +220,13 @@ const LoginModal = ({ open, onClose, openRegister }: LoginModalProps) => {
 			
 			if (response.status === 200) {
 				onClose(false)
-				await dispatch(setToken(response.payload));
+				if (rememberChecked) {
+					localStorage.setItem('tokenState', JSON.stringify(response.payload))
+				} else {
+					sessionStorage.setItem('tokenState', JSON.stringify(response.payload));
+				}
+				dispatch(setToken(response.payload));
+				dispatch(setIsLogin(true));
 			} else {
 				setAlert({...alertDetail, showAlert: true, message: response.message, title: "Error", alertSeverity: "error"})
 			}
@@ -228,7 +237,7 @@ const LoginModal = ({ open, onClose, openRegister }: LoginModalProps) => {
 		<Box>
 			<CommonModal
 				open={open}
-				onClose={onClose}
+				onClose={() => dispatch(setOpenLoginModal(false))}
 				size={'sm'}
 				dialogContent={
 					<LoginModalContent
@@ -236,7 +245,6 @@ const LoginModal = ({ open, onClose, openRegister }: LoginModalProps) => {
 						passwordValidCheck={passwordValidCheck}
 						alert={alert}
 						open={open}
-						openRegister={(value) => openRegister(value)}
 						setUsername={(value) => setUsername(value)}
 						setPassword={(value) => setPassword(value)}
 						setRememberChecked={(value) => setRememberChecked(value)}
@@ -246,7 +254,6 @@ const LoginModal = ({ open, onClose, openRegister }: LoginModalProps) => {
 						username={username}
 						password={password}
 						remember={rememberChecked}
-						onClose={onClose}
 						onSummit={() => loginHandle()}
 					/>
 				}

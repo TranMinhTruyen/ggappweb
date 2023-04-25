@@ -17,7 +17,7 @@ interface CommonModalProps {
 	back?: boolean;
 	size?: Breakpoint;
 	description?: string;
-	onClose: (isOpen: boolean) => void;
+	onClose: () => void;
 	onBack?: () => void;
 	dialogContent: React.ReactNode;
 	dialogAction: React.ReactNode;
@@ -27,7 +27,7 @@ interface ModalTitleProps {
 	open: boolean;
 	back?: boolean;
 	description?: string;
-	onClose: (isOpen: boolean) => void;
+	onClose: () => void;
 	onBack?: () => void;
 }
 
@@ -49,7 +49,7 @@ const ModalTitle = ({ open, back = false, onClose }: ModalTitleProps) => {
 				{back ? (
 					<IconButton
 						aria-label="close"
-						onClick={() => onClose(false)}
+						onClick={onClose}
 						sx={{
 							color: (theme) => theme.palette.grey[500],
 						}}
@@ -62,7 +62,7 @@ const ModalTitle = ({ open, back = false, onClose }: ModalTitleProps) => {
 				{open ? (
 						<IconButton
 							aria-label="close"
-							onClick={() => onClose(false)}
+							onClick={onClose}
 							sx={{
 								color: (theme) => theme.palette.grey[500],
 							}}
@@ -83,7 +83,7 @@ const CommonModal = ({ open, back, onClose, onBack, size = 'xs', description, di
 	return (
 		<Dialog
 			open={open}
-			onClose={() => onClose(false)}
+			onClose={onClose}
 			PaperComponent={PaperComponent}
 			aria-labelledby={"draggable-dialog-title"}
 			maxWidth={size}

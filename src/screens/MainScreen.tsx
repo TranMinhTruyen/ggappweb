@@ -1,13 +1,18 @@
-import React, {useState} from "react";
+import React from "react";
 import Drawer from "../components/drawer/Drawer";
 import Box from "@mui/material/Box";
 import {Outlet} from "react-router-dom";
 import Header from "../components/Header";
 import {clearToken} from "../redux/slices/tokenSlice";
-import {useAppDispatch} from "../redux/hooks";
+import {useAppDispatch, useAppSelector} from "../redux/hooks";
 import {styled} from "@mui/material/styles";
 import LoginModal from "./modal/LoginModal";
 import RegisterModal from "./modal/RegisterModal";
+import {
+	selectCommon,
+	setIsLogin,
+	setOpenLoginModal,
+} from "../redux/slices/commonSlice";
 const drawerWidth = 250;
 
 type ScreenLayoutProps = {
@@ -42,61 +47,35 @@ const ScreenLayout = styled(Box, {shouldForwardProp: (prop) => prop !== 'openDra
 
 const MainScreen = () => {
 
-	const [openDrawer, setOpenDrawer] = useState(true);
-	const [openLoginDialog, setOpenLoginDialog] = useState(false);
-	const [openRegisterDialog, setOpenRegisterDialog] = useState(false);
 	const dispatch = useAppDispatch();
-
-	const handleDrawerOpen = () => {
-		setOpenDrawer(true);
-	};
-
-	const handleDrawerClose = () => {
-		setOpenDrawer(false);
-	};
-
-	const handleOpenLoginDialog = (isOpen: boolean) => {
-		setOpenLoginDialog(isOpen);
-	}
-
-	const handleOpenRegisterDialog = (isOpen: boolean) => {
-		setOpenLoginDialog(!openLoginDialog);
-		setOpenRegisterDialog(isOpen);
-	}
+	const commonState = useAppSelector(selectCommon);
 
 	const handleLogout = () => {
-		dispatch(clearToken())
+		dispatch(clearToken());
+		dispatch(setIsLogin(false));
+		sessionStorage.removeItem('tokenState');
+		localStorage.removeItem('tokenState');
 	}
 
 	return (
 		<Box>
 			<Header drawerWidth={drawerWidth}
-			        handleOpenLoginDialog={handleOpenLoginDialog}
 			        handleLogout={handleLogout}
-			        openDrawer={openDrawer}
-			        handleDrawerOpen={handleDrawerOpen}
-			        handleDrawerClose={handleDrawerClose}
 			/>
 			<Drawer
 				drawerWidth={drawerWidth}
-				openDrawer={openDrawer}
-				handleDrawerOpen={handleDrawerOpen}
-				handleDrawerClose={handleDrawerClose}
 			/>
 			<LoginModal
-				open={openLoginDialog}
-				openRegister={(value) => handleOpenRegisterDialog(value)}
+				open={commonState.openLoginModal}
 				title={"Login Modal"}
-				onClose={(value) => handleOpenLoginDialog(value)}
+				onClose={(value) => dispatch(setOpenLoginModal(value))}
 			/>
 			<RegisterModal
-				open={openRegisterDialog}
+				open={commonState.openRegisterModal}
 				back={true}
 				title={"Register Modal"}
-				onClose={() => {handleOpenLoginDialog(true); handleOpenRegisterDialog(false)}}
-				onBack={() => {handleOpenLoginDialog(true); handleOpenRegisterDialog(false)}}
 			/>
-			<ScreenLayout openDrawer={openDrawer}>
+			<ScreenLayout openDrawer={commonState.openDrawer}>
 				<Outlet/>
 			</ScreenLayout>
 		</Box>

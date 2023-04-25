@@ -14,9 +14,6 @@ export const tokenSlice = createSlice({
 	name: 'tokenState',
 	initialState,
 	reducers: {
-		hydrate: (state, action: PayloadAction<LoginResponse>) => {
-			return action.payload
-		},
 		setToken: (state, action: PayloadAction<LoginResponse>) => {
 			state.accessToken = action.payload.accessToken;
 			state.userFullName = action.payload.userFullName;
@@ -31,7 +28,6 @@ export const tokenSlice = createSlice({
 export const {
 	setToken,
 	clearToken,
-	hydrate
 } = tokenSlice.actions;
 
 export const selectToken = ( state: RootState ) => state.tokenState;

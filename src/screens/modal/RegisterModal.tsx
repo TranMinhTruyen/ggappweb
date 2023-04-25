@@ -1,22 +1,25 @@
 import CommonModal from "../../components/CommonModal";
 import React from "react";
 import Typography from "@mui/material/Typography";
+import {setOpenLoginModal, setOpenRegisterModal} from "../../redux/slices/commonSlice";
+import {useAppDispatch} from "../../redux/hooks";
 
 type RegisterModalProps = {
     open: boolean;
     back?: boolean;
     title: string;
-    onClose: () => void;
-    onBack: () => void;
 }
 
-const RegisterModal = ({open, back, title, onClose, onBack}: RegisterModalProps) => {
+const RegisterModal = ({open, back, title}: RegisterModalProps) => {
+
+    const dispatch = useAppDispatch();
+
     return (
         <CommonModal
             open={open}
             back={back}
-            onClose={onClose}
-            onBack={onBack}
+            onClose={() => {dispatch(setOpenLoginModal(true)); dispatch(setOpenRegisterModal(false))}}
+            onBack={() => {dispatch(setOpenLoginModal(true)); dispatch(setOpenRegisterModal(false))}}
             size={'sm'}
             dialogContent={<Typography>Register</Typography>}
             dialogAction={<Typography>Register</Typography>}

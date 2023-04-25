@@ -11,6 +11,7 @@ const CustomSelectValid = styled(FormControl)({
     background: 'rgba(210,210,210,0.8)',
     color: '#000000',
     borderRadius: 50,
+    marginRight: 20,
     '& .MuiOutlinedInput-root': {
         '& fieldset': {
             borderColor: 'rgba(210,210,210,0.8)',
@@ -49,15 +50,13 @@ const StoreSelect = () => {
             const responseData = await StoreApi.getAllStore(1);
             if (responseData.status === 200) {
                 setStoreData(responseData.payload);
-            }
-            if (sessionStorage.getItem('storeSelect') === null) {
-                if (responseData.status === 200) {
+                if (sessionStorage.getItem('storeSelect') === null) {
                     dispatch(setStore(responseData.payload.data[0]));
                     setStoreSelect(responseData.payload.data[0])
+                } else {
+                    dispatch(setStore(JSON.parse(sessionStorage.getItem('storeSelect') || '{}')));
+                    setStoreSelect(JSON.parse(sessionStorage.getItem('storeSelect') || '{}'))
                 }
-            } else {
-                dispatch(setStore(JSON.parse(sessionStorage.getItem('storeSelect') || '{}')));
-                setStoreSelect(JSON.parse(sessionStorage.getItem('storeSelect') || '{}'))
             }
         }
         getAllStore().then(() => {});

@@ -6,9 +6,11 @@ import {styled} from "@mui/material/styles";
 import {CircularProgress} from "@mui/material";
 
 type CustomButtonProps = {
-	label: string;
+	label?: string;
 	height?: number;
 	width?: number;
+	backgroundColor?: string;
+	labelColor?: string;
 	disabled?: boolean;
 	endIcon?: React.ReactNode;
 	loading?: boolean;
@@ -60,6 +62,8 @@ const CommonButton = (props: CustomButtonProps) => {
 		size = 'medium',
 		width = 100,
 		height = 40,
+		backgroundColor,
+		labelColor,
 		variant = 'contained',
 		startIcon,
 		endIcon
@@ -73,7 +77,7 @@ const CommonButton = (props: CustomButtonProps) => {
 			variant={variant}
 			startIcon={startIcon}
 			endIcon={endIcon}
-			sx={{ width: width, height: height }}
+			sx={{ width: width, height: height, backgroundColor: backgroundColor, color: labelColor }}
 			disableRipple
 		>
 			{
@@ -82,7 +86,7 @@ const CommonButton = (props: CustomButtonProps) => {
 					variant="indeterminate"
 					disableShrink
 					size={20}
-					sx={{ color: '#ffffff' }}
+					sx={{ color: labelColor ? '#ffffff' : labelColor }}
 				/>
 				: label
 			}

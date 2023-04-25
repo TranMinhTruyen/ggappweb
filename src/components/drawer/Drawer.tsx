@@ -7,12 +7,11 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import DrawerMenu from "./DrawerMenu";
 import {DrawerProps} from "@mui/material/Drawer/Drawer";
+import {useAppDispatch, useAppSelector} from "../../redux/hooks";
+import {selectCommon, setOpenDrawer} from "../../redux/slices/commonSlice";
 
 type IDrawerProps = {
 	drawerWidth: number;
-	openDrawer: boolean;
-	handleDrawerOpen: () => void;
-	handleDrawerClose: () => void;
 }
 
 interface CustomDrawerProps extends DrawerProps {
@@ -67,24 +66,25 @@ const CustomDrawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'o
 
 const Drawer = (props: IDrawerProps) => {
 	
-	const { drawerWidth, openDrawer, handleDrawerOpen, handleDrawerClose } = props;
-	
+	const { drawerWidth } = props;
+	const commonState = useAppSelector(selectCommon);
+	const dispatch = useAppDispatch();
 	const theme = useTheme();
 
 	return (
-		<CustomDrawer drawerWidth={drawerWidth} variant="permanent" open={openDrawer}>
+		<CustomDrawer drawerWidth={drawerWidth} variant="permanent" open={commonState.openDrawer}>
 			<DrawerHeader>
-				<IconButton onClick={handleDrawerClose}>
+				<IconButton onClick={() => dispatch(setOpenDrawer(false))}>
 					{theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
 				</IconButton>
 			</DrawerHeader>
 			<Divider/>
 			<DrawerMenu
-				isDrawerOpen={openDrawer}
+				isDrawerOpen={commonState.openDrawer}
 				handleOpenDrawer={(value) =>
 					{
 						if (value) {
-							handleDrawerOpen()
+							dispatch(setOpenDrawer(true))
 						}
 					}
 				}
