@@ -11,7 +11,6 @@ const CustomSelectValid = styled(FormControl)({
     background: 'rgba(210,210,210,0.8)',
     color: '#000000',
     borderRadius: 50,
-    marginRight: 20,
     '& .MuiOutlinedInput-root': {
         '& fieldset': {
             borderColor: 'rgba(210,210,210,0.8)',

@@ -3,7 +3,6 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import {AccountCircleRounded} from "@mui/icons-material";
 import {styled} from "@mui/material/styles";
 import MuiAppBar from "@mui/material/AppBar";
@@ -13,8 +12,10 @@ import {useNavigate} from "react-router-dom";
 import StoreSelect from "./select/StoreSelect";
 import {useAppDispatch, useAppSelector} from "../redux/hooks";
 import {selectCommon, setOpenDrawer, setOpenLoginModal} from "../redux/slices/commonSlice";
-import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import CommonButton from "./CommonButton";
+import Grid2 from "@mui/material/Unstable_Grid2";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import CommonIconButton from "./CommonIconButton";
 
 type IHeaderProps = {
 	drawerWidth: number;
@@ -79,31 +80,48 @@ const Header = (props: IHeaderProps) => {
 						Gaming gear website
 					</Typography>
 				</>
-				<>
-					<StoreSelect/>
-				</>
-				{
-					userToken.accessToken === "" ?
-						<CommonButton
-							width={130}
-							height={35}
-							backgroundColor={"#ffffff"}
-							labelColor={"#000000"}
-							startIcon={<AccountCircleRounded/>}
-							variant="contained" onClick={() => dispatch(setOpenLoginModal(true))}
-							label={"Login"}
-						/>
-						:
-						<CommonButton
-							width={130}
-							height={35}
-							backgroundColor={"#ffffff"}
-							labelColor={"#000000"}
-							startIcon={<AccountCircleRounded/>}
-							variant="contained" onClick={() => handleLogout()}
-							label={"Logout"}
-						/>
-				}
+				<Grid2 container spacing={2}>
+					<Grid2>
+						<StoreSelect/>
+					</Grid2>
+					{
+						userToken.accessToken !== "" ?
+							<Grid2>
+								<CommonIconButton
+									backgroundColor={"#ffffff"}
+									icon={<ShoppingCartIcon/>}
+									onClick={() => {}}
+									variant="contained"
+								/>
+							</Grid2> : null
+					}
+					{
+						userToken.accessToken === "" ?
+							<Grid2>
+								<CommonButton
+									width={130}
+									height={35}
+									backgroundColor={"#ffffff"}
+									labelColor={"#000000"}
+									startIcon={<AccountCircleRounded/>}
+									variant="contained" onClick={() => dispatch(setOpenLoginModal(true))}
+									label={"Login"}
+								/>
+							</Grid2>
+							:
+							<Grid2>
+								<CommonButton
+									width={130}
+									height={35}
+									backgroundColor={"#ffffff"}
+									labelColor={"#000000"}
+									startIcon={<AccountCircleRounded/>}
+									variant="contained" onClick={() => handleLogout()}
+									label={"Logout"}
+								/>
+							</Grid2>
+					}
+				</Grid2>
 			</Toolbar>
 		</AppBar>
 	)

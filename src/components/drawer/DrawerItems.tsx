@@ -5,6 +5,7 @@ import ApiIcon from "@mui/icons-material/Api";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
 import FavoriteIcon from "@mui/icons-material/Favorite";
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
 export type DrawerItem = {
 	componentKey: number;
@@ -26,8 +27,8 @@ const DrawerItemList: Array<DrawerItem> = [
 	},
 	{
 		componentKey: 1,
-		componentIcon: <DashboardIcon/>,
-		componentLabel: "Dash Board",
+		componentIcon: <AdminPanelSettingsIcon/>,
+		componentLabel: "Admin Panel",
 		componentPath: "/dashboard",
 		componentRole: ["ROLE_ADMIN", "ROLE_EMP"],
 		componentChild: [

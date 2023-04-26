@@ -16,7 +16,7 @@ import {
 const drawerWidth = 250;
 
 type ScreenLayoutProps = {
-	openDrawer?: boolean
+	openDrawer: boolean
 }
 
 const ScreenLayout = styled(Box, {shouldForwardProp: (prop) => prop !== 'openDrawer'})

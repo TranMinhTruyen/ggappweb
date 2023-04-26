@@ -1,8 +1,17 @@
-import {List, ListItem, ListItemButton, ListItemIcon, ListItemText} from "@mui/material";
-import * as React from "react";
+import {
+	List,
+	ListItem,
+	ListItemButton,
+	ListItemIcon,
+	ListItemText,
+	Menu,
+	MenuItem,
+	MenuProps
+} from "@mui/material";
+import React from "react";
 
 import { useNavigate , useLocation } from "react-router-dom";
-import {useAppSelector} from "../../redux/hooks";
+import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import {selectToken} from "../../redux/slices/tokenSlice";
 import {useEffect, useState} from "react";
 import {ExpandLess, ExpandMore} from "@mui/icons-material";
@@ -10,37 +19,87 @@ import Box from "@mui/material/Box";
 import Collapse from '@mui/material/Collapse';
 import Divider from "@mui/material/Divider";
 import DrawerItemList, {DrawerItem} from "./DrawerItems";
+import {selectCommon, setOpenDrawer} from "../../redux/slices/commonSlice";
+import {styled} from "@mui/material/styles";
+import Grid2 from "@mui/material/Unstable_Grid2";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 const itemList = DrawerItemList;
 
-interface IMenuProps {
-	isDrawerOpen: boolean;
-	handleOpenDrawer: (value: boolean) => void;
-}
-
-interface IMenuItemProps {
-	isDrawerOpen: boolean;
+type IMenuItemProps = {
 	item: DrawerItem;
-	handleOpenDrawer?: (value: boolean) => void;
 }
 
-const DrawerMenuItem = ({ isDrawerOpen, item}: IMenuItemProps) => {
+const StyledMenu = styled((props: MenuProps) => (
+	<Menu
+		elevation={0}
+		anchorOrigin={{
+			vertical: 'top',
+			horizontal: 'right',
+		}}
+		transformOrigin={{
+			vertical: 'top',
+			horizontal: 'right',
+		}}
+		{...props}
+	/>
+))(({ theme }) => ({
+	'& .MuiPaper-root': {
+		borderRadius: 6,
+		marginTop: theme.spacing(0.5),
+		marginLeft: 60,
+		minWidth: 180,
+		boxShadow:
+			'rgb(255, 255, 255) 0px 0px 0px 0px, ' +
+			'rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, ' +
+			'rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, ' +
+			'rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
+		'& .MuiMenu-list': {
+		},
+	},
+}));
+
+const CustomListItem = styled(ListItem)({
+	borderRadius: 25,
+	display: 'block'
+})
+
+const CustomListItemButton = styled(ListItemButton)({
+	minHeight: 50,
+	minWidth: 0,
+	px: 2.5,
+	justifyContent: 'center',
+	borderRadius: 25,
+	"&:hover": {
+		backgroundColor: "#d9d8d8"
+	},
+	'&:active': {
+		boxShadow: '#a8a8a8',
+		color: '#000000',
+	},
+})
+
+const CustomListItemIcon = styled(ListItemIcon)({
+	minWidth: 0,
+	justifyContent: 'center',
+	color: "#7c7c7c"
+})
+
+const DrawerMenuItem = ({ item }: IMenuItemProps) => {
 
 	const navigate = useNavigate();
 	const location = useLocation();
-
 	const { pathname } = location;
-
 	const handleRoute = (path: string) => navigate(path);
+	const commonState = useAppSelector(selectCommon);
 
 	return (
 		<Box>
-			<ListItem
+			<CustomListItem
 				style={
 					pathname === item.componentPath ?
 					{
-						borderRadius: 25,
-						backgroundColor: "#cdf6ff",
+						backgroundColor: "rgba(210,210,210,0.8)",
 						color: "#ff0000"
 					}
 					: {
@@ -50,157 +109,111 @@ const DrawerMenuItem = ({ isDrawerOpen, item}: IMenuItemProps) => {
 				}
 				onClick={() => handleRoute(item.componentPath)}
 				disablePadding
-				sx={{ display: 'block' }}
 			>
-				<ListItemButton
-					sx={{
-						minHeight: 48,
-						justifyContent: isDrawerOpen ? 'initial' : 'center',
-						px: 2.5,
-						":hover": {
-							borderRadius: 25,
-							backgroundColor: "#d9d8d8"
-						},
-					}}
+				<CustomListItemButton
+					sx={{justifyContent: commonState.openDrawer ? 'initial' : 'center'}}
 				>
-					<ListItemIcon
+					<CustomListItemIcon
 						style={pathname === item.componentPath ? {color: "#ff0000"} : {color: "#7c7c7c"}}
 						sx={{
-							minWidth: 0,
-							mr: isDrawerOpen ? 3 : 'auto',
-							justifyContent: 'center',
+							mr: commonState.openDrawer ? 3 : 'auto',
 						}}
 					>
 						{item.componentIcon}
-					</ListItemIcon>
+					</CustomListItemIcon>
 					<ListItemText
 						primary={item.componentLabel}
 						style={pathname === item.componentPath ? {color: "#ff0000"} : {color: "#7c7c7c"}}
-						sx={{ opacity: isDrawerOpen ? 1 : 0 }}
+						sx={{ opacity: commonState.openDrawer ? 1 : 0 }}
 					/>
-				</ListItemButton>
-			</ListItem>
+				</CustomListItemButton>
+			</CustomListItem>
 		</Box>
 	)
 }
 
-const DrawerMenuItemWithChild = ({ isDrawerOpen, item, handleOpenDrawer }: IMenuItemProps) => {
+const DrawerMenuItemWithChild = ({ item }: IMenuItemProps) => {
 
 	const navigate = useNavigate();
 	const location = useLocation();
 	const [openChild, setOpenChild] = useState<boolean>(false);
-
+	const commonState = useAppSelector(selectCommon);
 	const { pathname } = location;
 
 	const handleRoute = (path: string) => {
 		navigate(path);
 	};
 
-	const handleExpand = (item: DrawerItem) => {
+	const handleExpand = () => {
 		setOpenChild(!openChild);
-		handleRoute(item.componentPath);
-		if (!isDrawerOpen) {
-			if (handleOpenDrawer) {
-				handleOpenDrawer(true);
-			}
-		}
 	};
-
-	useEffect(() => {
-		if (!isDrawerOpen) {
-			setOpenChild(isDrawerOpen);
-		}
-	}, [isDrawerOpen]);
 
 	return (
 		<Box>
-			<ListItem
-				onClick={() => handleExpand(item)}
+			<CustomListItem
+				onClick={handleExpand}
 				disablePadding
-				sx={{ display: 'block' }}
 			>
-				<ListItemButton
-					sx={{
-						minHeight: 48,
-						justifyContent: isDrawerOpen ? 'initial' : 'center',
-						px: 2.5,
-						":hover": {
-							borderRadius: 25,
-							backgroundColor: "#d9d8d8"
-						},
-						color: "#7c7c7c"
-					}}
-				>
-					<ListItemIcon
-						sx={{
-							minWidth: 0,
-							mr: isDrawerOpen ? 3 : 'auto',
-							justifyContent: 'center',
-						}}
-					>
+				<CustomListItemButton sx={{justifyContent: commonState.openDrawer ? 'initial' : 'center',}}>
+					<CustomListItemIcon sx={{mr: commonState.openDrawer ? 3 : 'auto'}}>
 						{item.componentIcon}
-					</ListItemIcon>
+					</CustomListItemIcon>
 					<ListItemText
 						primary={item.componentLabel}
-						sx={{ opacity: isDrawerOpen ? 1 : 0 }}
+						sx={{
+							opacity: commonState.openDrawer ? 1 : 0,
+							color: "#7c7c7c"
+						}}
 					/>
-					{isDrawerOpen ? openChild ? <ExpandLess /> : <ExpandMore /> : null}
-				</ListItemButton>
-			</ListItem>
+					{ commonState.openDrawer ? openChild ?
+						<ExpandLess sx={{color: "#7c7c7c"}} />
+						:
+						<ExpandMore sx={{color: "#7c7c7c"}} />
+						:
+						null
+					}
+				</CustomListItemButton>
+			</CustomListItem>
 			<Collapse in={openChild} unmountOnExit>
-				<List component="div" disablePadding style={{ marginLeft: 20 }}>
+				{ !commonState.openDrawer ? <Divider style={{ marginTop: 8 }}/> : null }
+				<List
+					component="div"
+					style={{
+						marginLeft: commonState.openDrawer ? 20 : 0,
+						paddingTop: 5,
+						paddingBottom: 5,
+					}}
+				>
 					{
 						item.componentChild?.map(child => (
 							child.componentChild == null ?
-							<ListItem
+							<CustomListItem
 								key={child.componentKey}
 								onClick={() => handleRoute(child.componentPath)}
 								disablePadding
-								style={
-									pathname === child.componentPath ?
-										{
-											borderRadius: 25,
-											backgroundColor: "#cdf6ff",
-											color: "#ff0000"
-										}
-										: {
-											backgroundColor: "#ffffff",
-											color: "#7c7c7c"
-										}
-								}
+								style={{
+									marginTop: item.componentChild?.indexOf(child) !== 0 ? 8 : 0,
+									backgroundColor: pathname === child.componentPath ? "rgba(210,210,210,0.8)" : "#ffffff",
+									color: pathname === child.componentPath ? "#ff0000" : "#7c7c7c"
+								}}
 							>
-								<ListItemButton
-									sx={{
-										minHeight: 48,
-										justifyContent: isDrawerOpen ? 'initial' : 'center',
-										px: 2.5,
-										":hover": {
-											borderRadius: 25,
-											backgroundColor: "#d9d8d8"
-										}
-									}}
+								<CustomListItemButton
+									sx={{justifyContent: commonState.openDrawer ? 'initial' : 'center'}}
 								>
-									<ListItemIcon
+									<CustomListItemIcon
 										style={pathname === child.componentPath ? {color: "#ff0000"} : {color: "#7c7c7c"}}
-										sx={{
-											minWidth: 0,
-											mr: isDrawerOpen ? 3 : 'auto',
-											justifyContent: 'center',
-										}}
+										sx={{mr: commonState.openDrawer ? 3 : 'auto',}}
 									>
 										{child.componentIcon}
-									</ListItemIcon>
+									</CustomListItemIcon>
 									<ListItemText
 										primary={child.componentLabel}
 										style={pathname === child.componentPath ? {color: "#ff0000"} : {color: "#7c7c7c"}}
-										sx={{ opacity: isDrawerOpen ? 1 : 0 }}
+										sx={{ opacity: commonState.openDrawer ? 1 : 0 }}
 									/>
-								</ListItemButton>
-							</ListItem> :
-								<DrawerMenuItemWithChild key={child.componentKey} item={child}
-								                         isDrawerOpen={isDrawerOpen}
-								                         handleOpenDrawer={handleOpenDrawer}
-								/>
+								</CustomListItemButton>
+							</CustomListItem> :
+								<DrawerMenuItemWithChild key={child.componentKey} item={child}/>
 						))
 					}
 				</List>
@@ -210,25 +223,30 @@ const DrawerMenuItemWithChild = ({ isDrawerOpen, item, handleOpenDrawer }: IMenu
 	)
 }
 
-const DrawerMenu = ({ isDrawerOpen, handleOpenDrawer }: IMenuProps) => {
+const DrawerMenu = () => {
 
 	const userToken = useAppSelector(selectToken);
 
 	return (
-		<List style={{ padding: 10 }}>
+		<Grid2 container sx={{ padding: 1 }} spacing={1}>
 			{itemList.map((item) => (
 				item.componentRole != null ?
 					userToken.role !== "" && item.componentRole.includes(userToken.role) ?
 						item.componentChild == null ?
-							<DrawerMenuItem key={item.componentKey} item={item}
-							                isDrawerOpen={isDrawerOpen}/>
-							: <DrawerMenuItemWithChild key={item.componentKey} item={item}
-							                           isDrawerOpen={isDrawerOpen}
-							                           handleOpenDrawer={handleOpenDrawer}/>
+							<Grid2 xs={12}>
+								<DrawerMenuItem key={item.componentKey} item={item}/>
+							</Grid2>
+							:
+							<Grid2 xs={12}>
+								<DrawerMenuItemWithChild key={item.componentKey} item={item}/>
+							</Grid2>
 						: null
-					: <DrawerMenuItem key={item.componentKey} item={item} isDrawerOpen={isDrawerOpen}/>
+					:
+					<Grid2 xs={12}>
+						<DrawerMenuItem key={item.componentKey} item={item}/>
+					</Grid2>
 			))}
-		</List>
+		</Grid2>
 	)
 }
 export default React.memo(DrawerMenu);

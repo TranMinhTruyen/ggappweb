@@ -79,16 +79,7 @@ const Drawer = (props: IDrawerProps) => {
 				</IconButton>
 			</DrawerHeader>
 			<Divider/>
-			<DrawerMenu
-				isDrawerOpen={commonState.openDrawer}
-				handleOpenDrawer={(value) =>
-					{
-						if (value) {
-							dispatch(setOpenDrawer(true))
-						}
-					}
-				}
-			/>
+			<DrawerMenu/>
 		</CustomDrawer>
 	)
 }

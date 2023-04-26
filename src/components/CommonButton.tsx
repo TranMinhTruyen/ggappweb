@@ -42,7 +42,7 @@ const CustomButton = styled(Button)({
 	].join(','),
 	'&:hover': {
 		boxShadow: '#a8a8a8',
-		backgroundColor: '#69a3ff',
+		backgroundColor: 'rgba(210,210,210,0.8)',
 		color: '#000000',
 	},
 	'&:active': {

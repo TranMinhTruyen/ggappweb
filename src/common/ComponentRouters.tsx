@@ -11,7 +11,6 @@ export interface ComponentTabItem {
     componentNode: React.ReactNode;
     componentPath: string;
 }
-
 const ComponentRouters: Array<ComponentTabItem> = [
     {
         componentNode: <HomeComponent/>,
