@@ -1,6 +1,6 @@
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import {selectStore, setStore} from "../../redux/slices/storeSlice";
-import React, {memo, useEffect, useState} from "react";
+import React, {memo, useEffect, useRef, useState} from "react";
 import {StoreResponse} from "../../common/dto/response/StoreResponse";
 import StoreApi from "../../common/api/StoreApi";
 import {Checkbox, FormControl, ListItemText, MenuItem, Select, SelectChangeEvent} from "@mui/material";
@@ -30,25 +30,36 @@ const CustomSelectValid = styled(FormControl)({
         }
     }
 });
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+
 const StoreSelect = () => {
 
     const dispatch = useAppDispatch();
-    let storeSlice = useAppSelector(selectStore);
-
+    const storeSlice = useAppSelector(selectStore);
     const [storeSelect, setStoreSelect] = useState<StoreResponse | any>(storeSlice);
     const [storeData, setStoreData] = useState<PaginationResponse<StoreResponse>>({
-        data: null,
+        data: [],
         totalRecord: 0,
         page: 0,
         size: 0,
         totalPage: 0
     });
+    const [page, setPage] = useState<number>(1);
 
     useEffect(() => {
         async function getAllStore() {
-            const responseData = await StoreApi.getAllStore(1);
+            const responseData = await StoreApi.getAllStore(page);
             if (responseData.status === 200) {
-                setStoreData(responseData.payload);
+                if (page === 1) {
+                    setStoreData(responseData.payload);
+                } else {
+                    setStoreData((prevState) => ({
+                        ...prevState,
+                        data: [...prevState.data, ...responseData.payload.data]
+                    }));
+                }
                 if (sessionStorage.getItem('storeSelect') === null) {
                     dispatch(setStore(responseData.payload.data[0]));
                     setStoreSelect(responseData.payload.data[0])
@@ -60,11 +71,17 @@ const StoreSelect = () => {
         }
         getAllStore().then(() => {});
         // eslint-disable-next-line
-    }, [])
+    }, [page])
+
+    const onMenuScroll = () => {
+        if (storeData.totalPage !== null && storeData.totalPage > page) {
+            setPage((prevState: number) => prevState + 1);
+        }
+    };
 
     const handleChange = (id: number) => {
-        let update = storeData.data?.find((store) => store.id === id)
-        if (update !== undefined && storeData.data?.includes(update)) {
+        let update = storeData.data.find((store) => store.id === id)
+        if (update !== undefined) {
             dispatch(setStore(update));
             setStoreSelect(update);
             sessionStorage.setItem('storeSelect', JSON.stringify(update));
@@ -72,11 +89,24 @@ const StoreSelect = () => {
     };
 
     return (
-        <CustomSelectValid sx={{ height: 35, width: 200 }}>
+        <CustomSelectValid>
             <Select
                 value={storeSelect.id !== 0 ? storeSelect.id : ''}
                 onChange={(event: SelectChangeEvent) => handleChange(parseInt(event.target.value))}
                 renderValue={() => "Store: " + storeSelect.storeCode}
+                MenuProps={{
+                    PaperProps: {
+                        style: {
+                            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+                            width: 250,
+                        },
+                        onScroll: (event) => {
+                            if (event.currentTarget.scrollTop + event.currentTarget.clientHeight >= event.currentTarget.scrollHeight) {
+                                onMenuScroll();
+                            }
+                        }
+                    },
+                }}
                 sx={{ height: 35, width: 200 }}
             >
                 {storeData.data?.map((item) => (

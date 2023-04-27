@@ -1,5 +1,5 @@
 export interface PaginationResponse<T> {
-    data: [T] | null,
+    data: T[] | [],
     totalRecord: number | null,
     page: number | null,
     size: number | null,

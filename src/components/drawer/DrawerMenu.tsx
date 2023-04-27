@@ -1,63 +1,25 @@
-import {
-	List,
-	ListItem,
-	ListItemButton,
-	ListItemIcon,
-	ListItemText,
-	Menu,
-	MenuItem,
-	MenuProps
-} from "@mui/material";
 import React from "react";
-
 import { useNavigate , useLocation } from "react-router-dom";
-import {useAppDispatch, useAppSelector} from "../../redux/hooks";
+import {useAppSelector} from "../../redux/hooks";
 import {selectToken} from "../../redux/slices/tokenSlice";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {ExpandLess, ExpandMore} from "@mui/icons-material";
 import Box from "@mui/material/Box";
 import Collapse from '@mui/material/Collapse';
 import Divider from "@mui/material/Divider";
 import DrawerItemList, {DrawerItem} from "./DrawerItems";
-import {selectCommon, setOpenDrawer} from "../../redux/slices/commonSlice";
+import {selectCommon} from "../../redux/slices/commonSlice";
 import {styled} from "@mui/material/styles";
 import Grid2 from "@mui/material/Unstable_Grid2";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import {RootState} from "../../redux/store";
+import {shallowEqual} from "react-redux";
+import {List, ListItem, ListItemButton, ListItemIcon, ListItemText} from "@mui/material";
 
 const itemList = DrawerItemList;
 
 type IMenuItemProps = {
 	item: DrawerItem;
 }
-
-const StyledMenu = styled((props: MenuProps) => (
-	<Menu
-		elevation={0}
-		anchorOrigin={{
-			vertical: 'top',
-			horizontal: 'right',
-		}}
-		transformOrigin={{
-			vertical: 'top',
-			horizontal: 'right',
-		}}
-		{...props}
-	/>
-))(({ theme }) => ({
-	'& .MuiPaper-root': {
-		borderRadius: 6,
-		marginTop: theme.spacing(0.5),
-		marginLeft: 60,
-		minWidth: 180,
-		boxShadow:
-			'rgb(255, 255, 255) 0px 0px 0px 0px, ' +
-			'rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, ' +
-			'rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, ' +
-			'rgba(0, 0, 0, 0.05) 0px 4px 6px -2px',
-		'& .MuiMenu-list': {
-		},
-	},
-}));
 
 const CustomListItem = styled(ListItem)({
 	borderRadius: 25,
@@ -137,8 +99,11 @@ const DrawerMenuItemWithChild = ({ item }: IMenuItemProps) => {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const [openChild, setOpenChild] = useState<boolean>(false);
-	const commonState = useAppSelector(selectCommon);
 	const { pathname } = location;
+	const { openDrawer } = useAppSelector(
+		(state: RootState) => ({ openDrawer: state.commonState.openDrawer }),
+		shallowEqual
+	);
 
 	const handleRoute = (path: string) => {
 		navigate(path);
@@ -154,18 +119,18 @@ const DrawerMenuItemWithChild = ({ item }: IMenuItemProps) => {
 				onClick={handleExpand}
 				disablePadding
 			>
-				<CustomListItemButton sx={{justifyContent: commonState.openDrawer ? 'initial' : 'center',}}>
-					<CustomListItemIcon sx={{mr: commonState.openDrawer ? 3 : 'auto'}}>
+				<CustomListItemButton sx={{justifyContent: openDrawer ? 'initial' : 'center',}}>
+					<CustomListItemIcon sx={{mr: openDrawer ? 3 : 'auto'}}>
 						{item.componentIcon}
 					</CustomListItemIcon>
 					<ListItemText
 						primary={item.componentLabel}
 						sx={{
-							opacity: commonState.openDrawer ? 1 : 0,
+							opacity: openDrawer ? 1 : 0,
 							color: "#7c7c7c"
 						}}
 					/>
-					{ commonState.openDrawer ? openChild ?
+					{ openDrawer ? openChild ?
 						<ExpandLess sx={{color: "#7c7c7c"}} />
 						:
 						<ExpandMore sx={{color: "#7c7c7c"}} />
@@ -175,11 +140,11 @@ const DrawerMenuItemWithChild = ({ item }: IMenuItemProps) => {
 				</CustomListItemButton>
 			</CustomListItem>
 			<Collapse in={openChild} unmountOnExit>
-				{ !commonState.openDrawer ? <Divider style={{ marginTop: 8 }}/> : null }
+				{ !openDrawer ? <Divider style={{ marginTop: 8 }}/> : null }
 				<List
 					component="div"
 					style={{
-						marginLeft: commonState.openDrawer ? 20 : 0,
+						marginLeft: openDrawer ? 20 : 0,
 						paddingTop: 5,
 						paddingBottom: 5,
 					}}
@@ -198,18 +163,18 @@ const DrawerMenuItemWithChild = ({ item }: IMenuItemProps) => {
 								}}
 							>
 								<CustomListItemButton
-									sx={{justifyContent: commonState.openDrawer ? 'initial' : 'center'}}
+									sx={{justifyContent: openDrawer ? 'initial' : 'center'}}
 								>
 									<CustomListItemIcon
 										style={pathname === child.componentPath ? {color: "#ff0000"} : {color: "#7c7c7c"}}
-										sx={{mr: commonState.openDrawer ? 3 : 'auto',}}
+										sx={{mr: openDrawer ? 3 : 'auto',}}
 									>
 										{child.componentIcon}
 									</CustomListItemIcon>
 									<ListItemText
 										primary={child.componentLabel}
 										style={pathname === child.componentPath ? {color: "#ff0000"} : {color: "#7c7c7c"}}
-										sx={{ opacity: commonState.openDrawer ? 1 : 0 }}
+										sx={{ opacity: openDrawer ? 1 : 0 }}
 									/>
 								</CustomListItemButton>
 							</CustomListItem> :
@@ -233,17 +198,17 @@ const DrawerMenu = () => {
 				item.componentRole != null ?
 					userToken.role !== "" && item.componentRole.includes(userToken.role) ?
 						item.componentChild == null ?
-							<Grid2 xs={12}>
-								<DrawerMenuItem key={item.componentKey} item={item}/>
+							<Grid2 key={item.componentKey} xs={12}>
+								<DrawerMenuItem item={item}/>
 							</Grid2>
 							:
-							<Grid2 xs={12}>
-								<DrawerMenuItemWithChild key={item.componentKey} item={item}/>
+							<Grid2 key={item.componentKey} xs={12}>
+								<DrawerMenuItemWithChild item={item}/>
 							</Grid2>
 						: null
 					:
-					<Grid2 xs={12}>
-						<DrawerMenuItem key={item.componentKey} item={item}/>
+					<Grid2 key={item.componentKey} xs={12}>
+						<DrawerMenuItem item={item}/>
 					</Grid2>
 			))}
 		</Grid2>

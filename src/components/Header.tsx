@@ -1,4 +1,4 @@
-import React from "react";
+import React, {memo} from "react";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -11,11 +11,13 @@ import {selectToken} from "../redux/slices/tokenSlice";
 import {useNavigate} from "react-router-dom";
 import StoreSelect from "./select/StoreSelect";
 import {useAppDispatch, useAppSelector} from "../redux/hooks";
-import {selectCommon, setOpenDrawer, setOpenLoginModal} from "../redux/slices/commonSlice";
+import {setOpenDrawer, setOpenLoginModal} from "../redux/slices/commonSlice";
 import CommonButton from "./CommonButton";
 import Grid2 from "@mui/material/Unstable_Grid2";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import CommonIconButton from "./CommonIconButton";
+import {RootState} from "../redux/store";
+import {shallowEqual} from "react-redux";
 
 type IHeaderProps = {
 	drawerWidth: number;
@@ -50,7 +52,10 @@ const Header = (props: IHeaderProps) => {
 	const userToken = useAppSelector(selectToken);
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
-	const commonState = useAppSelector(selectCommon);
+	const { openDrawer } = useAppSelector(
+		(state: RootState) => ({ openDrawer: state.commonState.openDrawer }),
+		shallowEqual
+	);
 
 	const handleDrawerOpen = () => {
 		dispatch(setOpenDrawer(true));
@@ -59,7 +64,7 @@ const Header = (props: IHeaderProps) => {
 	return (
 		<AppBar drawerWidth={drawerWidth}
 		        position="fixed"
-		        open={commonState.openDrawer}
+		        open={openDrawer}
 		        style={userToken.role === "ROLE_ADMIN" || userToken.role === "ROLE_EMP" ? {} : {backgroundColor: "#ff0000"}}
 		>
 			<Toolbar>
@@ -70,7 +75,7 @@ const Header = (props: IHeaderProps) => {
 					edge="start"
 					sx={{
 						marginRight: 5,
-						...(commonState.openDrawer && {display: 'none'}),
+						...(openDrawer && {display: 'none'}),
 					}}
 				>
 					<MenuIcon/>
@@ -126,4 +131,4 @@ const Header = (props: IHeaderProps) => {
 		</AppBar>
 	)
 }
-export default React.memo(Header);
+export default memo(Header);

@@ -8,11 +8,9 @@ import {useAppDispatch, useAppSelector} from "../redux/hooks";
 import {styled} from "@mui/material/styles";
 import LoginModal from "./modal/LoginModal";
 import RegisterModal from "./modal/RegisterModal";
-import {
-	selectCommon,
-	setIsLogin,
-	setOpenLoginModal,
-} from "../redux/slices/commonSlice";
+import {setIsLogin} from "../redux/slices/commonSlice";
+import {RootState} from "../redux/store";
+import {shallowEqual} from "react-redux";
 const drawerWidth = 250;
 
 type ScreenLayoutProps = {
@@ -48,7 +46,11 @@ const ScreenLayout = styled(Box, {shouldForwardProp: (prop) => prop !== 'openDra
 const MainScreen = () => {
 
 	const dispatch = useAppDispatch();
-	const commonState = useAppSelector(selectCommon);
+
+	const { openDrawer } = useAppSelector(
+		(state: RootState) => ({ openDrawer: state.commonState.openDrawer }),
+		shallowEqual
+	);
 
 	const handleLogout = () => {
 		dispatch(clearToken());
@@ -65,17 +67,9 @@ const MainScreen = () => {
 			<Drawer
 				drawerWidth={drawerWidth}
 			/>
-			<LoginModal
-				open={commonState.openLoginModal}
-				title={"Login Modal"}
-				onClose={(value) => dispatch(setOpenLoginModal(value))}
-			/>
-			<RegisterModal
-				open={commonState.openRegisterModal}
-				back={true}
-				title={"Register Modal"}
-			/>
-			<ScreenLayout openDrawer={commonState.openDrawer}>
+			<LoginModal/>
+			<RegisterModal/>
+			<ScreenLayout openDrawer={openDrawer}>
 				<Outlet/>
 			</ScreenLayout>
 		</Box>

@@ -15,9 +15,11 @@ import CommonButton from "../../components/CommonButton";
 import CommonTextInput from "../../components/CommonTextInput";
 import {Avatar, Checkbox, FormControlLabel, Link} from "@mui/material";
 import Typography from "@mui/material/Typography";
-import {useAppDispatch} from "../../redux/hooks";
+import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import CommonAlert, {IAlertDetail} from "../../components/CommonAlert";
 import {setIsLogin, setOpenLoginModal, setOpenRegisterModal} from "../../redux/slices/commonSlice";
+import {RootState} from "../../redux/store";
+import {shallowEqual} from "react-redux";
 
 const alertDetail: IAlertDetail = {
 	alertSeverity: "error",
@@ -32,12 +34,6 @@ type LoginModalActionProps = {
 	remember: boolean;
 	showAlert?: (showAlert: boolean) => void;
 	onSummit: () => void;
-}
-
-type LoginModalProps = {
-	open: boolean;
-	title: string;
-	onClose: (value: boolean) => void;
 }
 
 type LoginModalContentProps = {
@@ -165,7 +161,7 @@ const LoginModalContent = (props: LoginModalContentProps) => {
 	)
 }
 
-const LoginModal = ({ open, onClose }: LoginModalProps) => {
+const LoginModal = () => {
 	
 	const [username, setUsername] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
@@ -173,6 +169,11 @@ const LoginModal = ({ open, onClose }: LoginModalProps) => {
 	const [usernameValidCheck, setUsernameValidCheck] = useState<boolean>(true);
 	const [passwordValidCheck, setPasswordValidCheck] = useState<boolean>(true);
 	const [alert, setAlert] = useState<IAlertDetail>(alertDetail);
+
+	const { openLoginModal } = useAppSelector(
+		(state: RootState) => ({ openLoginModal: state.commonState.openLoginModal }),
+		shallowEqual
+	);
 	
 	useEffect(() => {
 		setUsernameValidCheck(true);
@@ -181,7 +182,7 @@ const LoginModal = ({ open, onClose }: LoginModalProps) => {
 		setUsername("");
 		setPassword("");
 		setAlert({...alertDetail, showAlert: false, message: "", title: "", alertSeverity: "error"});
-	}, [open, onClose])
+	}, [openLoginModal])
 	
 	const dispatch = useAppDispatch();
 	
@@ -219,7 +220,7 @@ const LoginModal = ({ open, onClose }: LoginModalProps) => {
 			const response = await LoginApi.login(request);
 			
 			if (response.status === 200) {
-				onClose(false)
+				dispatch(setOpenLoginModal(false));
 				if (rememberChecked) {
 					localStorage.setItem('tokenState', JSON.stringify(response.payload))
 				} else {
@@ -236,7 +237,7 @@ const LoginModal = ({ open, onClose }: LoginModalProps) => {
 	return (
 		<Box>
 			<CommonModal
-				open={open}
+				open={openLoginModal}
 				onClose={() => dispatch(setOpenLoginModal(false))}
 				size={'sm'}
 				dialogContent={
@@ -244,7 +245,7 @@ const LoginModal = ({ open, onClose }: LoginModalProps) => {
 						usernameValidCheck={usernameValidCheck}
 						passwordValidCheck={passwordValidCheck}
 						alert={alert}
-						open={open}
+						open={openLoginModal}
 						setUsername={(value) => setUsername(value)}
 						setPassword={(value) => setPassword(value)}
 						setRememberChecked={(value) => setRememberChecked(value)}

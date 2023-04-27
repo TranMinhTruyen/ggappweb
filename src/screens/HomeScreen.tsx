@@ -1,6 +1,3 @@
-import Box from "@mui/material/Box";
-import {useAppDispatch, useAppSelector} from "../redux/hooks";
-import {selectStore} from "../redux/slices/storeSlice";
 import React, {memo, useEffect, useState} from "react";
 import StoreApi from "../common/api/StoreApi";
 import {ProductStoreResponse} from "../common/dto/response/ProductStoreResponse";
@@ -11,32 +8,38 @@ import placeHolderImage from "../static/placeholder-image.png";
 import CommonButton from "../components/CommonButton";
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import {selectCommon, setOpenLoginModal} from "../redux/slices/commonSlice";
+import {setOpenLoginModal} from "../redux/slices/commonSlice";
 import CartApi from "../common/api/CartApi";
 import {selectToken} from "../redux/slices/tokenSlice";
+import {shallowEqual} from "react-redux";
+import {RootState} from "../redux/store";
+import Box from "@mui/material/Box";
+import {useAppDispatch, useAppSelector} from "../redux/hooks";
+import {selectStore} from "../redux/slices/storeSlice";
 
 const HomeScreen = () => {
-	const storeSlice = useAppSelector(selectStore);
-
 	const [productList, setProductList] = useState<ProductStoreResponse[]>([])
 	const [page, setPage] = useState<number>(1);
 	const [count, setCount] = useState<number>(1);
 	const [rowsPerPage, setRowsPerPage] = useState<number>(10);
-	const commonState = useAppSelector(selectCommon);
-	const storeState = useAppSelector(selectStore);
-	const userToken = useAppSelector(selectToken);
+	const storeState = useAppSelector(selectStore, shallowEqual);
+	const userToken = useAppSelector(selectToken, shallowEqual);
 	const dispatch = useAppDispatch();
+	const { isLogin } = useAppSelector(
+		(state: RootState) => ({ isLogin: state.commonState.isLogin }),
+		shallowEqual
+	);
 
 	useEffect(() => {
 		async function getProductFromStore() {
-			const responseData = await StoreApi.getProductFromStore(rowsPerPage, page, storeSlice.id);
+			const responseData = await StoreApi.getProductFromStore(rowsPerPage, page, storeState.id);
 			if (responseData.status === 200) {
 				setCount(responseData.payload.totalRecord);
 				setProductList(responseData.payload.data);
 			}
 		}
 		getProductFromStore().then(() => {});
-	}, [storeSlice, page, rowsPerPage])
+	}, [storeState, page, rowsPerPage])
 	
 	const handleChangePage = (
 		event: React.MouseEvent<HTMLButtonElement> | null,
@@ -53,7 +56,7 @@ const HomeScreen = () => {
 	};
 
 	const handleAddToCart = async (productId: number) => {
-		if (commonState.isLogin && userToken.accessToken !== null) {
+		if (isLogin && userToken.accessToken !== null) {
 			const response = await CartApi.createCartAndAddProductToCart(productId, storeState.id, 1, userToken.accessToken);
 			if (response.status === 200) {
 				console.log(response);
@@ -64,7 +67,7 @@ const HomeScreen = () => {
 	}
 
 	const handleBuyNow = () => {
-		if (commonState.isLogin) {
+		if (isLogin) {
 
 		} else {
 			dispatch(setOpenLoginModal(true));
@@ -141,5 +144,4 @@ const HomeScreen = () => {
 		</Box>
 	)
 }
-
 export default memo(HomeScreen);

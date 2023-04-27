@@ -2,22 +2,23 @@ import CommonModal from "../../components/CommonModal";
 import React from "react";
 import Typography from "@mui/material/Typography";
 import {setOpenLoginModal, setOpenRegisterModal} from "../../redux/slices/commonSlice";
-import {useAppDispatch} from "../../redux/hooks";
+import {useAppDispatch, useAppSelector} from "../../redux/hooks";
+import {RootState} from "../../redux/store";
+import {shallowEqual} from "react-redux";
 
-type RegisterModalProps = {
-    open: boolean;
-    back?: boolean;
-    title: string;
-}
-
-const RegisterModal = ({open, back, title}: RegisterModalProps) => {
+const RegisterModal = () => {
 
     const dispatch = useAppDispatch();
 
+    const { openRegisterModal } = useAppSelector(
+        (state: RootState) => ({ openRegisterModal: state.commonState.openRegisterModal }),
+        shallowEqual
+    );
+
     return (
         <CommonModal
-            open={open}
-            back={back}
+            open={openRegisterModal}
+            back={true}
             onClose={() => {dispatch(setOpenLoginModal(true)); dispatch(setOpenRegisterModal(false))}}
             onBack={() => {dispatch(setOpenLoginModal(true)); dispatch(setOpenRegisterModal(false))}}
             size={'sm'}

@@ -8,7 +8,9 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import DrawerMenu from "./DrawerMenu";
 import {DrawerProps} from "@mui/material/Drawer/Drawer";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
-import {selectCommon, setOpenDrawer} from "../../redux/slices/commonSlice";
+import {setOpenDrawer} from "../../redux/slices/commonSlice";
+import {RootState} from "../../redux/store";
+import {shallowEqual} from "react-redux";
 
 type IDrawerProps = {
 	drawerWidth: number;
@@ -67,12 +69,15 @@ const CustomDrawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'o
 const Drawer = (props: IDrawerProps) => {
 	
 	const { drawerWidth } = props;
-	const commonState = useAppSelector(selectCommon);
 	const dispatch = useAppDispatch();
 	const theme = useTheme();
+	const { openDrawer } = useAppSelector(
+		(state: RootState) => ({ openDrawer: state.commonState.openDrawer }),
+		shallowEqual
+	);
 
 	return (
-		<CustomDrawer drawerWidth={drawerWidth} variant="permanent" open={commonState.openDrawer}>
+		<CustomDrawer drawerWidth={drawerWidth} variant="permanent" open={openDrawer}>
 			<DrawerHeader>
 				<IconButton onClick={() => dispatch(setOpenDrawer(false))}>
 					{theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
