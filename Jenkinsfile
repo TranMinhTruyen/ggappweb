@@ -1,6 +1,11 @@
 pipeline {
     agent any
     stages {
+        stage('Run command') {
+            steps {
+                bat 'start /b command'
+            }
+        }
         stage('Clone repository') {
             steps {
                 git branch: 'master', url: 'https://github.com/TranMinhTruyen/ggappweb'
