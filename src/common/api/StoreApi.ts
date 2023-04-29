@@ -1,8 +1,8 @@
+import axios from "axios";
 import BaseResponse, {errorBaseResponse} from "../dto/response/BaseResponse";
 import {PaginationResponse} from "../dto/response/PaginationResponse";
 import {StoreResponse} from "../dto/response/StoreResponse";
 import {ProductStoreResponse} from "../dto/response/ProductStoreResponse";
-import axios from "axios";
 
 const STORE_URL: string = "http://localhost:8080/api/store/";
 

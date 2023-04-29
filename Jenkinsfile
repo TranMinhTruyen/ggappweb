@@ -1,11 +1,6 @@
 pipeline {
     agent any
     stages {
-        stage('Run command') {
-            steps {
-                bat 'start /b command'
-            }
-        }
         stage('Clone repository') {
             steps {
                 git branch: 'master', url: 'https://github.com/TranMinhTruyen/ggappweb'
@@ -14,7 +9,7 @@ pipeline {
         stage('Install dependencies') {
             steps {
                 nodejs(nodeJSInstallationName: 'Node.js 16.14.1') {
-                    sh 'npm install'
+                    sh 'npm install --force'
                 }
             }
         }
@@ -22,6 +17,13 @@ pipeline {
             steps {
                 nodejs(nodeJSInstallationName: 'Node.js 16.14.1') {
                     sh 'npm start'
+                }
+            }
+        }
+        stage('Build') {
+            steps {
+                nodejs(nodeJSInstallationName: 'Node.js 16.14.1') {
+                    sh 'npm run build'
                 }
             }
         }

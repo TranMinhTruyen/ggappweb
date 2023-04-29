@@ -1,8 +1,6 @@
 import {CartResponse} from "../dto/response/CartResponse";
 import BaseResponse, {errorBaseResponse} from "../dto/response/BaseResponse";
 import axios from "axios";
-import {useAppSelector} from "../../redux/hooks";
-import {selectToken} from "../../redux/slices/tokenSlice";
 
 const CART_URL: string = "http://localhost:8080/api/cart/";
 
