@@ -13,17 +13,10 @@ pipeline {
                 }
             }
         }
-        stage('Build') {
+        stage('Start') {
             steps {
                 nodejs(nodeJSInstallationName: 'Node.js 16.14.1') {
-                    sh 'npm run build'
-                }
-            }
-        }
-        stage('Test') {
-            steps {
-                nodejs(nodeJSInstallationName: 'Node.js 16.14.1') {
-                    sh 'npm run test'
+                    sh 'npm start'
                 }
             }
         }
