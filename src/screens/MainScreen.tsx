@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useRef} from "react";
 import Drawer from "../components/drawer/Drawer";
 import Box from "@mui/material/Box";
 import {Outlet} from "react-router-dom";
@@ -8,9 +8,16 @@ import {useAppDispatch, useAppSelector} from "../redux/hooks";
 import {styled} from "@mui/material/styles";
 import LoginModal from "./modal/LoginModal";
 import RegisterModal from "./modal/RegisterModal";
-import {setIsLogin} from "../redux/slices/commonSlice";
+import {setAlert, setIsLogin} from "../redux/slices/commonSlice";
 import {RootState} from "../redux/store";
 import {shallowEqual} from "react-redux";
+import CommonAlert from "../components/CommonAlert";
+import AlertList from "../components/AlertList";
+import Alert from "@mui/material/Alert";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import {AlertTitle} from "@mui/material";
+import Collapse from "@mui/material/Collapse";
 const drawerWidth = 250;
 
 type ScreenLayoutProps = {
@@ -51,6 +58,11 @@ const MainScreen = () => {
 		(state: RootState) => ({ openDrawer: state.commonState.openDrawer }),
 		shallowEqual
 	);
+	
+	const { alert } = useAppSelector(
+		(state: RootState) => ({ alert: state.commonState.alert }),
+		shallowEqual
+	);
 
 	const handleLogout = () => {
 		dispatch(clearToken());
@@ -69,7 +81,32 @@ const MainScreen = () => {
 			/>
 			<LoginModal/>
 			<RegisterModal/>
-			<ScreenLayout openDrawer={openDrawer}>
+			<ScreenLayout component={'main'} openDrawer={openDrawer}>
+				<AlertList>
+					{alert.map((alertItem) => (
+						<Alert
+							key={alert.indexOf(alertItem)}
+							severity={alertItem.alertSeverity}
+							variant={"filled"}
+							action={
+								<IconButton
+									aria-label="close"
+									color="inherit"
+									size="small"
+									onClick={() => {
+										dispatch(setAlert(alert.filter((item) => item !== alertItem)))
+									}}
+								>
+									<CloseIcon fontSize="inherit" />
+								</IconButton>
+							}
+							sx={{ mb: 2 }}
+						>
+							<AlertTitle>{alertItem.title}</AlertTitle>
+							{alertItem.message}
+						</Alert>
+					))}
+				</AlertList>
 				<Outlet/>
 			</ScreenLayout>
 		</Box>

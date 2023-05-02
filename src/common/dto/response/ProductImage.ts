@@ -1,4 +1,4 @@
 export interface ProductImage {
-    id: number | null;
-    imageData: string | null;
+    id: number | 0;
+    imageData: string | "";
 }

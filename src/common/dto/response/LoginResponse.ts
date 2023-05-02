@@ -1,7 +1,7 @@
 export interface LoginResponse {
-    accessToken: string | null,
-    userFullName: string | null,
+    accessToken: string | "",
+    userFullName: string | "",
     role: string,
-    authorities: [] | null,
+    authorities: [],
     accountSettingsResponse: null
 }

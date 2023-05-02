@@ -16,6 +16,20 @@ import {RootState} from "../redux/store";
 import Box from "@mui/material/Box";
 import {useAppDispatch, useAppSelector} from "../redux/hooks";
 import {selectStore} from "../redux/slices/storeSlice";
+import {styled} from "@mui/material/styles";
+
+const ResponsiveBox = styled(Box)(({ theme }) => ({
+	maxHeight: "75vh",
+	overflow: "auto",
+	overflowX: "hidden",
+	overflowY: "scroll",
+	[theme.breakpoints.down("md")]: {
+		maxHeight: "calc(100vh - 150px)",
+	},
+	[theme.breakpoints.down("sm")]: {
+		maxHeight: "calc(100vh - 120px)",
+	},
+}));
 
 const HomeScreen = () => {
 	const [productList, setProductList] = useState<ProductStoreResponse[]>([])
@@ -29,13 +43,18 @@ const HomeScreen = () => {
 		(state: RootState) => ({ isLogin: state.commonState.isLogin }),
 		shallowEqual
 	);
+	
+	const { alertInfoHeight } = useAppSelector(
+		(state: RootState) => ({ alertInfoHeight: state.commonState.alertInfoHeight }),
+		shallowEqual
+	);
 
 	useEffect(() => {
 		async function getProductFromStore() {
 			const responseData = await StoreApi.getProductFromStore(rowsPerPage, page, storeState.id);
 			if (responseData.status === 200) {
-				setCount(responseData.payload.totalRecord);
-				setProductList(responseData.payload.data);
+				setCount(responseData.data.payload.totalRecord);
+				setProductList(responseData.data.payload.data);
 			}
 		}
 		getProductFromStore().then(() => {});
@@ -76,63 +95,65 @@ const HomeScreen = () => {
 
 	return (
 		<Box>
-			<Grid2 container spacing={2.5}>
-				{productList.map((product) => (
-					<Grid2 key={product.id} xs={4}>
-						<Card>
-							<CardActionArea>
-								{
-									product.image !== null && product.image.length > 0 ?
-										<CardMedia
-											component="img"
-											alt={product.name}
-											height="300"
-											image={`data:image/png;base64,${product.image[0].imageData}`}
-										/> :
-										<CardMedia
-											component="img"
-											alt="example"
-											height="140"
-											image={placeHolderImage}
-										/>
-								}
-								<CardContent>
-									<Typography gutterBottom variant="h5" component="div">
-										{product.name}
-									</Typography>
-									<Typography gutterBottom variant="body2" component="div">
-										Brand: {product.brand}
-									</Typography>
-									<Typography variant="body2" color={'#ff0000'}>
-										Price: {product.price.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
-									</Typography>
-								</CardContent>
-							</CardActionArea>
-							<Box padding={1}>
-								<Grid2 container>
-									<Grid2 xs={6} display="flex" justifyContent="center" alignItems="center">
-										<CommonButton
-											width={200}
-											startIcon={<AddShoppingCartIcon/>}
-											variant="contained" onClick={() => handleAddToCart(product.id)}
-											label={"Add to cart"}
-										/>
+			<Box overflow={'hidden'} sx={{ maxHeight: `calc(86vh - ${alertInfoHeight}px)`, overflowY: "scroll" }}>
+				<Grid2 container spacing={2.5}>
+					{productList.map((product) => (
+						<Grid2 key={product.id} xs={4}>
+							<Card>
+								<CardActionArea>
+									{
+										product.image !== null && product.image.length > 0 ?
+											<CardMedia
+												component="img"
+												alt={product.name}
+												height="300"
+												image={`data:image/png;base64,${product.image[0].imageData}`}
+											/> :
+											<CardMedia
+												component="img"
+												alt="example"
+												height="140"
+												image={placeHolderImage}
+											/>
+									}
+									<CardContent>
+										<Typography gutterBottom variant="h5" component="div">
+											{product.name}
+										</Typography>
+										<Typography gutterBottom variant="body2" component="div">
+											Brand: {product.brand}
+										</Typography>
+										<Typography variant="body2" color={'#ff0000'}>
+											Price: {product.price.toLocaleString('vi-VN', {style: 'currency', currency: 'VND'})}
+										</Typography>
+									</CardContent>
+								</CardActionArea>
+								<Box padding={1}>
+									<Grid2 container>
+										<Grid2 xs={6} display="flex" justifyContent="center" alignItems="center">
+											<CommonButton
+												width={200}
+												startIcon={<AddShoppingCartIcon/>}
+												variant="contained" onClick={() => handleAddToCart(product.id)}
+												label={"Add to cart"}
+											/>
+										</Grid2>
+										<Grid2 xs={6} display="flex" justifyContent="center" alignItems="center">
+											<CommonButton
+												width={200}
+												startIcon={<ShoppingCartIcon/>}
+												variant="contained"
+												onClick={handleBuyNow}
+												label={"Buy now"}
+											/>
+										</Grid2>
 									</Grid2>
-									<Grid2 xs={6} display="flex" justifyContent="center" alignItems="center">
-										<CommonButton
-											width={200}
-											startIcon={<ShoppingCartIcon/>}
-											variant="contained"
-											onClick={handleBuyNow}
-											label={"Buy now"}
-										/>
-									</Grid2>
-								</Grid2>
-							</Box>
-						</Card>
-					</Grid2>
-				))}
-			</Grid2>
+								</Box>
+							</Card>
+						</Grid2>
+					))}
+				</Grid2>
+			</Box>
 			<TablePagination
 				component="div"
 				count={count}

@@ -1,5 +1,5 @@
 import {CartResponse} from "../dto/response/CartResponse";
-import BaseResponse, {errorBaseResponse} from "../dto/response/BaseResponse";
+import BaseResponse from "../dto/response/BaseResponse";
 import axios from "axios";
 
 const CART_URL: string = "http://localhost:8080/api/cart/";
@@ -7,7 +7,7 @@ const CART_URL: string = "http://localhost:8080/api/cart/";
 const CartApi = {
     async createCartAndAddProductToCart (productId: number, storeId: number, productAmount: number, accessToken: string): Promise<CartResponse | any> {
         try {
-            const response = await axios.post<BaseResponse<CartResponse>>(
+            return await axios.post<BaseResponse<CartResponse>>(
                 CART_URL + "createCartAndAddProductToCart",
                 null,
                 {
@@ -22,9 +22,10 @@ const CartApi = {
                     },
                 }
             );
-            return response.data;
         } catch (error) {
-            return errorBaseResponse;
+            if (axios.isAxiosError(error)) {
+                return error.response?.data;
+            }
         }
     }
 }

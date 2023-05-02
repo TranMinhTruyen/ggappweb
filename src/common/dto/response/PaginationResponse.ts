@@ -1,7 +1,7 @@
 export interface PaginationResponse<T> {
     data: T[] | [],
-    totalRecord: number | null,
-    page: number | null,
-    size: number | null,
-    totalPage: number | null
+    totalRecord: number | 0,
+    page: number | 0,
+    size: number | 0,
+    totalPage: number | 0
 }

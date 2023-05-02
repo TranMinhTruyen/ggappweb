@@ -11,7 +11,7 @@ export interface ProductStoreResponse {
     category: string,
     unitInStock: number,
     discount: number,
-    image: [ProductImage] | null,
+    image: ProductImage[] | null,
     productReviewList: null,
     new: boolean
 }

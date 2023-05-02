@@ -222,11 +222,11 @@ const LoginModal = () => {
 			if (response.status === 200) {
 				dispatch(setOpenLoginModal(false));
 				if (rememberChecked) {
-					localStorage.setItem('tokenState', JSON.stringify(response.payload))
+					localStorage.setItem('tokenState', JSON.stringify(response.data.payload))
 				} else {
-					sessionStorage.setItem('tokenState', JSON.stringify(response.payload));
+					sessionStorage.setItem('tokenState', JSON.stringify(response.data.payload));
 				}
-				dispatch(setToken(response.payload));
+				dispatch(setToken(response.data.payload));
 				dispatch(setIsLogin(true));
 			} else {
 				setAlert({...alertDetail, showAlert: true, message: response.message, title: "Error", alertSeverity: "error"})

@@ -53,16 +53,16 @@ const StoreSelect = () => {
             const responseData = await StoreApi.getAllStore(page);
             if (responseData.status === 200) {
                 if (page === 1) {
-                    setStoreData(responseData.payload);
+                    setStoreData(responseData.data.payload);
                 } else {
                     setStoreData((prevState) => ({
                         ...prevState,
-                        data: [...prevState.data, ...responseData.payload.data]
+                        data: [...prevState.data, ...responseData.data.payload.data]
                     }));
                 }
                 if (sessionStorage.getItem('storeSelect') === null) {
-                    dispatch(setStore(responseData.payload.data[0]));
-                    setStoreSelect(responseData.payload.data[0])
+                    dispatch(setStore(responseData.data.payload.data[0]));
+                    setStoreSelect(responseData.data.payload.data[0])
                 } else {
                     dispatch(setStore(JSON.parse(sessionStorage.getItem('storeSelect') || '{}')));
                     setStoreSelect(JSON.parse(sessionStorage.getItem('storeSelect') || '{}'))
@@ -97,6 +97,7 @@ const StoreSelect = () => {
                 MenuProps={{
                     PaperProps: {
                         style: {
+                            marginTop: 10,
                             maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
                             width: 250,
                         },
@@ -107,7 +108,10 @@ const StoreSelect = () => {
                         }
                     },
                 }}
-                sx={{ height: 35, width: 200 }}
+                sx={{
+                    height: 35,
+                    width: 200,
+                }}
             >
                 {storeData.data?.map((item) => (
                     <MenuItem key={item.id} value={item.id}>

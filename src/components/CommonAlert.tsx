@@ -26,7 +26,7 @@ const CommonAlert = (props: CommonAlertProps) => {
 	const {
 		icon,
 		variant = 'outlined',
-		alert
+		alert,
 	} = props;
 	
 	const [open, setOpen] = useState<boolean>(alert.showAlert);
