@@ -7,24 +7,30 @@ import {RootState} from "../../redux/store";
 import {shallowEqual} from "react-redux";
 
 const RegisterModal = () => {
-
-    const dispatch = useAppDispatch();
-
-    const { openRegisterModal } = useAppSelector(
-        (state: RootState) => ({ openRegisterModal: state.commonState.openRegisterModal }),
-        shallowEqual
-    );
-
-    return (
-        <CommonModal
-            open={openRegisterModal}
-            back={true}
-            onClose={() => {dispatch(setOpenLoginModal(true)); dispatch(setOpenRegisterModal(false))}}
-            onBack={() => {dispatch(setOpenLoginModal(true)); dispatch(setOpenRegisterModal(false))}}
-            size={'sm'}
-            dialogContent={<Typography>Register</Typography>}
-            dialogAction={<Typography>Register</Typography>}
-        />
-    )
+	
+	const dispatch = useAppDispatch();
+	
+	const {openRegisterModal} = useAppSelector(
+		(state: RootState) => ({openRegisterModal: state.commonState.openRegisterModal}),
+		shallowEqual
+	);
+	
+	return (
+		<CommonModal
+			open={openRegisterModal}
+			back={true}
+			onClose={() => {
+				dispatch(setOpenLoginModal(true));
+				dispatch(setOpenRegisterModal(false))
+			}}
+			onBack={() => {
+				dispatch(setOpenLoginModal(true));
+				dispatch(setOpenRegisterModal(false))
+			}}
+			size={'sm'}
+			dialogContent={<Typography>Register</Typography>}
+			dialogAction={<Typography>Register</Typography>}
+		/>
+	)
 }
 export default RegisterModal;

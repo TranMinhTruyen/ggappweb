@@ -29,7 +29,8 @@ interface AppBarProps extends MuiAppBarProps {
 	open?: boolean;
 }
 
-const AppBar = styled(MuiAppBar, {shouldForwardProp: (prop) => prop !== 'open' && prop !== 'drawerWidth',
+const AppBar = styled(MuiAppBar, {
+	shouldForwardProp: (prop) => prop !== 'open' && prop !== 'drawerWidth',
 })<AppBarProps>(({theme, open, drawerWidth}) => ({
 	zIndex: theme.zIndex.drawer + 1,
 	transition: theme.transitions.create(['width', 'margin'], {
@@ -47,20 +48,20 @@ const AppBar = styled(MuiAppBar, {shouldForwardProp: (prop) => prop !== 'open' &
 }));
 
 const Header = (props: IHeaderProps) => {
-
-	const { drawerWidth, handleLogout } = props;
+	
+	const {drawerWidth, handleLogout} = props;
 	const userToken = useAppSelector(selectToken);
 	const dispatch = useAppDispatch();
 	const navigate = useNavigate();
-	const { openDrawer } = useAppSelector(
-		(state: RootState) => ({ openDrawer: state.commonState.openDrawer }),
+	const {openDrawer} = useAppSelector(
+		(state: RootState) => ({openDrawer: state.commonState.openDrawer}),
 		shallowEqual
 	);
-
+	
 	const handleDrawerOpen = () => {
 		dispatch(setOpenDrawer(true));
 	}
-
+	
 	return (
 		<AppBar drawerWidth={drawerWidth}
 		        position="fixed"
@@ -81,7 +82,7 @@ const Header = (props: IHeaderProps) => {
 					<MenuIcon/>
 				</IconButton>
 				<>
-					<Typography variant="h6" noWrap component="span" sx={{ flexGrow: 1 }} onClick={() => navigate("/")}>
+					<Typography variant="h6" noWrap component="span" sx={{flexGrow: 1}} onClick={() => navigate("/")}>
 						Gaming gear website
 					</Typography>
 				</>
@@ -95,7 +96,8 @@ const Header = (props: IHeaderProps) => {
 								<CommonIconButton
 									backgroundColor={"#ffffff"}
 									icon={<ShoppingCartIcon/>}
-									onClick={() => {}}
+									onClick={() => {
+									}}
 									variant="contained"
 								/>
 							</Grid2> : null

@@ -18,7 +18,7 @@ import {useAppDispatch, useAppSelector} from "../redux/hooks";
 import {selectStore} from "../redux/slices/storeSlice";
 import {styled} from "@mui/material/styles";
 
-const ResponsiveBox = styled(Box)(({ theme }) => ({
+const ResponsiveBox = styled(Box)(({theme}) => ({
 	maxHeight: "75vh",
 	overflow: "auto",
 	overflowX: "hidden",
@@ -39,16 +39,16 @@ const HomeScreen = () => {
 	const storeState = useAppSelector(selectStore, shallowEqual);
 	const userToken = useAppSelector(selectToken, shallowEqual);
 	const dispatch = useAppDispatch();
-	const { isLogin } = useAppSelector(
-		(state: RootState) => ({ isLogin: state.commonState.isLogin }),
+	const {isLogin} = useAppSelector(
+		(state: RootState) => ({isLogin: state.commonState.isLogin}),
 		shallowEqual
 	);
 	
-	const { alertInfoHeight } = useAppSelector(
-		(state: RootState) => ({ alertInfoHeight: state.commonState.alertInfoHeight }),
+	const {alertInfoHeight} = useAppSelector(
+		(state: RootState) => ({alertInfoHeight: state.commonState.alertInfoHeight}),
 		shallowEqual
 	);
-
+	
 	useEffect(() => {
 		async function getProductFromStore() {
 			const responseData = await StoreApi.getProductFromStore(rowsPerPage, page, storeState.id);
@@ -57,7 +57,9 @@ const HomeScreen = () => {
 				setProductList(responseData.data.payload.data);
 			}
 		}
-		getProductFromStore().then(() => {});
+		
+		getProductFromStore().then(() => {
+		});
 	}, [storeState, page, rowsPerPage])
 	
 	const handleChangePage = (
@@ -73,7 +75,7 @@ const HomeScreen = () => {
 		setRowsPerPage(parseInt(event.target.value, 10));
 		setPage(1);
 	};
-
+	
 	const handleAddToCart = async (productId: number) => {
 		if (isLogin && userToken.accessToken !== null) {
 			const response = await CartApi.createCartAndAddProductToCart(productId, storeState.id, 1, userToken.accessToken);
@@ -84,18 +86,18 @@ const HomeScreen = () => {
 			dispatch(setOpenLoginModal(true));
 		}
 	}
-
+	
 	const handleBuyNow = () => {
 		if (isLogin) {
-
+		
 		} else {
 			dispatch(setOpenLoginModal(true));
 		}
 	}
-
+	
 	return (
 		<Box>
-			<Box overflow={'hidden'} sx={{ maxHeight: `calc(86vh - ${alertInfoHeight}px)`, overflowY: "scroll" }}>
+			<Box overflow={'hidden'} sx={{maxHeight: `calc(86vh - ${alertInfoHeight}px)`, overflowY: "scroll"}}>
 				<Grid2 container spacing={2.5}>
 					{productList.map((product) => (
 						<Grid2 key={product.id} xs={4}>

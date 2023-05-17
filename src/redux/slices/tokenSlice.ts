@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 import {RootState} from "../store";
 import {LoginResponse} from "../../common/dto/response/LoginResponse";
 
@@ -30,6 +30,6 @@ export const {
 	clearToken,
 } = tokenSlice.actions;
 
-export const selectToken = ( state: RootState ) => state.tokenState;
+export const selectToken = (state: RootState) => state.tokenState;
 
 export default tokenSlice.reducer;

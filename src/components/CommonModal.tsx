@@ -42,9 +42,9 @@ const PaperComponent = (props: PaperProps) => {
 	);
 }
 
-const ModalTitle = ({ open, back = false, onClose }: ModalTitleProps) => {
+const ModalTitle = ({open, back = false, onClose}: ModalTitleProps) => {
 	return (
-		<Grid2 container direction={"row"} style={{ cursor: 'move' }} id="draggable-dialog-title">
+		<Grid2 container direction={"row"} style={{cursor: 'move'}} id="draggable-dialog-title">
 			<Grid2 xs={6} container justifyContent={"flex-start"}>
 				{back ? (
 					<IconButton
@@ -54,32 +54,43 @@ const ModalTitle = ({ open, back = false, onClose }: ModalTitleProps) => {
 							color: (theme) => theme.palette.grey[500],
 						}}
 					>
-						<ArrowBackIcon />
+						<ArrowBackIcon/>
 					</IconButton>
 				) : null}
 			</Grid2>
 			<Grid2 xs={6} container justifyContent={"flex-end"}>
 				{open ? (
-						<IconButton
-							aria-label="close"
-							onClick={onClose}
-							sx={{
-								color: (theme) => theme.palette.grey[500],
-							}}
-						>
-							<CloseIcon />
-						</IconButton>
+					<IconButton
+						aria-label="close"
+						onClick={onClose}
+						sx={{
+							color: (theme) => theme.palette.grey[500],
+						}}
+					>
+						<CloseIcon/>
+					</IconButton>
 				) : null}
 			</Grid2>
 		</Grid2>
 	)
 }
 
-const CommonModal = ({ open, back, onClose, onBack, size = 'xs', description, dialogContent, dialogAction }: CommonModalProps) => {
-
+const CommonModal = (props: CommonModalProps) => {
+	
+	const {
+		open,
+		back,
+		onClose,
+		onBack,
+		size = 'xs',
+		description,
+		dialogContent,
+		dialogAction
+	} = props;
+	
 	const theme = useTheme();
 	const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-
+	
 	return (
 		<Dialog
 			open={open}
@@ -89,14 +100,14 @@ const CommonModal = ({ open, back, onClose, onBack, size = 'xs', description, di
 			maxWidth={size}
 			fullScreen={fullScreen}
 		>
-			<ModalTitle open={open} back={back} onClose={onClose} onBack={onBack} />
+			<ModalTitle open={open} back={back} onClose={onClose} onBack={onBack}/>
 			<Divider/>
 			<DialogContent>
 				<DialogContentText>{description}</DialogContentText>
 				{dialogContent}
 			</DialogContent>
 			<Divider/>
-			<DialogActions style={{ padding: 10, marginRight: 14 }}>
+			<DialogActions style={{padding: 10, marginRight: 14}}>
 				{dialogAction}
 			</DialogActions>
 		</Dialog>

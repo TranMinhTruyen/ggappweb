@@ -8,34 +8,35 @@ const ChartComponent = React.lazy(() => import("../screens/ChartScreen"));
 const LogChangeComponent = React.lazy(() => import("../screens/LogChangeScreen"));
 
 export interface ComponentTabItem {
-    componentNode: React.ReactNode;
-    componentPath: string;
+	componentNode: React.ReactNode;
+	componentPath: string;
 }
+
 const ComponentRouters: Array<ComponentTabItem> = [
-    {
-        componentNode: <HomeComponent/>,
-        componentPath: "/"
-    },
-    {
-        componentNode: <DashBoardComponent/>,
-        componentPath: "/dashboard"
-    },
-    {
-        componentNode: <ApiComponent/>,
-        componentPath: "/dashboard/api"
-    },
-    {
-        componentNode: <ChartComponent/>,
-        componentPath: "/dashboard/chart"
-    },
-    {
-        componentNode: <LogChangeComponent/>,
-        componentPath: "/dashboard/log"
-    },
-    {
-        componentNode: <FavoriteComponent/>,
-        componentPath: "/favorite",
-    },
+	{
+		componentNode: <HomeComponent/>,
+		componentPath: "/"
+	},
+	{
+		componentNode: <DashBoardComponent/>,
+		componentPath: "/dashboard"
+	},
+	{
+		componentNode: <ApiComponent/>,
+		componentPath: "/dashboard/api"
+	},
+	{
+		componentNode: <ChartComponent/>,
+		componentPath: "/dashboard/chart"
+	},
+	{
+		componentNode: <LogChangeComponent/>,
+		componentPath: "/dashboard/log"
+	},
+	{
+		componentNode: <FavoriteComponent/>,
+		componentPath: "/favorite",
+	},
 ];
 
 export default ComponentRouters;

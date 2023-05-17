@@ -1,9 +1,9 @@
 import * as React from 'react';
+import {useEffect, useState} from 'react';
 import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
 import CloseIcon from '@mui/icons-material/Close';
-import {useEffect, useState} from "react";
 import {AlertTitle} from "@mui/material";
 import {AlertColor, AlertPropsVariantOverrides} from "@mui/material/Alert/Alert";
 import {OverridableStringUnion} from "@mui/types";
@@ -50,10 +50,10 @@ const CommonAlert = (props: CommonAlertProps) => {
 							setOpen(!alert.showAlert);
 						}}
 					>
-						<CloseIcon fontSize="inherit" />
+						<CloseIcon fontSize="inherit"/>
 					</IconButton>
 				}
-				sx={{ mb: 2 }}
+				sx={{mb: 2}}
 			>
 				<AlertTitle>{alert.title}</AlertTitle>
 				{alert.message}

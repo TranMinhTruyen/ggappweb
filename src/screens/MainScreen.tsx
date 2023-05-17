@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from "react";
+import React from "react";
 import Drawer from "../components/drawer/Drawer";
 import Box from "@mui/material/Box";
 import {Outlet} from "react-router-dom";
@@ -11,13 +11,12 @@ import RegisterModal from "./modal/RegisterModal";
 import {setAlert, setIsLogin} from "../redux/slices/commonSlice";
 import {RootState} from "../redux/store";
 import {shallowEqual} from "react-redux";
-import CommonAlert from "../components/CommonAlert";
 import AlertList from "../components/AlertList";
 import Alert from "@mui/material/Alert";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import {AlertTitle} from "@mui/material";
-import Collapse from "@mui/material/Collapse";
+
 const drawerWidth = 250;
 
 type ScreenLayoutProps = {
@@ -25,52 +24,52 @@ type ScreenLayoutProps = {
 }
 
 const ScreenLayout = styled(Box, {shouldForwardProp: (prop) => prop !== 'openDrawer'})
-	<ScreenLayoutProps>(({theme, openDrawer}) => ({
-	zIndex: theme.zIndex.drawer + 1,
-	marginTop: 75,
-	paddingLeft: 10,
-	paddingRight: 10,
-	transition: theme.transitions.create(['width', 'margin'], {
-		easing: theme.transitions.easing.sharp,
-		duration: theme.transitions.duration.leavingScreen,
-	}),
-	...(openDrawer && {
-		marginLeft: drawerWidth,
+	< ScreenLayoutProps > (({theme, openDrawer}) => ({
+		zIndex: theme.zIndex.drawer + 1,
+		marginTop: 75,
+		paddingLeft: 10,
+		paddingRight: 10,
 		transition: theme.transitions.create(['width', 'margin'], {
 			easing: theme.transitions.easing.sharp,
-			duration: theme.transitions.duration.enteringScreen,
+			duration: theme.transitions.duration.leavingScreen,
 		}),
-	}),
-	...(!openDrawer && {
-		marginLeft: `calc(${theme.spacing(8)} + 6px)`,
-		transition: theme.transitions.create(['width', 'margin'], {
-			easing: theme.transitions.easing.sharp,
-			duration: theme.transitions.duration.enteringScreen,
+		...(openDrawer && {
+			marginLeft: drawerWidth,
+			transition: theme.transitions.create(['width', 'margin'], {
+				easing: theme.transitions.easing.sharp,
+				duration: theme.transitions.duration.enteringScreen,
+			}),
 		}),
-	}),
-}));
+		...(!openDrawer && {
+			marginLeft: `calc(${theme.spacing(8)} + 6px)`,
+			transition: theme.transitions.create(['width', 'margin'], {
+				easing: theme.transitions.easing.sharp,
+				duration: theme.transitions.duration.enteringScreen,
+			}),
+		}),
+	}));
 
 const MainScreen = () => {
-
+	
 	const dispatch = useAppDispatch();
-
-	const { openDrawer } = useAppSelector(
-		(state: RootState) => ({ openDrawer: state.commonState.openDrawer }),
+	
+	const {openDrawer} = useAppSelector(
+		(state: RootState) => ({openDrawer: state.commonState.openDrawer}),
 		shallowEqual
 	);
 	
-	const { alert } = useAppSelector(
-		(state: RootState) => ({ alert: state.commonState.alert }),
+	const {alert} = useAppSelector(
+		(state: RootState) => ({alert: state.commonState.alert}),
 		shallowEqual
 	);
-
+	
 	const handleLogout = () => {
 		dispatch(clearToken());
 		dispatch(setIsLogin(false));
 		sessionStorage.removeItem('tokenState');
 		localStorage.removeItem('tokenState');
 	}
-
+	
 	return (
 		<Box>
 			<Header drawerWidth={drawerWidth}
@@ -97,10 +96,10 @@ const MainScreen = () => {
 										dispatch(setAlert(alert.filter((item) => item !== alertItem)))
 									}}
 								>
-									<CloseIcon fontSize="inherit" />
+									<CloseIcon fontSize="inherit"/>
 								</IconButton>
 							}
-							sx={{ mb: 2 }}
+							sx={{mb: 2}}
 						>
 							<AlertTitle>{alertItem.title}</AlertTitle>
 							{alertItem.message}

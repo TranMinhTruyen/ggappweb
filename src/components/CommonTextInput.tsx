@@ -3,10 +3,9 @@ import TextField from "@mui/material/TextField";
 import {InputProps as StandardInputProps} from "@mui/material/Input/Input";
 import {OverridableStringUnion} from "@mui/types";
 import {TextFieldPropsSizeOverrides} from "@mui/material/TextField/TextField";
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import Box from "@mui/material/Box";
 import {FormHelperText} from "@mui/material";
-import {useState} from "react";
 import Grid2 from "@mui/material/Unstable_Grid2";
 import ErrorIcon from '@mui/icons-material/Error';
 
@@ -57,7 +56,7 @@ type CommonTextInputProps = {
 }
 
 const CommonTextInput = (props: CommonTextInputProps) => {
-
+	
 	const {
 		autoComplete,
 		isRequire = false,
@@ -73,14 +72,14 @@ const CommonTextInput = (props: CommonTextInputProps) => {
 		type = 'text',
 		InputProps
 	} = props;
-
+	
 	const [valid, setValid] = useState<boolean>(isValid);
 	const [value, setValue] = useState<any>();
-
+	
 	useEffect(() => {
 		setValid(isValid);
 	}, [isValid])
-
+	
 	const handleCheckValid = () => {
 		if ((isRequire && (value === undefined || value === null || value === "")) || !valid) {
 			setValid(false);
@@ -88,7 +87,7 @@ const CommonTextInput = (props: CommonTextInputProps) => {
 			setValid(true);
 		}
 	}
-
+	
 	return (
 		<Box>
 			<CustomTextFieldValid
@@ -120,13 +119,13 @@ const CommonTextInput = (props: CommonTextInputProps) => {
 			/>
 			{
 				!valid ?
-				<Grid2 container sx={{justify: "flex-end", alignItems: "center", marginLeft: 1}}>
-					<ErrorIcon sx={{ color: '#ff0000', fontSize: 15 }}/>
-					<CustomFormHelperText>
-						{ helpText === "" || helpText === null || helpText === undefined ? "Error" : helpText}
-					</CustomFormHelperText>
-				</Grid2>
-				: null
+					<Grid2 container sx={{justify: "flex-end", alignItems: "center", marginLeft: 1}}>
+						<ErrorIcon sx={{color: '#ff0000', fontSize: 15}}/>
+						<CustomFormHelperText>
+							{helpText === "" || helpText === null || helpText === undefined ? "Error" : helpText}
+						</CustomFormHelperText>
+					</Grid2>
+					: null
 			}
 		</Box>
 	)

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import IconButton from "@mui/material/IconButton";
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -47,24 +47,24 @@ type LoginModalContentProps = {
 }
 
 const LoginModalAction = (props: LoginModalActionProps) => {
-
-	const { onSummit } = props;
+	
+	const {onSummit} = props;
 	const dispatch = useAppDispatch();
-
+	
 	return (
 		<Grid2 container columnSpacing={2}>
 			<Grid2>
-				<CommonButton variant="contained" onClick={() => dispatch(setOpenLoginModal(false))} label={"Cancel"} />
+				<CommonButton variant="contained" onClick={() => dispatch(setOpenLoginModal(false))} label={"Cancel"}/>
 			</Grid2>
 			<Grid2>
-				<CommonButton variant="contained" onClick={() => onSummit()} label={"Login"} />
+				<CommonButton variant="contained" onClick={() => onSummit()} label={"Login"}/>
 			</Grid2>
 		</Grid2>
 	)
 }
 
 const LoginModalContent = (props: LoginModalContentProps) => {
-
+	
 	const {
 		open,
 		usernameValidCheck,
@@ -82,14 +82,14 @@ const LoginModalContent = (props: LoginModalContentProps) => {
 	useEffect(() => {
 		setShowPassword(false);
 	}, [open])
-
+	
 	return (
 		<Grid2 container spacing={2}>
-			<Grid2 xs={12} sx={{ marginBottom: 2 }}>
+			<Grid2 xs={12} sx={{marginBottom: 2}}>
 				<CommonAlert variant={"filled"} alert={alert}/>
 			</Grid2>
 			<Grid2 container justifyContent="center" xs={12}>
-				<Avatar sx={{ width: 150, height: 150 }} />
+				<Avatar sx={{width: 150, height: 150}}/>
 			</Grid2>
 			<Grid2 container justifyContent="center" xs={12}>
 				<Typography fontSize={50} fontWeight={'bold'}>Login</Typography>
@@ -103,7 +103,7 @@ const LoginModalContent = (props: LoginModalContentProps) => {
 					InputProps={{
 						startAdornment: (
 							<InputAdornment position="start">
-								<AccountCircle />
+								<AccountCircle/>
 							</InputAdornment>
 						),
 					}}
@@ -122,17 +122,17 @@ const LoginModalContent = (props: LoginModalContentProps) => {
 					InputProps={{
 						startAdornment: (
 							<InputAdornment position="start">
-								<KeyIcon />
+								<KeyIcon/>
 							</InputAdornment>
 						),
-						endAdornment : (
-							<InputAdornment position="end" style={{ marginRight: 5 }}>
+						endAdornment: (
+							<InputAdornment position="end" style={{marginRight: 5}}>
 								<IconButton
 									aria-label="toggle password visibility"
 									onClick={handleClickShowPassword}
 									edge="end"
 								>
-									{showPassword ? <VisibilityIcon /> : <VisibilityOffIcon/>}
+									{showPassword ? <VisibilityIcon/> : <VisibilityOffIcon/>}
 								</IconButton>
 							</InputAdornment>
 						)
@@ -146,7 +146,7 @@ const LoginModalContent = (props: LoginModalContentProps) => {
 				<FormControlLabel control={
 					<Checkbox onChange={
 						(event: React.ChangeEvent<HTMLInputElement>) => setRememberChecked(event.target.checked)}
-					/>} label="Remember me" />
+					/>} label="Remember me"/>
 			</Grid2>
 			<Grid2 container justifyContent="center" xs={12}>
 				<Typography>If you don't have account:
@@ -169,9 +169,9 @@ const LoginModal = () => {
 	const [usernameValidCheck, setUsernameValidCheck] = useState<boolean>(true);
 	const [passwordValidCheck, setPasswordValidCheck] = useState<boolean>(true);
 	const [alert, setAlert] = useState<IAlertDetail>(alertDetail);
-
-	const { openLoginModal } = useAppSelector(
-		(state: RootState) => ({ openLoginModal: state.commonState.openLoginModal }),
+	
+	const {openLoginModal} = useAppSelector(
+		(state: RootState) => ({openLoginModal: state.commonState.openLoginModal}),
 		shallowEqual
 	);
 	
@@ -190,16 +190,34 @@ const LoginModal = () => {
 		
 		if (username === null || username === "") {
 			setUsernameValidCheck(false);
-			setAlert({...alertDetail, showAlert: true, message: "Please input username!", title: "Warning", alertSeverity: "warning"})
+			setAlert({
+				...alertDetail,
+				showAlert: true,
+				message: "Please input username!",
+				title: "Warning",
+				alertSeverity: "warning"
+			})
 		}
 		if (password === null || password === "") {
 			setPasswordValidCheck(false);
-			setAlert({...alertDetail, showAlert: true, message: "Please input password!", title: "Warning", alertSeverity: "warning"})
+			setAlert({
+				...alertDetail,
+				showAlert: true,
+				message: "Please input password!",
+				title: "Warning",
+				alertSeverity: "warning"
+			})
 		}
 		if ((username === null || username === "") && (password === null || password === "")) {
 			setUsernameValidCheck(false);
 			setPasswordValidCheck(false);
-			setAlert({...alertDetail, showAlert: true, message: "Please input username and password!", title: "Warning", alertSeverity: "warning"})
+			setAlert({
+				...alertDetail,
+				showAlert: true,
+				message: "Please input username and password!",
+				title: "Warning",
+				alertSeverity: "warning"
+			})
 		}
 		if (username !== "" && username !== null && password !== "" && password !== null) {
 			setUsernameValidCheck(true);
@@ -233,7 +251,7 @@ const LoginModal = () => {
 			}
 		}
 	}
-
+	
 	return (
 		<Box>
 			<CommonModal

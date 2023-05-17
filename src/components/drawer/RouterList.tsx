@@ -15,7 +15,7 @@ const RouterList = () => {
 						key={"router"}
 						path={item.componentPath}
 						element={
-							<Suspense fallback={<Backdrop open={true}><CircularProgress color="inherit" /></Backdrop>}>
+							<Suspense fallback={<Backdrop open={true}><CircularProgress color="inherit"/></Backdrop>}>
 								{item.componentNode}
 							</Suspense>
 						}

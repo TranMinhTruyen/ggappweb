@@ -49,8 +49,9 @@ const DrawerHeader = styled('div')(({theme}) => ({
 	...theme.mixins.toolbar,
 }));
 
-const CustomDrawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open' && prop !== 'drawerWidth',
-})<CustomDrawerProps>(({theme, open, drawerWidth }) => ({
+const CustomDrawer = styled(MuiDrawer, {
+	shouldForwardProp: (prop) => prop !== 'open' && prop !== 'drawerWidth',
+})<CustomDrawerProps>(({theme, open, drawerWidth}) => ({
 		width: drawerWidth,
 		flexShrink: 0,
 		whiteSpace: 'nowrap',
@@ -68,14 +69,14 @@ const CustomDrawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'o
 
 const Drawer = (props: IDrawerProps) => {
 	
-	const { drawerWidth } = props;
+	const {drawerWidth} = props;
 	const dispatch = useAppDispatch();
 	const theme = useTheme();
-	const { openDrawer } = useAppSelector(
-		(state: RootState) => ({ openDrawer: state.commonState.openDrawer }),
+	const {openDrawer} = useAppSelector(
+		(state: RootState) => ({openDrawer: state.commonState.openDrawer}),
 		shallowEqual
 	);
-
+	
 	return (
 		<CustomDrawer drawerWidth={drawerWidth} variant="permanent" open={openDrawer}>
 			<DrawerHeader>

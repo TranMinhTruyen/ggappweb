@@ -53,7 +53,7 @@ const CustomButton = styled(Button)({
 });
 
 const CommonButton = (props: CustomButtonProps) => {
-
+	
 	const {
 		label,
 		onClick,
@@ -68,7 +68,7 @@ const CommonButton = (props: CustomButtonProps) => {
 		startIcon,
 		endIcon
 	} = props;
-
+	
 	return (
 		<CustomButton
 			disabled={disabled}
@@ -77,18 +77,18 @@ const CommonButton = (props: CustomButtonProps) => {
 			variant={variant}
 			startIcon={startIcon}
 			endIcon={endIcon}
-			sx={{ width: width, height: height, backgroundColor: backgroundColor, color: labelColor }}
+			sx={{width: width, height: height, backgroundColor: backgroundColor, color: labelColor}}
 			disableRipple
 		>
 			{
 				loading ?
-				<CircularProgress
-					variant="indeterminate"
-					disableShrink
-					size={20}
-					sx={{ color: labelColor ? '#ffffff' : labelColor }}
-				/>
-				: label
+					<CircularProgress
+						variant="indeterminate"
+						disableShrink
+						size={20}
+						sx={{color: labelColor ? '#ffffff' : labelColor}}
+					/>
+					: label
 			}
 		</CustomButton>
 	)

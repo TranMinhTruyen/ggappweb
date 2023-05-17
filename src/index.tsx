@@ -9,39 +9,38 @@ import {setToken} from "./redux/slices/tokenSlice";
 import {setIsLogin} from "./redux/slices/commonSlice";
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+	document.getElementById('root') as HTMLElement
 );
 
 const getTokenState = () => {
-    try {
-        let persistedState = localStorage.getItem('tokenState');
-        if (persistedState) {
-            store.dispatch(setIsLogin(true));
-            return JSON.parse(persistedState);
-        }
-
-        persistedState = sessionStorage.getItem('tokenState');
-        if (persistedState) {
-            store.dispatch(setIsLogin(true));
-            return JSON.parse(persistedState);
-        }
-    }
-    catch (e){
-        console.log(e)
-    }
+	try {
+		let persistedState = localStorage.getItem('tokenState');
+		if (persistedState) {
+			store.dispatch(setIsLogin(true));
+			return JSON.parse(persistedState);
+		}
+		
+		persistedState = sessionStorage.getItem('tokenState');
+		if (persistedState) {
+			store.dispatch(setIsLogin(true));
+			return JSON.parse(persistedState);
+		}
+	} catch (e) {
+		console.log(e)
+	}
 }
 
 const tokenState = getTokenState()
 
 if (tokenState) {
-    store.dispatch(setToken(tokenState))
+	store.dispatch(setToken(tokenState))
 }
 
 root.render(
-    <Provider store={store}>
-        <BrowserRouter>
-            <CssBaseline />
-            <App/>
-        </BrowserRouter>
-    </Provider>
+	<Provider store={store}>
+		<BrowserRouter>
+			<CssBaseline/>
+			<App/>
+		</BrowserRouter>
+	</Provider>
 );
