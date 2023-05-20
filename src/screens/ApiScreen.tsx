@@ -1,6 +1,6 @@
-import React from "react";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
+import React from 'react';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 
 const ApiScreen = () => {
 	return (
@@ -8,7 +8,7 @@ const ApiScreen = () => {
 			<Typography>Api</Typography>
 			<Typography>Hello world</Typography>
 		</Box>
-	)
-}
+	);
+};
 
 export default ApiScreen;

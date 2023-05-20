@@ -1,4 +1,4 @@
-import {ListProduct} from "./ListProduct";
+import { ListProduct } from './ListProduct';
 
 export interface CartResponse {
 	userId: string;

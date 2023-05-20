@@ -1,6 +1,6 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {RootState} from "../store";
-import {AlertColor} from "@mui/material/Alert/Alert";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '../store';
+import { AlertColor } from '@mui/material/Alert/Alert';
 
 type CommonState = {
 	theme: string,
@@ -19,26 +19,26 @@ export interface IAlertPrimaryDetail {
 }
 
 const initialState: CommonState = {
-	theme: "",
+	theme: '',
 	openLoginModal: false,
 	openRegisterModal: false,
 	openDrawer: true,
 	isLogin: false,
 	alertInfoHeight: 0,
 	alert: [{
-		alertSeverity: "error",
-		title: "Error alert",
-		message: "This is error alert"
+		alertSeverity: 'error',
+		title: 'Error alert',
+		message: 'This is error alert'
 	},
 		{
-			alertSeverity: "success",
-			title: "Success alert",
-			message: "This is error alert"
+			alertSeverity: 'success',
+			title: 'Success alert',
+			message: 'This is error alert'
 		},
 		{
-			alertSeverity: "warning",
-			title: "Warning alert",
-			message: "This is Warning alert"
+			alertSeverity: 'warning',
+			title: 'Warning alert',
+			message: 'This is Warning alert'
 		}]
 };
 
@@ -47,22 +47,40 @@ export const commonSlice = createSlice({
 	initialState,
 	reducers: {
 		setOpenLoginModal: (state, action: PayloadAction<boolean>) => {
-			state.openLoginModal = action.payload;
+			return {
+				...state,
+				openLoginModal: action.payload,
+			};
 		},
 		setOpenRegisterModal: (state, action: PayloadAction<boolean>) => {
-			state.openRegisterModal = action.payload;
+			return {
+				...state,
+				openRegisterModal: action.payload,
+			};
 		},
 		setOpenDrawer: (state, action: PayloadAction<boolean>) => {
-			state.openDrawer = action.payload;
+			return {
+				...state,
+				openDrawer: action.payload,
+			};
 		},
 		setIsLogin: (state, action: PayloadAction<boolean>) => {
-			state.isLogin = action.payload;
+			return {
+				...state,
+				isLogin: action.payload,
+			};
 		},
 		setAlert: (state, action: PayloadAction<IAlertPrimaryDetail[]>) => {
-			state.alert = action.payload;
+			return {
+				...state,
+				alert: action.payload,
+			};
 		},
 		setAlertInfoHeight: (state, action: PayloadAction<number>) => {
-			state.alertInfoHeight = action.payload;
+			return {
+				...state,
+				alertInfoHeight: action.payload,
+			};
 		},
 		removeAlert: (state, action: PayloadAction<IAlertPrimaryDetail[]>) => {
 		

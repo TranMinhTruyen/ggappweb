@@ -1,11 +1,11 @@
-import {useAppDispatch, useAppSelector} from "../../redux/hooks";
-import {selectStore, setStore} from "../../redux/slices/storeSlice";
-import React, {memo, useEffect, useState} from "react";
-import {StoreResponse} from "../../common/dto/response/StoreResponse";
-import StoreApi from "../../common/api/StoreApi";
-import {Checkbox, FormControl, ListItemText, MenuItem, Select, SelectChangeEvent} from "@mui/material";
-import {styled} from "@mui/material/styles";
-import {PaginationResponse} from "../../common/dto/response/PaginationResponse";
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { selectStore, setStore } from '../../redux/slices/productSlice';
+import React, { memo, useEffect, useState } from 'react';
+import { StoreResponse } from '../../common/dto/response/StoreResponse';
+import StoreService from '../../common/sevices/StoreService';
+import { Checkbox, FormControl, ListItemText, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { PaginationResponse } from '../../common/dto/response/PaginationResponse';
 
 const CustomSelectValid = styled(FormControl)({
 	background: 'rgba(210,210,210,0.8)',
@@ -24,8 +24,8 @@ const CustomSelectValid = styled(FormControl)({
 		},
 	},
 	input: {
-		"&:-webkit-autofill": {
-			WebkitBoxShadow: "0 0 0 1000px rgba(210,210,210,0.8) inset",
+		'&:-webkit-autofill': {
+			WebkitBoxShadow: '0 0 0 1000px rgba(210,210,210,0.8) inset',
 			borderRadius: 50,
 		}
 	}
@@ -50,7 +50,7 @@ const StoreSelect = () => {
 	
 	useEffect(() => {
 		async function getAllStore() {
-			const responseData = await StoreApi.getAllStore(page);
+			const responseData = await StoreService.getAllStore(page);
 			if (responseData.status === 200) {
 				if (page === 1) {
 					setStoreData(responseData.data.payload);
@@ -62,10 +62,10 @@ const StoreSelect = () => {
 				}
 				if (sessionStorage.getItem('storeSelect') === null) {
 					dispatch(setStore(responseData.data.payload.data[0]));
-					setStoreSelect(responseData.data.payload.data[0])
+					setStoreSelect(responseData.data.payload.data[0]);
 				} else {
 					dispatch(setStore(JSON.parse(sessionStorage.getItem('storeSelect') || '{}')));
-					setStoreSelect(JSON.parse(sessionStorage.getItem('storeSelect') || '{}'))
+					setStoreSelect(JSON.parse(sessionStorage.getItem('storeSelect') || '{}'));
 				}
 			}
 		}
@@ -73,7 +73,7 @@ const StoreSelect = () => {
 		getAllStore().then(() => {
 		});
 		// eslint-disable-next-line
-	}, [page])
+	}, [page]);
 	
 	const onMenuScroll = () => {
 		if (storeData.totalPage !== null && storeData.totalPage > page) {
@@ -82,7 +82,7 @@ const StoreSelect = () => {
 	};
 	
 	const handleChange = (id: number) => {
-		let update = storeData.data.find((store) => store.id === id)
+		let update = storeData.data.find((store) => store.id === id);
 		if (update !== undefined) {
 			dispatch(setStore(update));
 			setStoreSelect(update);
@@ -95,7 +95,7 @@ const StoreSelect = () => {
 			<Select
 				value={storeSelect.id !== 0 ? storeSelect.id : ''}
 				onChange={(event: SelectChangeEvent) => handleChange(parseInt(event.target.value))}
-				renderValue={() => "Store: " + storeSelect.storeCode}
+				renderValue={() => 'Store: ' + storeSelect.storeCode}
 				MenuProps={{
 					PaperProps: {
 						style: {
@@ -123,6 +123,6 @@ const StoreSelect = () => {
 				))}
 			</Select>
 		</CustomSelectValid>
-	)
-}
+	);
+};
 export default memo(StoreSelect);

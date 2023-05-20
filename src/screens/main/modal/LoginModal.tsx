@@ -1,32 +1,32 @@
-import React, {useEffect, useState} from "react";
-import IconButton from "@mui/material/IconButton";
+import React, { useEffect, useState } from 'react';
+import IconButton from '@mui/material/IconButton';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import InputAdornment from '@mui/material/InputAdornment';
 import KeyIcon from '@mui/icons-material/Key';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import {LoginRequest} from "../../common/dto/request/LoginRequest";
-import {setToken} from "../../redux/slices/tokenSlice";
-import LoginApi from "../../common/api/LoginApi";
-import Box from "@mui/material/Box";
-import CommonModal from "../../components/CommonModal";
-import Grid2 from "@mui/material/Unstable_Grid2";
-import CommonButton from "../../components/CommonButton";
-import CommonTextInput from "../../components/CommonTextInput";
-import {Avatar, Checkbox, FormControlLabel, Link} from "@mui/material";
-import Typography from "@mui/material/Typography";
-import {useAppDispatch, useAppSelector} from "../../redux/hooks";
-import CommonAlert, {IAlertDetail} from "../../components/CommonAlert";
-import {setIsLogin, setOpenLoginModal, setOpenRegisterModal} from "../../redux/slices/commonSlice";
-import {RootState} from "../../redux/store";
-import {shallowEqual} from "react-redux";
+import { LoginRequest } from '../../../common/dto/request/LoginRequest';
+import { setToken } from '../../../redux/slices/tokenSlice';
+import LoginService from '../../../common/sevices/LoginService';
+import Box from '@mui/material/Box';
+import CommonModal from '../../../components/CommonModal';
+import Grid2 from '@mui/material/Unstable_Grid2';
+import CommonButton from '../../../components/CommonButton';
+import CommonTextInput from '../../../components/CommonTextInput';
+import { Avatar, Checkbox, FormControlLabel, Link } from '@mui/material';
+import Typography from '@mui/material/Typography';
+import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
+import CommonAlert, { IAlertDetail } from '../../../components/CommonAlert';
+import { setIsLogin, setOpenLoginModal, setOpenRegisterModal } from '../../../redux/slices/commonSlice';
+import { RootState } from '../../../redux/store';
+import { shallowEqual } from 'react-redux';
 
 const alertDetail: IAlertDetail = {
-	alertSeverity: "error",
-	title: "",
+	alertSeverity: 'error',
+	title: '',
 	showAlert: false,
-	message: ""
-}
+	message: ''
+};
 
 type LoginModalActionProps = {
 	username: string;
@@ -48,20 +48,20 @@ type LoginModalContentProps = {
 
 const LoginModalAction = (props: LoginModalActionProps) => {
 	
-	const {onSummit} = props;
+	const { onSummit } = props;
 	const dispatch = useAppDispatch();
 	
 	return (
 		<Grid2 container columnSpacing={2}>
 			<Grid2>
-				<CommonButton variant="contained" onClick={() => dispatch(setOpenLoginModal(false))} label={"Cancel"}/>
+				<CommonButton variant="contained" onClick={() => dispatch(setOpenLoginModal(false))} label={'Cancel'}/>
 			</Grid2>
 			<Grid2>
-				<CommonButton variant="contained" onClick={() => onSummit()} label={"Login"}/>
+				<CommonButton variant="contained" onClick={() => onSummit()} label={'Login'}/>
 			</Grid2>
 		</Grid2>
-	)
-}
+	);
+};
 
 const LoginModalContent = (props: LoginModalContentProps) => {
 	
@@ -69,7 +69,7 @@ const LoginModalContent = (props: LoginModalContentProps) => {
 		open,
 		usernameValidCheck,
 		passwordValidCheck,
-		alert = {showAlert: false, message: "", title: "", alertSeverity: "error"},
+		alert = { showAlert: false, message: '', title: '', alertSeverity: 'error' },
 		setUsername,
 		setPassword,
 		setRememberChecked
@@ -81,15 +81,20 @@ const LoginModalContent = (props: LoginModalContentProps) => {
 	
 	useEffect(() => {
 		setShowPassword(false);
-	}, [open])
+	}, [open]);
+	
+	const handleOpenRegisterModal = () => {
+		dispatch(setOpenRegisterModal(true));
+		dispatch(setOpenLoginModal(false));
+	};
 	
 	return (
 		<Grid2 container spacing={2}>
-			<Grid2 xs={12} sx={{marginBottom: 2}}>
-				<CommonAlert variant={"filled"} alert={alert}/>
+			<Grid2 xs={12} sx={{ marginBottom: 2 }}>
+				<CommonAlert variant={'filled'} alert={alert}/>
 			</Grid2>
 			<Grid2 container justifyContent="center" xs={12}>
-				<Avatar sx={{width: 150, height: 150}}/>
+				<Avatar sx={{ width: 150, height: 150 }}/>
 			</Grid2>
 			<Grid2 container justifyContent="center" xs={12}>
 				<Typography fontSize={50} fontWeight={'bold'}>Login</Typography>
@@ -98,8 +103,8 @@ const LoginModalContent = (props: LoginModalContentProps) => {
 				<CommonTextInput
 					isValid={usernameValidCheck}
 					isRequire={true}
-					placeholder={"Username or email"}
-					helpText={"This is require!"}
+					placeholder={'Username or email'}
+					helpText={'This is require!'}
 					InputProps={{
 						startAdornment: (
 							<InputAdornment position="start">
@@ -117,7 +122,7 @@ const LoginModalContent = (props: LoginModalContentProps) => {
 					isValid={passwordValidCheck}
 					isRequire={true}
 					placeholder="Password"
-					helpText={"This is require!"}
+					helpText={'This is require!'}
 					type={showPassword ? 'text' : 'password'}
 					InputProps={{
 						startAdornment: (
@@ -126,7 +131,7 @@ const LoginModalContent = (props: LoginModalContentProps) => {
 							</InputAdornment>
 						),
 						endAdornment: (
-							<InputAdornment position="end" style={{marginRight: 5}}>
+							<InputAdornment position="end" style={{ marginRight: 5 }}>
 								<IconButton
 									aria-label="toggle password visibility"
 									onClick={handleClickShowPassword}
@@ -150,28 +155,25 @@ const LoginModalContent = (props: LoginModalContentProps) => {
 			</Grid2>
 			<Grid2 container justifyContent="center" xs={12}>
 				<Typography>If you don't have account:
-					<Link onClick={() => {
-						dispatch(setOpenRegisterModal(true))
-						dispatch(setOpenLoginModal(false))
-					}}>Register</Link>
+					<Link onClick={handleOpenRegisterModal}>Register</Link>
 				</Typography>
 			</Grid2>
 		
 		</Grid2>
-	)
-}
+	);
+};
 
 const LoginModal = () => {
 	
-	const [username, setUsername] = useState<string>("");
-	const [password, setPassword] = useState<string>("");
+	const [username, setUsername] = useState<string>('');
+	const [password, setPassword] = useState<string>('');
 	const [rememberChecked, setRememberChecked] = useState<boolean>(false);
 	const [usernameValidCheck, setUsernameValidCheck] = useState<boolean>(true);
 	const [passwordValidCheck, setPasswordValidCheck] = useState<boolean>(true);
 	const [alert, setAlert] = useState<IAlertDetail>(alertDetail);
 	
-	const {openLoginModal} = useAppSelector(
-		(state: RootState) => ({openLoginModal: state.commonState.openLoginModal}),
+	const { openLoginModal } = useAppSelector(
+		(state: RootState) => ({ openLoginModal: state.commonState.openLoginModal }),
 		shallowEqual
 	);
 	
@@ -179,47 +181,47 @@ const LoginModal = () => {
 		setUsernameValidCheck(true);
 		setPasswordValidCheck(true);
 		setRememberChecked(false);
-		setUsername("");
-		setPassword("");
-		setAlert({...alertDetail, showAlert: false, message: "", title: "", alertSeverity: "error"});
-	}, [openLoginModal])
+		setUsername('');
+		setPassword('');
+		setAlert({ ...alertDetail, showAlert: false, message: '', title: '', alertSeverity: 'error' });
+	}, [openLoginModal]);
 	
 	const dispatch = useAppDispatch();
 	
 	const loginHandle = async () => {
 		
-		if (username === null || username === "") {
+		if (username === null || username === '') {
 			setUsernameValidCheck(false);
 			setAlert({
 				...alertDetail,
 				showAlert: true,
-				message: "Please input username!",
-				title: "Warning",
-				alertSeverity: "warning"
-			})
+				message: 'Please input username!',
+				title: 'Warning',
+				alertSeverity: 'warning'
+			});
 		}
-		if (password === null || password === "") {
+		if (password === null || password === '') {
 			setPasswordValidCheck(false);
 			setAlert({
 				...alertDetail,
 				showAlert: true,
-				message: "Please input password!",
-				title: "Warning",
-				alertSeverity: "warning"
-			})
+				message: 'Please input password!',
+				title: 'Warning',
+				alertSeverity: 'warning'
+			});
 		}
-		if ((username === null || username === "") && (password === null || password === "")) {
+		if ((username === null || username === '') && (password === null || password === '')) {
 			setUsernameValidCheck(false);
 			setPasswordValidCheck(false);
 			setAlert({
 				...alertDetail,
 				showAlert: true,
-				message: "Please input username and password!",
-				title: "Warning",
-				alertSeverity: "warning"
-			})
+				message: 'Please input username and password!',
+				title: 'Warning',
+				alertSeverity: 'warning'
+			});
 		}
-		if (username !== "" && username !== null && password !== "" && password !== null) {
+		if (username !== '' && username !== null && password !== '' && password !== null) {
 			setUsernameValidCheck(true);
 			setPasswordValidCheck(true);
 			
@@ -227,30 +229,30 @@ const LoginModal = () => {
 				account: username,
 				password: password,
 				deviceInfo: {
-					deviceOperationSystem: "string",
-					deviceName: "string",
-					deviceMac: "string",
-					deviceIp: "string"
+					deviceOperationSystem: 'string',
+					deviceName: 'string',
+					deviceMac: 'string',
+					deviceIp: 'string'
 				},
 				remember: rememberChecked
 			};
 			
-			const response = await LoginApi.login(request);
+			const response = await LoginService.login(request);
 			
 			if (response.status === 200) {
 				dispatch(setOpenLoginModal(false));
 				if (rememberChecked) {
-					localStorage.setItem('tokenState', JSON.stringify(response.data.payload))
+					localStorage.setItem('tokenState', JSON.stringify(response.data.payload));
 				} else {
 					sessionStorage.setItem('tokenState', JSON.stringify(response.data.payload));
 				}
 				dispatch(setToken(response.data.payload));
 				dispatch(setIsLogin(true));
 			} else {
-				setAlert({...alertDetail, showAlert: true, message: response.message, title: "Error", alertSeverity: "error"})
+				setAlert({ ...alertDetail, showAlert: true, message: response.message, title: 'Error', alertSeverity: 'error' });
 			}
 		}
-	}
+	};
 	
 	return (
 		<Box>
@@ -273,12 +275,12 @@ const LoginModal = () => {
 						username={username}
 						password={password}
 						remember={rememberChecked}
-						onSummit={() => loginHandle()}
+						onSummit={loginHandle}
 					/>
 				}
 			/>
 		</Box>
-	)
-}
+	);
+};
 
 export default React.memo(LoginModal);

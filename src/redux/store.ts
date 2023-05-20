@@ -1,8 +1,8 @@
-import {configureStore} from "@reduxjs/toolkit";
-import tokenSlice from "./slices/tokenSlice";
+import { configureStore } from '@reduxjs/toolkit';
+import tokenSlice from './slices/tokenSlice';
 import thunk from 'redux-thunk';
-import storeSlice from "./slices/storeSlice";
-import commonSlice from "./slices/commonSlice";
+import storeSlice from './slices/productSlice';
+import commonSlice from './slices/commonSlice';
 
 export const store = configureStore({
 	reducer: {
@@ -11,7 +11,7 @@ export const store = configureStore({
 		commonState: commonSlice
 	},
 	middleware: [thunk]
-})
+});
 
 // store.subscribe(()=> {
 // 	localStorage.setItem('tokenState', JSON.stringify(store.getState().tokenState))

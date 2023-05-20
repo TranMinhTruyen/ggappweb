@@ -1,11 +1,11 @@
-import {createSlice, PayloadAction} from '@reduxjs/toolkit'
-import {RootState} from "../store";
-import {LoginResponse} from "../../common/dto/response/LoginResponse";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RootState } from '../store';
+import { LoginResponse } from '../../common/dto/response/LoginResponse';
 
 const initialState: LoginResponse = {
-	accessToken: "",
-	userFullName: "",
-	role: "",
+	accessToken: '',
+	userFullName: '',
+	role: '',
 	authorities: [],
 	accountSettingsResponse: null
 };
@@ -15,13 +15,18 @@ export const tokenSlice = createSlice({
 	initialState,
 	reducers: {
 		setToken: (state, action: PayloadAction<LoginResponse>) => {
-			state.accessToken = action.payload.accessToken;
-			state.userFullName = action.payload.userFullName;
-			state.role = action.payload.role;
-			state.authorities = action.payload.authorities;
-			state.accountSettingsResponse = action.payload.accountSettingsResponse;
+			return {
+				...state,
+				accessToken: action.payload.accessToken,
+				userFullName: action.payload.userFullName,
+				role: action.payload.role,
+				authorities: action.payload.authorities,
+				accountSettingsResponse: action.payload.accountSettingsResponse,
+			};
 		},
-		clearToken: () => initialState
+		clearToken: () => {
+			return initialState;
+		}
 	}
 });
 

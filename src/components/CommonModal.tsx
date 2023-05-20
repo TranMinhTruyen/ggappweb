@@ -1,16 +1,16 @@
-import React from "react";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
-import Dialog from "@mui/material/Dialog";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogActions from "@mui/material/DialogActions";
-import {Breakpoint, Paper, PaperProps, useMediaQuery} from "@mui/material";
-import Draggable from "react-draggable";
-import {useTheme} from "@mui/material/styles";
-import Divider from "@mui/material/Divider";
+import React from 'react';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogActions from '@mui/material/DialogActions';
+import { Breakpoint, Paper, PaperProps, useMediaQuery } from '@mui/material';
+import Draggable from 'react-draggable';
+import { useTheme } from '@mui/material/styles';
+import Divider from '@mui/material/Divider';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import Grid2 from "@mui/material/Unstable_Grid2";
+import Grid2 from '@mui/material/Unstable_Grid2';
 
 interface CommonModalProps {
 	open: boolean;
@@ -40,12 +40,12 @@ const PaperComponent = (props: PaperProps) => {
 			<Paper {...props} />
 		</Draggable>
 	);
-}
+};
 
-const ModalTitle = ({open, back = false, onClose}: ModalTitleProps) => {
+const ModalTitle = ({ open, back = false, onClose }: ModalTitleProps) => {
 	return (
-		<Grid2 container direction={"row"} style={{cursor: 'move'}} id="draggable-dialog-title">
-			<Grid2 xs={6} container justifyContent={"flex-start"}>
+		<Grid2 container direction={'row'} style={{ cursor: 'move' }} id="draggable-dialog-title">
+			<Grid2 xs={6} container justifyContent={'flex-start'}>
 				{back ? (
 					<IconButton
 						aria-label="close"
@@ -58,7 +58,7 @@ const ModalTitle = ({open, back = false, onClose}: ModalTitleProps) => {
 					</IconButton>
 				) : null}
 			</Grid2>
-			<Grid2 xs={6} container justifyContent={"flex-end"}>
+			<Grid2 xs={6} container justifyContent={'flex-end'}>
 				{open ? (
 					<IconButton
 						aria-label="close"
@@ -72,8 +72,8 @@ const ModalTitle = ({open, back = false, onClose}: ModalTitleProps) => {
 				) : null}
 			</Grid2>
 		</Grid2>
-	)
-}
+	);
+};
 
 const CommonModal = (props: CommonModalProps) => {
 	
@@ -96,7 +96,7 @@ const CommonModal = (props: CommonModalProps) => {
 			open={open}
 			onClose={onClose}
 			PaperComponent={PaperComponent}
-			aria-labelledby={"draggable-dialog-title"}
+			aria-labelledby={'draggable-dialog-title'}
 			maxWidth={size}
 			fullScreen={fullScreen}
 		>
@@ -107,11 +107,11 @@ const CommonModal = (props: CommonModalProps) => {
 				{dialogContent}
 			</DialogContent>
 			<Divider/>
-			<DialogActions style={{padding: 10, marginRight: 14}}>
+			<DialogActions style={{ padding: 10, marginRight: 14 }}>
 				{dialogAction}
 			</DialogActions>
 		</Dialog>
-	)
-}
+	);
+};
 
 export default React.memo(CommonModal);

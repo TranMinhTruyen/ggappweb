@@ -1,10 +1,10 @@
-import * as React from "react";
-import {memo} from "react";
-import {OverridableStringUnion} from "@mui/types";
-import {ButtonPropsVariantOverrides} from "@mui/material/Button/Button";
-import {styled} from "@mui/material/styles";
-import Button from "@mui/material/Button";
-import {Badge} from "@mui/material";
+import * as React from 'react';
+import { memo } from 'react';
+import { OverridableStringUnion } from '@mui/types';
+import { ButtonPropsVariantOverrides } from '@mui/material/Button/Button';
+import { styled } from '@mui/material/styles';
+import Button from '@mui/material/Button';
+import { Badge, CircularProgress } from '@mui/material';
 
 type CustomIconButtonProps = {
 	height?: number;
@@ -29,14 +29,14 @@ const CustomButton = styled(Button)({
 	fontFamily: [
 		'-apple-system',
 		'BlinkMacSystemFont',
-		'"Segoe UI"',
+		'Segoe UI',
 		'Roboto',
-		'"Helvetica Neue"',
+		'Helvetica Neue',
 		'Arial',
 		'sans-serif',
-		'"Apple Color Emoji"',
-		'"Segoe UI Emoji"',
-		'"Segoe UI Symbol"',
+		'Apple Color Emoji',
+		'Segoe UI Emoji',
+		'Segoe UI Symbol',
 	].join(','),
 	'&:hover': {
 		boxShadow: '#a8a8a8',
@@ -64,9 +64,18 @@ const CommonIconButton = (props: CustomIconButtonProps) => {
 		variant = 'contained'
 	} = props;
 	
+	const loadingComponent =
+		loading ? (<CircularProgress
+				variant="indeterminate"
+				disableShrink
+				size={20}
+			/>)
+			: (icon);
+	
 	return (
-		<Badge badgeContent={badgeContent} max={99} color={"warning"}>
+		<Badge badgeContent={badgeContent} max={99} color={'warning'}>
 			<CustomButton
+				disabled={disabled}
 				onClick={onClick}
 				variant={variant}
 				sx={{
@@ -76,9 +85,9 @@ const CommonIconButton = (props: CustomIconButtonProps) => {
 					color: '#000000'
 				}}
 			>
-				{icon}
+				{loadingComponent}
 			</CustomButton>
 		</Badge>
-	)
-}
+	);
+};
 export default memo(CommonIconButton);

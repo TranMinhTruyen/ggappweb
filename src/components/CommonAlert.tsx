@@ -1,12 +1,12 @@
-import * as React from 'react';
-import {useEffect, useState} from 'react';
+import React, { memo } from 'react';
+import { useEffect, useState } from 'react';
 import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
 import CloseIcon from '@mui/icons-material/Close';
-import {AlertTitle} from "@mui/material";
-import {AlertColor, AlertPropsVariantOverrides} from "@mui/material/Alert/Alert";
-import {OverridableStringUnion} from "@mui/types";
+import { AlertTitle } from '@mui/material';
+import { AlertColor, AlertPropsVariantOverrides } from '@mui/material/Alert/Alert';
+import { OverridableStringUnion } from '@mui/types';
 
 export interface IAlertDetail {
 	alertSeverity: AlertColor;
@@ -33,7 +33,7 @@ const CommonAlert = (props: CommonAlertProps) => {
 	
 	useEffect(() => {
 		setOpen(alert.showAlert);
-	}, [alert])
+	}, [alert]);
 	
 	return (
 		<Collapse in={open}>
@@ -53,12 +53,12 @@ const CommonAlert = (props: CommonAlertProps) => {
 						<CloseIcon fontSize="inherit"/>
 					</IconButton>
 				}
-				sx={{mb: 2}}
+				sx={{ mb: 2 }}
 			>
 				<AlertTitle>{alert.title}</AlertTitle>
 				{alert.message}
 			</Alert>
 		</Collapse>
 	);
-}
-export default React.memo(CommonAlert);
+};
+export default memo(CommonAlert);

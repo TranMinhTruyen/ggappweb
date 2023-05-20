@@ -1,11 +1,11 @@
-import * as React from "react";
-import {OverridableStringUnion} from "@mui/types";
-import {ButtonPropsSizeOverrides, ButtonPropsVariantOverrides} from "@mui/material/Button/Button";
-import Button from "@mui/material/Button";
-import {styled} from "@mui/material/styles";
-import {CircularProgress} from "@mui/material";
+import * as React from 'react';
+import { OverridableStringUnion } from '@mui/types';
+import { ButtonPropsSizeOverrides, ButtonPropsVariantOverrides } from '@mui/material/Button/Button';
+import Button from '@mui/material/Button';
+import { styled } from '@mui/material/styles';
+import { CircularProgress } from '@mui/material';
 
-type CustomButtonProps = {
+interface CustomButtonProps {
 	label?: string;
 	height?: number;
 	width?: number;
@@ -31,14 +31,14 @@ const CustomButton = styled(Button)({
 	fontFamily: [
 		'-apple-system',
 		'BlinkMacSystemFont',
-		'"Segoe UI"',
+		'Segoe UI',
 		'Roboto',
-		'"Helvetica Neue"',
+		'Helvetica Neue',
 		'Arial',
 		'sans-serif',
-		'"Apple Color Emoji"',
-		'"Segoe UI Emoji"',
-		'"Segoe UI Symbol"',
+		'Apple Color Emoji',
+		'Segoe UI Emoji',
+		'Segoe UI Symbol',
 	].join(','),
 	'&:hover': {
 		boxShadow: '#a8a8a8',
@@ -69,6 +69,16 @@ const CommonButton = (props: CustomButtonProps) => {
 		endIcon
 	} = props;
 	
+	const loadingComponent = loading ?
+		(
+			<CircularProgress
+				variant="indeterminate"
+				disableShrink
+				size={20}
+				sx={{ color: labelColor ? '#ffffff' : labelColor }}
+			/>
+		) : (label);
+	
 	return (
 		<CustomButton
 			disabled={disabled}
@@ -77,20 +87,11 @@ const CommonButton = (props: CustomButtonProps) => {
 			variant={variant}
 			startIcon={startIcon}
 			endIcon={endIcon}
-			sx={{width: width, height: height, backgroundColor: backgroundColor, color: labelColor}}
+			sx={{ width: width, height: height, backgroundColor: backgroundColor, color: labelColor }}
 			disableRipple
 		>
-			{
-				loading ?
-					<CircularProgress
-						variant="indeterminate"
-						disableShrink
-						size={20}
-						sx={{color: labelColor ? '#ffffff' : labelColor}}
-					/>
-					: label
-			}
+			{loadingComponent}
 		</CustomButton>
-	)
-}
+	);
+};
 export default React.memo(CommonButton);

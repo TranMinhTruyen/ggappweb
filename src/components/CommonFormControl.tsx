@@ -1,6 +1,6 @@
-import React from "react";
-import {styled} from "@mui/material/styles";
-import {FormControl, InputLabel} from "@mui/material";
+import React from 'react';
+import { styled } from '@mui/material/styles';
+import { FormControl, InputLabel } from '@mui/material';
 
 const CustomSelectValid = styled(FormControl)({
 	background: 'rgba(210,210,210,0.8)',
@@ -19,8 +19,8 @@ const CustomSelectValid = styled(FormControl)({
 		},
 	},
 	input: {
-		"&:-webkit-autofill": {
-			WebkitBoxShadow: "0 0 0 1000px rgba(210,210,210,0.8) inset",
+		'&:-webkit-autofill': {
+			WebkitBoxShadow: '0 0 0 1000px rgba(210,210,210,0.8) inset',
 			borderRadius: 50,
 		}
 	}
@@ -43,6 +43,6 @@ const CommonFormControl = (props: CustomSelectProps) => {
 		<CustomSelectValid error={!isValid}>
 			<InputLabel>{label}</InputLabel>
 		</CustomSelectValid>
-	)
-}
+	);
+};
 export default React.memo(CommonFormControl);

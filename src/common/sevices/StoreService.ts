@@ -1,12 +1,12 @@
-import axios from "axios";
-import BaseResponse from "../dto/response/BaseResponse";
-import {PaginationResponse} from "../dto/response/PaginationResponse";
-import {StoreResponse} from "../dto/response/StoreResponse";
-import {ProductStoreResponse} from "../dto/response/ProductStoreResponse";
+import axios from 'axios';
+import BaseResponse from '../dto/response/BaseResponse';
+import { PaginationResponse } from '../dto/response/PaginationResponse';
+import { StoreResponse } from '../dto/response/StoreResponse';
+import { ProductStoreResponse } from '../dto/response/ProductStoreResponse';
 
-const STORE_URL: string = "http://localhost:8080/api/store/";
+const STORE_URL: string = 'http://localhost:8080/api/store/';
 
-const StoreApi = {
+const StoreService = {
 	getAllStore: async function (page: number): Promise<BaseResponse<PaginationResponse<StoreResponse>> | any> {
 		try {
 			return await axios.get(
@@ -42,6 +42,6 @@ const StoreApi = {
 			}
 		}
 	}
-}
+};
 
-export default StoreApi;
+export default StoreService;

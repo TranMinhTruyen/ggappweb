@@ -1,12 +1,12 @@
-import {styled} from "@mui/material/styles";
-import TextField from "@mui/material/TextField";
-import {InputProps as StandardInputProps} from "@mui/material/Input/Input";
-import {OverridableStringUnion} from "@mui/types";
-import {TextFieldPropsSizeOverrides} from "@mui/material/TextField/TextField";
-import React, {useEffect, useState} from "react";
-import Box from "@mui/material/Box";
-import {FormHelperText} from "@mui/material";
-import Grid2 from "@mui/material/Unstable_Grid2";
+import { styled } from '@mui/material/styles';
+import TextField from '@mui/material/TextField';
+import { InputProps as StandardInputProps } from '@mui/material/Input/Input';
+import { OverridableStringUnion } from '@mui/types';
+import { TextFieldPropsSizeOverrides } from '@mui/material/TextField/TextField';
+import React, { useEffect, useState } from 'react';
+import Box from '@mui/material/Box';
+import { FormHelperText } from '@mui/material';
+import Grid2 from '@mui/material/Unstable_Grid2';
 import ErrorIcon from '@mui/icons-material/Error';
 
 const CustomTextFieldValid = styled(TextField)({
@@ -26,8 +26,8 @@ const CustomTextFieldValid = styled(TextField)({
 		},
 	},
 	input: {
-		"&:-webkit-autofill": {
-			WebkitBoxShadow: "0 0 0 1000px rgba(210,210,210,0.8) inset",
+		'&:-webkit-autofill': {
+			WebkitBoxShadow: '0 0 0 1000px rgba(210,210,210,0.8) inset',
 			borderRadius: 50,
 		}
 	}
@@ -78,15 +78,15 @@ const CommonTextInput = (props: CommonTextInputProps) => {
 	
 	useEffect(() => {
 		setValid(isValid);
-	}, [isValid])
+	}, [isValid]);
 	
 	const handleCheckValid = () => {
-		if ((isRequire && (value === undefined || value === null || value === "")) || !valid) {
+		if ((isRequire && (value === undefined || value === null || value === '')) || !valid) {
 			setValid(false);
 		} else {
 			setValid(true);
 		}
-	}
+	};
 	
 	return (
 		<Box>
@@ -106,7 +106,7 @@ const CommonTextInput = (props: CommonTextInputProps) => {
 					onChange(event.target.value);
 					setValue(event.target.value);
 					if (!valid) {
-						setValid(true)
+						setValid(true);
 					}
 				}}
 				onBlur={() => {
@@ -119,15 +119,15 @@ const CommonTextInput = (props: CommonTextInputProps) => {
 			/>
 			{
 				!valid ?
-					<Grid2 container sx={{justify: "flex-end", alignItems: "center", marginLeft: 1}}>
-						<ErrorIcon sx={{color: '#ff0000', fontSize: 15}}/>
+					<Grid2 container sx={{ justify: 'flex-end', alignItems: 'center', marginLeft: 1 }}>
+						<ErrorIcon sx={{ color: '#ff0000', fontSize: 15 }}/>
 						<CustomFormHelperText>
-							{helpText === "" || helpText === null || helpText === undefined ? "Error" : helpText}
+							{helpText === '' || helpText === null || helpText === undefined ? 'Error' : helpText}
 						</CustomFormHelperText>
 					</Grid2>
 					: null
 			}
 		</Box>
-	)
+	);
 };
 export default React.memo(CommonTextInput);

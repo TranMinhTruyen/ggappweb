@@ -1,18 +1,18 @@
-import {Route, Routes} from "react-router-dom";
-import React, {Suspense} from "react";
-import MainScreen from "../../screens/MainScreen";
-import ComponentRouters from "../../common/ComponentRouters";
-import {Backdrop, CircularProgress} from "@mui/material";
+import { Route, Routes } from 'react-router-dom';
+import React, { Suspense } from 'react';
+import MainScreen from '../../screens/main/MainScreen';
+import ComponentRouters from '../../common/ComponentRouters';
+import { Backdrop, CircularProgress } from '@mui/material';
 
 const componentRouter = ComponentRouters;
 
 const RouterList = () => {
 	return (
 		<Routes>
-			<Route key={"main"} path={"/"} element={<MainScreen/>}>
+			<Route key={'main'} path={'/'} element={<MainScreen/>}>
 				{componentRouter.map(item => (
 					<Route
-						key={"router"}
+						key={'router'}
 						path={item.componentPath}
 						element={
 							<Suspense fallback={<Backdrop open={true}><CircularProgress color="inherit"/></Backdrop>}>
@@ -23,7 +23,7 @@ const RouterList = () => {
 				))}
 			</Route>
 		</Routes>
-	)
-}
+	);
+};
 export default React.memo(RouterList);
 

@@ -1,16 +1,15 @@
-import React from "react";
-import {CSSObject, styled, Theme, useTheme} from "@mui/material/styles";
-import MuiDrawer from "@mui/material/Drawer";
-import IconButton from "@mui/material/IconButton";
-import Divider from "@mui/material/Divider";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import DrawerMenu from "./DrawerMenu";
-import {DrawerProps} from "@mui/material/Drawer/Drawer";
-import {useAppDispatch, useAppSelector} from "../../redux/hooks";
-import {setOpenDrawer} from "../../redux/slices/commonSlice";
-import {RootState} from "../../redux/store";
-import {shallowEqual} from "react-redux";
+import React from 'react';
+import { CSSObject, styled, Theme, useTheme } from '@mui/material/styles';
+import MuiDrawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
+import Divider from '@mui/material/Divider';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import DrawerMenu from './DrawerMenu';
+import { DrawerProps } from '@mui/material/Drawer/Drawer';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { setOpenDrawer } from '../../redux/slices/commonSlice';
+import { RootState } from '../../redux/store';
+import { shallowEqual } from 'react-redux';
 
 type IDrawerProps = {
 	drawerWidth: number;
@@ -41,7 +40,7 @@ const closedMixin = (theme: Theme): CSSObject => ({
 	},
 });
 
-const DrawerHeader = styled('div')(({theme}) => ({
+const DrawerHeader = styled('div')(({ theme }) => ({
 	display: 'flex',
 	alignItems: 'center',
 	justifyContent: 'flex-end',
@@ -51,7 +50,7 @@ const DrawerHeader = styled('div')(({theme}) => ({
 
 const CustomDrawer = styled(MuiDrawer, {
 	shouldForwardProp: (prop) => prop !== 'open' && prop !== 'drawerWidth',
-})<CustomDrawerProps>(({theme, open, drawerWidth}) => ({
+})<CustomDrawerProps>(({ theme, open, drawerWidth }) => ({
 		width: drawerWidth,
 		flexShrink: 0,
 		whiteSpace: 'nowrap',
@@ -69,24 +68,28 @@ const CustomDrawer = styled(MuiDrawer, {
 
 const Drawer = (props: IDrawerProps) => {
 	
-	const {drawerWidth} = props;
+	const { drawerWidth } = props;
 	const dispatch = useAppDispatch();
 	const theme = useTheme();
-	const {openDrawer} = useAppSelector(
-		(state: RootState) => ({openDrawer: state.commonState.openDrawer}),
+	const { openDrawer } = useAppSelector(
+		(state: RootState) => ({ openDrawer: state.commonState.openDrawer }),
 		shallowEqual
 	);
+	
+	const handleOpenDrawer = () => {
+		dispatch(setOpenDrawer(false));
+	};
 	
 	return (
 		<CustomDrawer drawerWidth={drawerWidth} variant="permanent" open={openDrawer}>
 			<DrawerHeader>
-				<IconButton onClick={() => dispatch(setOpenDrawer(false))}>
-					{theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
+				<IconButton onClick={handleOpenDrawer}>
+					<ChevronLeftIcon/>
 				</IconButton>
 			</DrawerHeader>
 			<Divider/>
 			<DrawerMenu/>
 		</CustomDrawer>
-	)
-}
+	);
+};
 export default React.memo(Drawer);
