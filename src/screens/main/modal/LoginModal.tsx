@@ -28,7 +28,7 @@ const alertDetail: IAlertDetail = {
 	message: ''
 };
 
-type LoginModalActionProps = {
+interface LoginModalActionProps {
 	username: string;
 	password: string;
 	remember: boolean;
@@ -36,8 +36,7 @@ type LoginModalActionProps = {
 	onSummit: () => void;
 }
 
-type LoginModalContentProps = {
-	open: boolean;
+interface LoginModalContentProps {
 	usernameValidCheck: boolean
 	passwordValidCheck: boolean
 	alert?: IAlertDetail;
@@ -51,10 +50,14 @@ const LoginModalAction = (props: LoginModalActionProps) => {
 	const { onSummit } = props;
 	const dispatch = useAppDispatch();
 	
+	const handleCancel = () => {
+		dispatch(setOpenLoginModal(false))
+	}
+	
 	return (
 		<Grid2 container columnSpacing={2}>
 			<Grid2>
-				<CommonButton variant="contained" onClick={() => dispatch(setOpenLoginModal(false))} label={'Cancel'}/>
+				<CommonButton variant="contained" onClick={handleCancel} label={'Cancel'}/>
 			</Grid2>
 			<Grid2>
 				<CommonButton variant="contained" onClick={() => onSummit()} label={'Login'}/>
@@ -66,7 +69,6 @@ const LoginModalAction = (props: LoginModalActionProps) => {
 const LoginModalContent = (props: LoginModalContentProps) => {
 	
 	const {
-		open,
 		usernameValidCheck,
 		passwordValidCheck,
 		alert = { showAlert: false, message: '', title: '', alertSeverity: 'error' },
@@ -78,10 +80,6 @@ const LoginModalContent = (props: LoginModalContentProps) => {
 	const [showPassword, setShowPassword] = useState<boolean>(false);
 	const handleClickShowPassword = () => setShowPassword((show) => !show);
 	const dispatch = useAppDispatch();
-	
-	useEffect(() => {
-		setShowPassword(false);
-	}, [open]);
 	
 	const handleOpenRegisterModal = () => {
 		dispatch(setOpenRegisterModal(true));
@@ -265,7 +263,6 @@ const LoginModal = () => {
 						usernameValidCheck={usernameValidCheck}
 						passwordValidCheck={passwordValidCheck}
 						alert={alert}
-						open={openLoginModal}
 						setUsername={(value) => setUsername(value)}
 						setPassword={(value) => setPassword(value)}
 						setRememberChecked={(value) => setRememberChecked(value)}

@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store';
 import { AlertColor } from '@mui/material/Alert/Alert';
+import { IMasterResponse } from '../../common/dto/response/MasterResponse';
 
 type CommonState = {
 	theme: string,
@@ -9,7 +10,11 @@ type CommonState = {
 	openDrawer: boolean,
 	isLogin: boolean,
 	alertInfoHeight: number,
-	alert: IAlertPrimaryDetail[]
+	alert: IAlertPrimaryDetail[],
+	authorityMaster: IMasterResponse[],
+	roleMaster: IMasterResponse[],
+	positionMaster: IMasterResponse[],
+	levelMaster: IMasterResponse[],
 }
 
 export interface IAlertPrimaryDetail {
@@ -25,11 +30,12 @@ const initialState: CommonState = {
 	openDrawer: true,
 	isLogin: false,
 	alertInfoHeight: 0,
-	alert: [{
+	alert: [
+		{
 		alertSeverity: 'error',
 		title: 'Error alert',
 		message: 'This is error alert'
-	},
+		},
 		{
 			alertSeverity: 'success',
 			title: 'Success alert',
@@ -39,7 +45,12 @@ const initialState: CommonState = {
 			alertSeverity: 'warning',
 			title: 'Warning alert',
 			message: 'This is Warning alert'
-		}]
+		}
+	],
+	authorityMaster: [],
+	roleMaster: [],
+	positionMaster: [],
+	levelMaster: [],
 };
 
 export const commonSlice = createSlice({
@@ -84,7 +95,31 @@ export const commonSlice = createSlice({
 		},
 		removeAlert: (state, action: PayloadAction<IAlertPrimaryDetail[]>) => {
 		
-		}
+		},
+		setAuthorityMaster: (state, action: PayloadAction<IMasterResponse[]>) => {
+			return {
+				...state,
+				authorityMaster: action.payload,
+			}
+		},
+		setRoleMaster: (state, action: PayloadAction<IMasterResponse[]>) => {
+			return {
+				...state,
+				roleMaster: action.payload,
+			}
+		},
+		setPositionMaster: (state, action: PayloadAction<IMasterResponse[]>) => {
+			return {
+				...state,
+				positionMaster: action.payload,
+			}
+		},
+		setLevelMaster: (state, action: PayloadAction<IMasterResponse[]>) => {
+			return {
+				...state,
+				levelMaster: action.payload,
+			}
+		},
 	}
 });
 
@@ -94,7 +129,11 @@ export const {
 	setOpenDrawer,
 	setIsLogin,
 	setAlert,
-	setAlertInfoHeight
+	setAlertInfoHeight,
+	setAuthorityMaster,
+	setRoleMaster,
+	setPositionMaster,
+	setLevelMaster,
 } = commonSlice.actions;
 
 export const selectCommon = (state: RootState) => state.commonState;

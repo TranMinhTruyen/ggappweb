@@ -42,14 +42,16 @@ const PaperComponent = (props: PaperProps) => {
 	);
 };
 
-const ModalTitle = ({ open, back = false, onClose }: ModalTitleProps) => {
+const ModalTitle = (props: ModalTitleProps) => {
+	const { open, back = false, onClose, onBack } = props;
+	
 	return (
 		<Grid2 container direction={'row'} style={{ cursor: 'move' }} id="draggable-dialog-title">
 			<Grid2 xs={6} container justifyContent={'flex-start'}>
 				{back ? (
 					<IconButton
-						aria-label="close"
-						onClick={onClose}
+						aria-label="back"
+						onClick={onBack}
 						sx={{
 							color: (theme) => theme.palette.grey[500],
 						}}
@@ -98,6 +100,7 @@ const CommonModal = (props: CommonModalProps) => {
 			PaperComponent={PaperComponent}
 			aria-labelledby={'draggable-dialog-title'}
 			maxWidth={size}
+			fullWidth={true}
 			fullScreen={fullScreen}
 		>
 			<ModalTitle open={open} back={back} onClose={onClose} onBack={onBack}/>

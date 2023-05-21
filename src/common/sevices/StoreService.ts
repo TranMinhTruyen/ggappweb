@@ -14,7 +14,7 @@ const StoreService = {
 				{
 					params: {
 						page: page,
-						size: 5
+						size: 5,
 					}
 				}
 			);
