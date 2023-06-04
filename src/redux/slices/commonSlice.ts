@@ -3,7 +3,7 @@ import { RootState } from '../store';
 import { AlertColor } from '@mui/material/Alert/Alert';
 import { IMasterResponse } from '../../common/dto/response/MasterResponse';
 
-type CommonState = {
+interface CommonState {
 	theme: string,
 	openLoginModal: boolean,
 	openRegisterModal: boolean,

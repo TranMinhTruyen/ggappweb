@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useMemo } from 'react';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -66,41 +66,51 @@ const Header = (props: IHeaderProps) => {
 		dispatch(setOpenLoginModal(true));
 	};
 	
-	const cartButton = userToken.accessToken !== '' ??
-      <Grid2>
-          <CommonIconButton
-              backgroundColor={'#ffffff'}
-              icon={<ShoppingCartIcon/>}
-              onClick={() => {
-							}}
-              variant="contained"
-          />
-      </Grid2>;
+	const cartButton = userToken.accessToken !== '' ?
+		(
+			<Grid2>
+				<CommonIconButton
+					backgroundColor={'#ffffff'}
+					icon={<ShoppingCartIcon/>}
+					onClick={() => {}}
+					variant="contained"
+				/>
+			</Grid2>
+		) :
+		(
+			<></>
+		);
 	
 	const accountButton = userToken.accessToken === '' ?
-		<Grid2>
-			<CommonButton
-				width={130}
-				height={35}
-				backgroundColor={'#ffffff'}
-				labelColor={'#000000'}
-				startIcon={<AccountCircleRounded/>}
-				variant="contained" onClick={handleOpenLoginModal}
-				label={'Login'}
-			/>
-		</Grid2>
-		:
-		<Grid2>
-			<CommonButton
-				width={130}
-				height={35}
-				backgroundColor={'#ffffff'}
-				labelColor={'#000000'}
-				startIcon={<AccountCircleRounded/>}
-				variant="contained" onClick={handleLogout}
-				label={'Logout'}
-			/>
-		</Grid2>;
+		(
+			<Grid2>
+				<CommonButton
+					width={130}
+					height={35}
+					backgroundColor={'#ffffff'}
+					labelColor={'#000000'}
+					startIcon={<AccountCircleRounded/>}
+					variant="contained"
+					onClick={handleOpenLoginModal}
+					label={'Login'}
+				/>
+			</Grid2>
+		)
+			:
+		(
+			<Grid2>
+				<CommonButton
+					width={130}
+					height={35}
+					backgroundColor={'#ffffff'}
+					labelColor={'#000000'}
+					startIcon={<AccountCircleRounded/>}
+					variant="contained"
+					onClick={handleLogout}
+					label={'Logout'}
+				/>
+			</Grid2>
+		);
 	
 	return (
 		<AppBar drawerWidth={drawerWidth}

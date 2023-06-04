@@ -1,18 +1,37 @@
 import * as React from 'react';
-import { useEffect } from 'react';
-import RouterList from './components/drawer/RouterList';
-import { useNavigate } from 'react-router-dom';
+import RouterList from './common/RouterList';
+import { store } from './redux/store';
+import { setIsLogin } from './redux/slices/commonSlice';
+import { setToken } from './redux/slices/tokenSlice';
 
-export default function App() {
-	
-	const navigate = useNavigate();
-	
-	useEffect(() => {
-		navigate('/');
-		// eslint-disable-next-line
-	}, []);
-	
+const getTokenState = () => {
+	try {
+		let persistedState = localStorage.getItem('tokenState');
+		if (persistedState) {
+			store.dispatch(setIsLogin(true));
+			return JSON.parse(persistedState);
+		}
+		
+		persistedState = sessionStorage.getItem('tokenState');
+		if (persistedState) {
+			store.dispatch(setIsLogin(true));
+			return JSON.parse(persistedState);
+		}
+	} catch (e) {
+		console.log(e);
+	}
+};
+
+const tokenState = getTokenState();
+
+if (tokenState) {
+	store.dispatch(setToken(tokenState));
+}
+
+const App = () => {
 	return (
 		<RouterList/>
 	);
 }
+
+export default App;

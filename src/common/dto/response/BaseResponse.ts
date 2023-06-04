@@ -1,5 +1,6 @@
-export default interface BaseResponse<T> {
-	timestamp: string | '',
-	message: string | '',
-	payload: T | null
+export default interface BaseResponse<T = any> {
+	status?: number;
+	timestamp: string | '';
+	message: string | '';
+	payload: T;
 }

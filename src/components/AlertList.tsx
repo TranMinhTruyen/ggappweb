@@ -4,10 +4,11 @@ import { useAppDispatch } from '../redux/hooks';
 import { setAlertInfoHeight } from '../redux/slices/commonSlice';
 
 interface Props {
-	children: React.ReactNode;
+	children: React.ReactNode | [];
 }
 
-const AlertList = ({ children }: Props) => {
+const AlertList = (props: Props) => {
+	const { children } = props
 	const ref = useRef<HTMLDivElement>(null);
 	
 	const dispatch = useAppDispatch();

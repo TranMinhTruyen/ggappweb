@@ -1,5 +1,5 @@
-import { CartResponse } from '../dto/response/CartResponse';
-import BaseResponse from '../dto/response/BaseResponse';
+import { CartResponse } from '../../dto/response/CartResponse';
+import BaseResponse from '../../dto/response/BaseResponse';
 import axios from 'axios';
 
 const CART_URL: string = 'http://localhost:8080/api/cart/';

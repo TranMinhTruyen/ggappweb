@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { lazy } from 'react';
 
-const HomeComponent = React.lazy(() => import('../screens/home/HomeScreen'));
-const DashBoardComponent = React.lazy(() => import('../screens/DashBoardScreen'));
-const FavoriteComponent = React.lazy(() => import('../screens/FavoriteScreen'));
-const ApiComponent = React.lazy(() => import('../screens/ApiScreen'));
-const ChartComponent = React.lazy(() => import('../screens/ChartScreen'));
-const LogChangeComponent = React.lazy(() => import('../screens/LogChangeScreen'));
+const HomeComponent = lazy(() => import('../screens/home/HomeScreen'));
+const DashBoardComponent = lazy(() => import('../screens/DashBoardScreen'));
+const FavoriteComponent = lazy(() => import('../screens/FavoriteScreen'));
+const ApiComponent = lazy(() => import('../screens/ApiScreen'));
+const ChartComponent = lazy(() => import('../screens/ChartScreen'));
+const LogChangeComponent = lazy(() => import('../screens/LogChangeScreen'));
+const NotFoundComponent = lazy(() => import ('../screens/NotFoundScreen'));
 
 export interface ComponentTabItem {
 	componentNode: React.ReactNode;
@@ -36,6 +37,10 @@ const ComponentRouters: Array<ComponentTabItem> = [
 	{
 		componentNode: <FavoriteComponent/>,
 		componentPath: '/favorite',
+	},
+	{
+		componentNode: <NotFoundComponent/>,
+		componentPath: '*',
 	},
 ];
 

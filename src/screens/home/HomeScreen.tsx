@@ -1,9 +1,9 @@
 import React, { memo, useEffect, useState } from 'react';
-import StoreService from '../../common/sevices/StoreService';
+import StoreService from '../../common/sevices/store/storeService';
 import { ProductStoreResponse } from '../../common/dto/response/ProductStoreResponse';
 import Grid2 from '@mui/material/Unstable_Grid2';
 import { setOpenLoginModal } from '../../redux/slices/commonSlice';
-import CartService from '../../common/sevices/CartService';
+import CartService from '../../common/sevices/cart/cartService';
 import { selectToken } from '../../redux/slices/tokenSlice';
 import { shallowEqual } from 'react-redux';
 import { RootState } from '../../redux/store';
@@ -26,17 +26,18 @@ const HomeScreen = () => {
 		shallowEqual
 	);
 	
-	const { alertInfoHeight } = useAppSelector(
-		(state: RootState) => ({ alertInfoHeight: state.commonState.alertInfoHeight }),
+	const { alertInfoHeight } = useAppSelector((state: RootState) =>
+			({ alertInfoHeight: state.commonState.alertInfoHeight }),
 		shallowEqual
 	);
+	
 	
 	useEffect(() => {
 		async function getProductFromStore() {
 			const responseData = await StoreService.getProductFromStore(rowsPerPage, page, storeState.id);
 			if (responseData.status === 200) {
-				setCount(responseData.data.payload.totalRecord);
-				setProductList(responseData.data.payload.data);
+				setCount(responseData.payload.totalRecord);
+				setProductList(responseData.payload.data);
 			}
 		}
 		
@@ -79,7 +80,14 @@ const HomeScreen = () => {
 	
 	return (
 		<Box>
-			<Box overflow={'hidden'} sx={{ maxHeight: `calc(86vh - ${alertInfoHeight}px)`, overflowY: 'scroll' }}>
+			<Box
+				overflow={'hidden'}
+				sx={{
+					height: `calc(86vh - ${alertInfoHeight}px)`,
+					maxHeight: `calc(86vh - ${alertInfoHeight}px)`,
+					overflowY: 'scroll'
+				}}
+			>
 				<Grid2 container spacing={2.5}>
 					{productList.map((product) => (
 						<Grid2 key={product.id} xs={4}>

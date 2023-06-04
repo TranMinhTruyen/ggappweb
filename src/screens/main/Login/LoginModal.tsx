@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import IconButton from '@mui/material/IconButton';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -7,19 +7,21 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { LoginRequest } from '../../../common/dto/request/LoginRequest';
 import { setToken } from '../../../redux/slices/tokenSlice';
-import LoginService from '../../../common/sevices/LoginService';
+import LoginService from '../../../common/sevices/login/loginService';
 import Box from '@mui/material/Box';
 import CommonModal from '../../../components/CommonModal';
 import Grid2 from '@mui/material/Unstable_Grid2';
 import CommonButton from '../../../components/CommonButton';
 import CommonTextInput from '../../../components/CommonTextInput';
-import { Avatar, Checkbox, FormControlLabel, Link } from '@mui/material';
+import { Avatar, Link } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
 import CommonAlert, { IAlertDetail } from '../../../components/CommonAlert';
 import { setIsLogin, setOpenLoginModal, setOpenRegisterModal } from '../../../redux/slices/commonSlice';
 import { RootState } from '../../../redux/store';
 import { shallowEqual } from 'react-redux';
+import { Control, FieldValues, useForm, UseFormReset } from 'react-hook-form';
+import CommonCheckbox from '../../../components/CommonCheckbox';
 
 const alertDetail: IAlertDetail = {
 	alertSeverity: 'error',
@@ -28,30 +30,25 @@ const alertDetail: IAlertDetail = {
 	message: ''
 };
 
-interface LoginModalActionProps {
-	username: string;
-	password: string;
-	remember: boolean;
+interface LoginModalActionProps<T extends FieldValues> {
 	showAlert?: (showAlert: boolean) => void;
 	onSummit: () => void;
+	reset: UseFormReset<T>;
 }
 
-interface LoginModalContentProps {
-	usernameValidCheck: boolean
-	passwordValidCheck: boolean
+interface LoginModalContentProps<T extends FieldValues> {
+	control: Control<T, object>;
 	alert?: IAlertDetail;
-	setUsername: (username: string) => void;
-	setPassword: (password: string) => void;
-	setRememberChecked: (checked: boolean) => void;
 }
 
-const LoginModalAction = (props: LoginModalActionProps) => {
+const LoginModalAction = (props: LoginModalActionProps<LoginRequest>) => {
 	
-	const { onSummit } = props;
+	const { onSummit, reset } = props;
 	const dispatch = useAppDispatch();
 	
 	const handleCancel = () => {
-		dispatch(setOpenLoginModal(false))
+		dispatch(setOpenLoginModal(false));
+		reset();
 	}
 	
 	return (
@@ -66,20 +63,18 @@ const LoginModalAction = (props: LoginModalActionProps) => {
 	);
 };
 
-const LoginModalContent = (props: LoginModalContentProps) => {
-	
-	const {
-		usernameValidCheck,
-		passwordValidCheck,
-		alert = { showAlert: false, message: '', title: '', alertSeverity: 'error' },
-		setUsername,
-		setPassword,
-		setRememberChecked
-	} = props;
+const LoginModalContent = ({
+	control,
+	alert = { showAlert: false, message: '', title: '', alertSeverity: 'error' },
+}: LoginModalContentProps<LoginRequest>) => {
+
 	
 	const [showPassword, setShowPassword] = useState<boolean>(false);
-	const handleClickShowPassword = () => setShowPassword((show) => !show);
 	const dispatch = useAppDispatch();
+	
+	const handleClickShowPassword = () => {
+		setShowPassword((show) => !show)
+	};
 	
 	const handleOpenRegisterModal = () => {
 		dispatch(setOpenRegisterModal(true));
@@ -87,7 +82,7 @@ const LoginModalContent = (props: LoginModalContentProps) => {
 	};
 	
 	return (
-		<Grid2 container spacing={2}>
+		<Grid2 container spacing={2} >
 			<Grid2 xs={12} sx={{ marginBottom: 2 }}>
 				<CommonAlert variant={'filled'} alert={alert}/>
 			</Grid2>
@@ -99,7 +94,8 @@ const LoginModalContent = (props: LoginModalContentProps) => {
 			</Grid2>
 			<Grid2 xs={12}>
 				<CommonTextInput
-					isValid={usernameValidCheck}
+					name={'account'}
+					control={control}
 					isRequire={true}
 					placeholder={'Username or email'}
 					helpText={'This is require!'}
@@ -110,14 +106,12 @@ const LoginModalContent = (props: LoginModalContentProps) => {
 							</InputAdornment>
 						),
 					}}
-					onChange={(value) => {
-						setUsername(value);
-					}}
 				/>
 			</Grid2>
 			<Grid2 xs={12}>
 				<CommonTextInput
-					isValid={passwordValidCheck}
+					name={'password'}
+					control={control}
 					isRequire={true}
 					placeholder="Password"
 					helpText={'This is require!'}
@@ -140,35 +134,41 @@ const LoginModalContent = (props: LoginModalContentProps) => {
 							</InputAdornment>
 						)
 					}}
-					onChange={(value) => {
-						setPassword(value);
-					}}
 				/>
 			</Grid2>
 			<Grid2 container justifyContent="end" xs={12}>
-				<FormControlLabel control={
-					<Checkbox onChange={
-						(event: React.ChangeEvent<HTMLInputElement>) => setRememberChecked(event.target.checked)}
-					/>} label="Remember me"/>
+				<CommonCheckbox
+					name={'remember'}
+					label={'Remember me'}
+					control={control}
+				/>
 			</Grid2>
 			<Grid2 container justifyContent="center" xs={12}>
 				<Typography>If you don't have account:
 					<Link onClick={handleOpenRegisterModal}>Register</Link>
 				</Typography>
 			</Grid2>
-		
 		</Grid2>
 	);
 };
 
+const initValue: LoginRequest = {
+	account: '',
+	password: '',
+	deviceInfo: {
+		deviceOperationSystem: '',
+		deviceName: '',
+		deviceMac: '',
+		deviceIp: ''
+	},
+	remember: false
+}
+
 const LoginModal = () => {
-	
-	const [username, setUsername] = useState<string>('');
-	const [password, setPassword] = useState<string>('');
-	const [rememberChecked, setRememberChecked] = useState<boolean>(false);
-	const [usernameValidCheck, setUsernameValidCheck] = useState<boolean>(true);
-	const [passwordValidCheck, setPasswordValidCheck] = useState<boolean>(true);
 	const [alert, setAlert] = useState<IAlertDetail>(alertDetail);
+	const { control, getValues, reset } = useForm<LoginRequest>({
+		defaultValues: initValue
+	});
 	
 	const { openLoginModal } = useAppSelector(
 		(state: RootState) => ({ openLoginModal: state.commonState.openLoginModal }),
@@ -176,20 +176,17 @@ const LoginModal = () => {
 	);
 	
 	useEffect(() => {
-		setUsernameValidCheck(true);
-		setPasswordValidCheck(true);
-		setRememberChecked(false);
-		setUsername('');
-		setPassword('');
 		setAlert({ ...alertDetail, showAlert: false, message: '', title: '', alertSeverity: 'error' });
 	}, [openLoginModal]);
 	
 	const dispatch = useAppDispatch();
 	
 	const loginHandle = async () => {
+		const accountInput: string = getValues().account;
+		const passwordInput: string = getValues().password;
+		const rememberChecked: boolean = getValues().remember;
 		
-		if (username === null || username === '') {
-			setUsernameValidCheck(false);
+		if (accountInput === null || passwordInput === '') {
 			setAlert({
 				...alertDetail,
 				showAlert: true,
@@ -198,8 +195,7 @@ const LoginModal = () => {
 				alertSeverity: 'warning'
 			});
 		}
-		if (password === null || password === '') {
-			setPasswordValidCheck(false);
+		if (passwordInput === null || passwordInput === '') {
 			setAlert({
 				...alertDetail,
 				showAlert: true,
@@ -208,9 +204,7 @@ const LoginModal = () => {
 				alertSeverity: 'warning'
 			});
 		}
-		if ((username === null || username === '') && (password === null || password === '')) {
-			setUsernameValidCheck(false);
-			setPasswordValidCheck(false);
+		if ((accountInput === null || accountInput === '') && (passwordInput === null || passwordInput === '')) {
 			setAlert({
 				...alertDetail,
 				showAlert: true,
@@ -219,32 +213,28 @@ const LoginModal = () => {
 				alertSeverity: 'warning'
 			});
 		}
-		if (username !== '' && username !== null && password !== '' && password !== null) {
-			setUsernameValidCheck(true);
-			setPasswordValidCheck(true);
-			
+		if (accountInput !== '' && accountInput !== null && passwordInput !== '' && passwordInput !== null) {
 			let request: LoginRequest = {
-				account: username,
-				password: password,
+				account: accountInput,
+				password: passwordInput,
 				deviceInfo: {
 					deviceOperationSystem: 'string',
 					deviceName: 'string',
 					deviceMac: 'string',
 					deviceIp: 'string'
 				},
-				remember: rememberChecked
+				remember: rememberChecked,
 			};
 			
 			const response = await LoginService.login(request);
-			
 			if (response.status === 200) {
 				dispatch(setOpenLoginModal(false));
 				if (rememberChecked) {
-					localStorage.setItem('tokenState', JSON.stringify(response.data.payload));
+					localStorage.setItem('tokenState', JSON.stringify(response.payload));
 				} else {
-					sessionStorage.setItem('tokenState', JSON.stringify(response.data.payload));
+					sessionStorage.setItem('tokenState', JSON.stringify(response.payload));
 				}
-				dispatch(setToken(response.data.payload));
+				dispatch(setToken(response.payload));
 				dispatch(setIsLogin(true));
 			} else {
 				setAlert({ ...alertDetail, showAlert: true, message: response.message, title: 'Error', alertSeverity: 'error' });
@@ -256,23 +246,17 @@ const LoginModal = () => {
 		<Box>
 			<CommonModal
 				open={openLoginModal}
-				onClose={() => dispatch(setOpenLoginModal(false))}
+				onClose={() => {dispatch(setOpenLoginModal(false)); reset()}}
 				size={'sm'}
 				dialogContent={
 					<LoginModalContent
-						usernameValidCheck={usernameValidCheck}
-						passwordValidCheck={passwordValidCheck}
+						control={control}
 						alert={alert}
-						setUsername={(value) => setUsername(value)}
-						setPassword={(value) => setPassword(value)}
-						setRememberChecked={(value) => setRememberChecked(value)}
 					/>}
 				dialogAction={
 					<LoginModalAction
-						username={username}
-						password={password}
-						remember={rememberChecked}
 						onSummit={loginHandle}
+						reset={reset}
 					/>
 				}
 			/>
@@ -280,4 +264,4 @@ const LoginModal = () => {
 	);
 };
 
-export default React.memo(LoginModal);
+export default memo(LoginModal);

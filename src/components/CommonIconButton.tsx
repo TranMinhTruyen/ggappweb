@@ -14,7 +14,7 @@ type CustomIconButtonProps = {
 	icon?: React.ReactNode;
 	loading?: boolean;
 	badgeContent?: number;
-	onClick: () => void;
+	onClick?: () => void;
 	variant?: OverridableStringUnion<'text' | 'outlined' | 'contained', ButtonPropsVariantOverrides>;
 }
 

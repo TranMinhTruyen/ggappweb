@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import Dialog from '@mui/material/Dialog';
@@ -30,17 +30,6 @@ interface ModalTitleProps {
 	onClose: () => void;
 	onBack?: () => void;
 }
-
-const PaperComponent = (props: PaperProps) => {
-	return (
-		<Draggable
-			handle="#draggable-dialog-title"
-			cancel={'[class*="MuiDialogContent-root"]'}
-		>
-			<Paper {...props} />
-		</Draggable>
-	);
-};
 
 const ModalTitle = (props: ModalTitleProps) => {
 	const { open, back = false, onClose, onBack } = props;
@@ -93,11 +82,25 @@ const CommonModal = (props: CommonModalProps) => {
 	const theme = useTheme();
 	const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 	
+	const nodeRef = React.useRef(null);
+	const paperComponent = useCallback(
+		(props: PaperProps) => {
+			return (
+				<Draggable
+					nodeRef={nodeRef}
+					handle="#draggable-dialog-title"
+					cancel='[class*="MuiDialogContent-root"]'
+				>
+					<Paper ref={nodeRef} {...props} />
+				</Draggable>
+			);
+	}, []);
+	
 	return (
 		<Dialog
 			open={open}
 			onClose={onClose}
-			PaperComponent={PaperComponent}
+			PaperComponent={paperComponent}
 			aria-labelledby={'draggable-dialog-title'}
 			maxWidth={size}
 			fullWidth={true}

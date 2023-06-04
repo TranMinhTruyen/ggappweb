@@ -3,12 +3,14 @@ import tokenSlice from './slices/tokenSlice';
 import thunk from 'redux-thunk';
 import storeSlice from './slices/productSlice';
 import commonSlice from './slices/commonSlice';
+import masterSlice from '../common/sevices/master/masterSlice';
 
 export const store = configureStore({
 	reducer: {
+		masterState: masterSlice,
 		tokenState: tokenSlice,
 		storeState: storeSlice,
-		commonState: commonSlice
+		commonState: commonSlice,
 	},
 	middleware: [thunk]
 });

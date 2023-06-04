@@ -4,7 +4,7 @@ import { Checkbox, FormControl, ListItemText, MenuItem, Select, SelectChangeEven
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { selectCommon, setRoleMaster } from '../../redux/slices/commonSlice';
 import { IMasterResponse } from '../../common/dto/response/MasterResponse';
-import MasterService from '../../common/sevices/MasterService';
+import MasterService from '../../common/sevices/master/masterService';
 
 const CustomSelectValid = styled(FormControl)({
 	background: 'rgba(210,210,210,0.8)',

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import Drawer from '../../components/drawer/Drawer';
 import Box from '@mui/material/Box';
 import { Outlet } from 'react-router-dom';
@@ -6,8 +6,8 @@ import Header from '../../components/Header';
 import { clearToken } from '../../redux/slices/tokenSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { styled } from '@mui/material/styles';
-import LoginModal from '../main/modal/LoginModal';
-import RegisterModal from '../main/modal/RegisterModal';
+import LoginModal from './Login/LoginModal';
+import RegisterModal from './Register/RegisterModal';
 import { setIsLogin } from '../../redux/slices/commonSlice';
 import { RootState } from '../../redux/store';
 import { shallowEqual } from 'react-redux';
@@ -78,4 +78,4 @@ const MainScreen = () => {
 	);
 };
 
-export default MainScreen;
+export default memo(MainScreen);

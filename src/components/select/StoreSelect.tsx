@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { selectStore, setStore } from '../../redux/slices/productSlice';
 import React, { memo, useEffect, useState } from 'react';
 import { StoreResponse } from '../../common/dto/response/StoreResponse';
-import StoreService from '../../common/sevices/StoreService';
+import StoreService from '../../common/sevices/store/storeService';
 import { Checkbox, FormControl, ListItemText, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { PaginationResponse } from '../../common/dto/response/PaginationResponse';
@@ -49,20 +49,20 @@ const StoreSelect = () => {
 	const [page, setPage] = useState<number>(1);
 	
 	useEffect(() => {
-		async function getAllStore() {
+		const fetchGetAllStore = async () => {
 			const responseData = await StoreService.getAllStore(page);
-			if (responseData.status === 200) {
+			if (responseData?.status === 200) {
 				if (page === 1) {
-					setStoreData(responseData.data.payload);
+					setStoreData(responseData.payload);
 				} else {
 					setStoreData((prevState) => ({
 						...prevState,
-						data: [...prevState.data, ...responseData.data.payload.data]
+						data: [...prevState.data, ...responseData.payload.data]
 					}));
 				}
 				if (sessionStorage.getItem('storeSelect') === null) {
-					dispatch(setStore(responseData.data.payload.data[0]));
-					setStoreSelect(responseData.data.payload.data[0]);
+					dispatch(setStore(responseData.payload.data[0]));
+					setStoreSelect(responseData.payload.data[0]);
 				} else {
 					dispatch(setStore(JSON.parse(sessionStorage.getItem('storeSelect') || '{}')));
 					setStoreSelect(JSON.parse(sessionStorage.getItem('storeSelect') || '{}'));
@@ -70,8 +70,7 @@ const StoreSelect = () => {
 			}
 		}
 		
-		getAllStore().then(() => {
-		});
+		fetchGetAllStore().then(() => {});
 		// eslint-disable-next-line
 	}, [page]);
 	

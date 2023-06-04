@@ -1,5 +1,5 @@
-import BaseResponse from '../dto/response/BaseResponse';
-import { IMasterResponse } from '../dto/response/MasterResponse';
+import BaseResponse from '../../dto/response/BaseResponse';
+import { IMasterResponse } from '../../dto/response/MasterResponse';
 import axios from 'axios';
 
 const MASTER_URL: string = 'http://localhost:8080/api/master/';
