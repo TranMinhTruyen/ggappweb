@@ -9,35 +9,43 @@ const HomeScreen = lazy(() => import('../screens/home/HomeScreen'));
 const componentRouter = ComponentRouters;
 
 const RouterList = () => {
-	return (
-		<Routes>
-			<Route
-				path={'/'}
-				element={<MainScreen/>}
-			>
-				<Route
-					index
-					path={'/'}
-					element={
-						<Suspense fallback={<Backdrop open={true}><CircularProgress color="inherit"/></Backdrop>}>
-							<HomeScreen/>
-						</Suspense>
-					}
-				/>
-				{componentRouter.map(item => (
-					<Route
-						key={'route'}
-						path={item.componentPath}
-						element={
-							<Suspense fallback={<Backdrop open={true}><CircularProgress color="inherit"/></Backdrop>}>
-								{item.componentNode}
-							</Suspense>
-						}
-					/>
-				))}
-			</Route>
-		</Routes>
-	);
+  return (
+    <Routes>
+      <Route path={'/'} element={<MainScreen />}>
+        <Route
+          index
+          path={'/'}
+          element={
+            <Suspense
+              fallback={
+                <Backdrop open={true}>
+                  <CircularProgress color="inherit" />
+                </Backdrop>
+              }
+            >
+              <HomeScreen />
+            </Suspense>
+          }
+        />
+        {componentRouter.map(item => (
+          <Route
+            key={'route'}
+            path={item.componentPath}
+            element={
+              <Suspense
+                fallback={
+                  <Backdrop open={true}>
+                    <CircularProgress color="inherit" />
+                  </Backdrop>
+                }
+              >
+                {item.componentNode}
+              </Suspense>
+            }
+          />
+        ))}
+      </Route>
+    </Routes>
+  );
 };
 export default React.memo(RouterList);
-
