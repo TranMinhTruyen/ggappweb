@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import BaseResponse from '../dto/response/BaseResponse';
+import BaseResponse from 'common/dto/response/BaseResponse';
 
 type ApiMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
@@ -7,17 +7,19 @@ export interface IUseAxiosProps {
 	url: string;
 	request?: any;
 	param?: any;
+	header?: any;
 	method: ApiMethod;
 }
 
 const fetchData = async <PayloadType>(props: IUseAxiosProps): Promise<BaseResponse<PayloadType>> => {
-	const { url, method, param, request } = props;
+	const { url, method, param, header, request } = props;
 	const config: AxiosRequestConfig = {
 		baseURL: 'http://localhost:8080/api',
 		url: url,
 		method: method,
 		data: request,
 		params: param,
+		headers: header,
 		timeout: 30000,
 	};
 	try {

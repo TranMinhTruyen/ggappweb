@@ -1,32 +1,33 @@
+import fetchData, { IUseAxiosProps } from 'common/axios/customAxios';
 import { CartResponse } from '../../dto/response/CartResponse';
-import BaseResponse from '../../dto/response/BaseResponse';
-import axios from 'axios';
-
-const CART_URL: string = 'http://localhost:8080/api/cart/';
 
 const CartService = {
-	async createCartAndAddProductToCart(productId: number, storeId: number, productAmount: number, accessToken: string): Promise<CartResponse | any> {
-		try {
-			return await axios.post<BaseResponse<CartResponse>>(
-				CART_URL + 'createCartAndAddProductToCart',
-				null,
-				{
-					params: {
-						productId: productId,
-						storeId: storeId,
-						productAmount: productAmount
-					},
-					headers: {
-						'Content-Type': 'application/json',
-						Authorization: 'Bearer ' + accessToken,
-					},
-				}
-			);
-		} catch (error) {
-			if (axios.isAxiosError(error)) {
-				return error.response?.data;
-			}
-		}
-	}
+	async createCartAndAddProductToCart(productId: number, storeId: number, productAmount: number, accessToken: string) {
+		const props: IUseAxiosProps = {
+			url: '/cart/createCartAndAddProductToCart',
+			method: 'POST',
+			param: {
+				productId: productId,
+				storeId: storeId,
+				productAmount: productAmount
+			},
+			header: {
+				'Content-Type': 'application/json',
+				Authorization: 'Bearer ' + accessToken,
+			},
+		};
+		return fetchData<CartResponse>(props);
+	},
+	async getCartById(accessToken: string) {
+		const props: IUseAxiosProps = {
+			url: '/cart/getCartById',
+			method: 'GET',
+			header: {
+				'Content-Type': 'application/json',
+				Authorization: 'Bearer ' + accessToken,
+			},
+		};
+		return fetchData<CartResponse>(props);
+	},
 };
 export default CartService;

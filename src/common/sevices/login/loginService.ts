@@ -1,6 +1,6 @@
-import { LoginRequest } from '../../dto/request/LoginRequest';
-import { LoginResponse } from '../../dto/response/LoginResponse';
-import fetchData, { IUseAxiosProps } from '../../axios/customAxios';
+import fetchData, { IUseAxiosProps } from 'common/axios/customAxios';
+import { LoginRequest } from 'common/dto/request/LoginRequest';
+import { LoginResponse } from 'common/dto/response/LoginResponse';
 
 const LoginService = {
 	login(request: LoginRequest) {

@@ -1,23 +1,24 @@
-import CommonModal from '../../../components/CommonModal';
-import React, { useEffect, useState } from 'react';
+import { toggleLoginDialog } from 'common/sevices/login/loginSlice';
+import { selectOpenRegisterDialog, toggleRegisterDialog } from 'common/sevices/register/registerSlice';
+import CommonModal from 'components/Modal';
+import React, { useCallback, useEffect, useState } from 'react';
 import Typography from '@mui/material/Typography';
-import { setOpenLoginModal, setOpenRegisterModal, setRoleMaster } from '../../../redux/slices/commonSlice';
-import { useAppDispatch, useAppSelector } from '../../../redux/hooks';
-import { RootState } from '../../../redux/store';
+import { setOpenRegisterModal } from 'common/sevices/main/mainSlice';
 import { shallowEqual } from 'react-redux';
 import Grid2 from '@mui/material/Unstable_Grid2';
 import { Avatar } from '@mui/material';
 import InputAdornment from '@mui/material/InputAdornment';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import CommonTextInput from '../../../components/CommonTextInput';
+import CommonTextInput from 'components/TextInput';
 import KeyIcon from '@mui/icons-material/Key';
 import IconButton from '@mui/material/IconButton';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { selectToken } from '../../../redux/slices/tokenSlice';
-import CommonButton from '../../../components/CommonButton';
+import { selectAccessToken } from 'common/sevices/auth/authSlice';
+import CommonButton from 'components/Button';
 import RoleSelect from '../../../components/select/RoleSelect';
 import masterService from '../../../common/sevices/master/masterService';
+import { RootState, useAppDispatch, useAppSelector } from 'app/store';
 
 interface RegisterModalContentProps {
 	open: boolean;
@@ -26,7 +27,7 @@ interface RegisterModalContentProps {
 const RegisterContent = (props: RegisterModalContentProps) => {
 	const [showPassword, setShowPassword] = useState<boolean>(false);
 	const handleClickShowPassword = () => setShowPassword((show) => !show);
-	const userToken = useAppSelector(selectToken);
+	const accessToken = useAppSelector(selectAccessToken);
 	const dispatch = useAppDispatch();
 	
 	// const employee =
@@ -334,19 +335,12 @@ const RegisterModal = () => {
 	
 	const dispatch = useAppDispatch();
 	
-	const { openRegisterModal } = useAppSelector(
-		(state: RootState) => ({ openRegisterModal: state.commonState.openRegisterModal }),
-		shallowEqual
-	);
+	const openRegisterModal = useAppSelector(selectOpenRegisterDialog);
 	
-	const handleClose = () => {
-		dispatch(setOpenRegisterModal(false));
-	};
-	
-	const handleBack = () => {
-		dispatch(setOpenLoginModal(true));
-		dispatch(setOpenRegisterModal(false));
-	};
+	const handleClose = useCallback(() => {
+		dispatch(toggleRegisterDialog());
+		dispatch(toggleLoginDialog());
+	}, [dispatch]);
 	
 	return (
 		<CommonModal
@@ -354,9 +348,9 @@ const RegisterModal = () => {
 			back={true}
 			size={'sm'}
 			onClose={handleClose}
-			onBack={handleBack}
+			onBack={handleClose}
 			dialogContent={<RegisterContent open={openRegisterModal}/>}
-			dialogAction={<RegisterModalAction/>}
+			dialogFooter={<RegisterModalAction/>}
 		/>
 	);
 };

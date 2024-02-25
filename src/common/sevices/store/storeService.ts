@@ -4,7 +4,7 @@ import fetchData, { IUseAxiosProps } from '../../axios/customAxios';
 import { StoreResponse } from '../../dto/response/StoreResponse';
 
 const StoreService = {
-	getAllStore(page: number) {
+	async getAllStore(page: number) {
 		const props: IUseAxiosProps = {
 			url: '/store/getAllStore',
 			param: {
@@ -13,7 +13,7 @@ const StoreService = {
 			},
 			method: 'GET',
 		};
-		return fetchData<PaginationResponse<StoreResponse>>(props);
+		return await fetchData<PaginationResponse<StoreResponse>>(props);
 	},
 	getProductFromStore(size: number, page: number, storeId: number) {
 		const props: IUseAxiosProps = {

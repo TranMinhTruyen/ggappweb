@@ -1,16 +1,13 @@
-import React, { memo } from 'react';
-import Drawer from '../../components/drawer/Drawer';
 import Box from '@mui/material/Box';
-import { Outlet } from 'react-router-dom';
-import Header from '../../components/Header';
-import { clearToken } from '../../redux/slices/tokenSlice';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { styled } from '@mui/material/styles';
-import LoginModal from './Login/LoginModal';
-import RegisterModal from './Register/RegisterModal';
-import { setIsLogin } from '../../redux/slices/commonSlice';
-import { RootState } from '../../redux/store';
-import { shallowEqual } from 'react-redux';
+import { useAppSelector } from 'app/store';
+import { selectOpenDrawer } from 'common/sevices/main/mainSlice';
+import Drawer from 'components/drawer/Drawer';
+import Header from 'components/Header';
+import React, { memo } from 'react';
+import { Outlet } from 'react-router-dom';
+import LoginModal from 'screens/main/login/LoginModal';
+import RegisterModal from 'screens/main/register/RegisterModal';
 import MainScreenAlertList from './MainScreenAlertList';
 
 const drawerWidth = 250;
@@ -46,26 +43,13 @@ const ScreenLayout = styled(Box, { shouldForwardProp: (prop) => prop !== 'openDr
 	}));
 
 const MainScreen = () => {
-	const dispatch = useAppDispatch();
-	
-	const { openDrawer } = useAppSelector(
-		(state: RootState) => ({ openDrawer: state.commonState.openDrawer }),
-		shallowEqual
-	);
-	
-	const handleLogout = () => {
-		dispatch(clearToken());
-		dispatch(setIsLogin(false));
-		sessionStorage.removeItem('tokenState');
-		localStorage.removeItem('tokenState');
-	};
+	const openDrawer = useAppSelector(selectOpenDrawer);
 	
 	return (
 		<Box>
-			<Header drawerWidth={drawerWidth}
-			        handleLogout={handleLogout}
-			/>
+			<Header drawerWidth={drawerWidth}/>
 			<Drawer
+				key={'drawer'}
 				drawerWidth={drawerWidth}
 			/>
 			<LoginModal/>

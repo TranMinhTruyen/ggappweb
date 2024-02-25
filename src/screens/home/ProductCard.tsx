@@ -1,13 +1,13 @@
 import React, { memo } from 'react';
 import { Card, CardActionArea, CardContent, CardMedia } from '@mui/material';
-import placeHolderImage from '../../static/placeholder-image.png';
+import placeHolderImage from 'static/placeholder-image.png';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Grid2 from '@mui/material/Unstable_Grid2';
-import CommonButton from '../../components/CommonButton';
+import CommonButton from 'components/Button';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import { ProductStoreResponse } from '../../common/dto/response/ProductStoreResponse';
+import { ProductStoreResponse } from 'common/dto/response/ProductStoreResponse';
 
 interface IProductCard {
 	product: ProductStoreResponse;

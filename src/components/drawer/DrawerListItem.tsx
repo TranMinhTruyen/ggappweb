@@ -7,8 +7,8 @@ import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
-export type DrawerItem = {
-	componentKey: number;
+export interface DrawerItem {
+	componentKey: string;
 	componentIcon: React.ReactElement;
 	componentLabel: string;
 	componentPath: string;
@@ -18,7 +18,7 @@ export type DrawerItem = {
 
 const DrawerItemList: Array<DrawerItem> = [
 	{
-		componentKey: 0,
+		componentKey: '1',
 		componentIcon: <Home/>,
 		componentLabel: 'Home',
 		componentPath: '/',
@@ -26,14 +26,14 @@ const DrawerItemList: Array<DrawerItem> = [
 		componentChild: null,
 	},
 	{
-		componentKey: 1,
+		componentKey: '2',
 		componentIcon: <AdminPanelSettingsIcon/>,
 		componentLabel: 'Admin Panel',
 		componentPath: '/dashboard',
 		componentRole: ['ROLE_ADMIN', 'ROLE_EMP'],
 		componentChild: [
 			{
-				componentKey: 1.0,
+				componentKey: '2.1',
 				componentIcon: <DashboardIcon/>,
 				componentLabel: 'Dash Board',
 				componentPath: '/dashboard',
@@ -41,7 +41,7 @@ const DrawerItemList: Array<DrawerItem> = [
 				componentChild: null
 			},
 			{
-				componentKey: 1.1,
+				componentKey: '2.2',
 				componentIcon: <ApiIcon/>,
 				componentLabel: 'App API',
 				componentPath: '/dashboard/api',
@@ -49,7 +49,7 @@ const DrawerItemList: Array<DrawerItem> = [
 				componentChild: null
 			},
 			{
-				componentKey: 1.2,
+				componentKey: '2.3',
 				componentIcon: <BarChartIcon/>,
 				componentLabel: 'Chart',
 				componentPath: '/dashboard/chart',
@@ -57,17 +57,26 @@ const DrawerItemList: Array<DrawerItem> = [
 				componentChild: null
 			},
 			{
-				componentKey: 1.3,
+				componentKey: '2.4',
 				componentIcon: <ChangeCircleIcon/>,
 				componentLabel: 'Log Change',
 				componentPath: '/dashboard/log',
 				componentRole: ['ROLE_ADMIN', 'ROLE_EMP'],
-				componentChild: null
+				componentChild: [
+					{
+						componentKey: '2.4.1',
+						componentIcon: <ChangeCircleIcon/>,
+						componentLabel: 'Log Change test',
+						componentPath: '/dashboard/logtest',
+						componentRole: ['ROLE_ADMIN', 'ROLE_EMP'],
+						componentChild: null
+					},
+				]
 			},
 		]
 	},
 	{
-		componentKey: 2,
+		componentKey: '3',
 		componentIcon: <FavoriteIcon/>,
 		componentLabel: 'Favorite',
 		componentPath: '/favorite',

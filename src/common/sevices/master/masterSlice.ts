@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IMasterResponse } from '../../dto/response/MasterResponse';
-import { RootState } from '../../../redux/store';
+import { RootState } from 'app/store';
 
 interface IMasterState {
 	authorityMaster: IMasterResponse[],

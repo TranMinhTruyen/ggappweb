@@ -1,40 +1,32 @@
-import React, { memo, useEffect, useState } from 'react';
-import StoreService from '../../common/sevices/store/storeService';
-import { ProductStoreResponse } from '../../common/dto/response/ProductStoreResponse';
-import Grid2 from '@mui/material/Unstable_Grid2';
-import { setOpenLoginModal } from '../../redux/slices/commonSlice';
-import CartService from '../../common/sevices/cart/cartService';
-import { selectToken } from '../../redux/slices/tokenSlice';
-import { shallowEqual } from 'react-redux';
-import { RootState } from '../../redux/store';
-import Box from '@mui/material/Box';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { selectStore } from '../../redux/slices/productSlice';
-import ProductCard from './ProductCard';
 import { TablePagination } from '@mui/material';
+import Box from '@mui/material/Box';
+import Grid2 from '@mui/material/Unstable_Grid2';
+import { ProductStoreResponse } from 'common/dto/response/ProductStoreResponse';
+import { selectAccessToken, selectIsLogin } from 'common/sevices/auth/authSlice';
+import CartService from 'common/sevices/cart/cartService';
+import { setAmountInCart } from 'common/sevices/cart/cartSlice';
+import { toggleLoginDialog } from 'common/sevices/login/loginSlice';
+import { selectAlertInfoHeight } from 'common/sevices/main/mainSlice';
+import StoreService from 'common/sevices/store/storeService';
+import { selectStoreId } from 'common/sevices/store/storeSlice';
+import React, { memo, useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector } from 'app/store';
+import ProductCard from './ProductCard';
 
 const HomeScreen = () => {
 	const [productList, setProductList] = useState<ProductStoreResponse[]>([]);
 	const [page, setPage] = useState<number>(1);
 	const [count, setCount] = useState<number>(1);
 	const [rowsPerPage, setRowsPerPage] = useState<number>(10);
-	const storeState = useAppSelector(selectStore, shallowEqual);
-	const userToken = useAppSelector(selectToken, shallowEqual);
+	const storeId = useAppSelector(selectStoreId);
+	const accessToken = useAppSelector(selectAccessToken);
+	const isLogin = useAppSelector(selectIsLogin);
+	const alertInfoHeight = useAppSelector(selectAlertInfoHeight);
 	const dispatch = useAppDispatch();
-	const { isLogin } = useAppSelector(
-		(state: RootState) => ({ isLogin: state.commonState.isLogin }),
-		shallowEqual
-	);
-	
-	const { alertInfoHeight } = useAppSelector((state: RootState) =>
-			({ alertInfoHeight: state.commonState.alertInfoHeight }),
-		shallowEqual
-	);
-	
 	
 	useEffect(() => {
 		async function getProductFromStore() {
-			const responseData = await StoreService.getProductFromStore(rowsPerPage, page, storeState.id);
+			const responseData = await StoreService.getProductFromStore(rowsPerPage, page, storeId as number);
 			if (responseData.status === 200) {
 				setCount(responseData.payload.totalRecord);
 				setProductList(responseData.payload.data);
@@ -43,7 +35,7 @@ const HomeScreen = () => {
 		
 		getProductFromStore().then(() => {
 		});
-	}, [storeState, page, rowsPerPage]);
+	}, [storeId, page, rowsPerPage]);
 	
 	const handleChangePage = (
 		event: React.MouseEvent<HTMLButtonElement> | null,
@@ -60,13 +52,13 @@ const HomeScreen = () => {
 	};
 	
 	const handleAddToCart = async (productId: number) => {
-		if (isLogin && userToken.accessToken !== null) {
-			const response = await CartService.createCartAndAddProductToCart(productId, storeState.id, 1, userToken.accessToken);
+		if (isLogin && accessToken !== null) {
+			const response = await CartService.createCartAndAddProductToCart(productId, storeId as number, 1, accessToken);
 			if (response.status === 200) {
-				console.log(response);
+				dispatch(setAmountInCart(response.payload.amountInCart));
 			}
 		} else {
-			dispatch(setOpenLoginModal(true));
+			dispatch(toggleLoginDialog());
 		}
 	};
 	
@@ -74,7 +66,7 @@ const HomeScreen = () => {
 		if (isLogin) {
 		
 		} else {
-			dispatch(setOpenLoginModal(true));
+			dispatch(toggleLoginDialog());
 		}
 	};
 	

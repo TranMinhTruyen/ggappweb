@@ -1,24 +1,41 @@
-import Alert from '@mui/material/Alert';
-import IconButton from '@mui/material/IconButton';
-import { IAlertPrimaryDetail, setAlert } from '../../redux/slices/commonSlice';
 import CloseIcon from '@mui/icons-material/Close';
 import { AlertTitle } from '@mui/material';
-import AlertList from '../../components/AlertList';
-import React, { memo } from 'react';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { RootState } from '../../redux/store';
-import { shallowEqual } from 'react-redux';
+import Alert from '@mui/material/Alert';
+import IconButton from '@mui/material/IconButton';
+import { useAppDispatch, useAppSelector } from 'app/store';
+import { IAlertPrimaryDetail, selectAlert, setAlert } from 'common/sevices/main/mainSlice';
+import AlertList from 'components/AlertPopupList';
+import { filter } from 'lodash';
+import React, { memo, useEffect } from 'react';
 
 const MainScreenAlertList = () => {
 	const dispatch = useAppDispatch();
 	
-	const { alert } = useAppSelector(
-		(state: RootState) => ({ alert: state.commonState.alert }),
-		shallowEqual
-	);
+	const alert = useAppSelector(selectAlert);
+	
+	useEffect(() => {
+		const defaultAlert: IAlertPrimaryDetail[] = [
+			{
+				alertSeverity: 'error',
+				title: 'Error alert',
+				message: 'This is error alert'
+			},
+			{
+				alertSeverity: 'success',
+				title: 'Success alert',
+				message: 'This is error alert'
+			},
+			{
+				alertSeverity: 'warning',
+				title: 'Warning alert',
+				message: 'This is Warning alert'
+			}
+		];
+		dispatch(setAlert(defaultAlert));
+	}, []);
 	
 	const handleCloseAlert = (alertItem: IAlertPrimaryDetail) => {
-		dispatch(setAlert(alert.filter((item) => item !== alertItem)));
+		dispatch(setAlert(filter(alert, (item) => item !== alertItem)));
 	};
 	
 	return (
