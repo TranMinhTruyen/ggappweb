@@ -1,10 +1,8 @@
 import { Route, Routes } from 'react-router-dom';
-import React, { lazy, Suspense } from 'react';
-import MainScreen from '../screens/main/MainScreen';
+import { Suspense, memo } from 'react';
 import ComponentRouters from './ComponentRouters';
 import { Backdrop, CircularProgress } from '@mui/material';
-
-const HomeScreen = lazy(() => import('../screens/home/HomeScreen'));
+import MainScreen from 'components/main/MainScreen';
 
 const componentRouter = ComponentRouters;
 
@@ -12,23 +10,9 @@ const RouterList = () => {
   return (
     <Routes>
       <Route path={'/'} element={<MainScreen />}>
-        <Route
-          index
-          path={'/'}
-          element={
-            <Suspense
-              fallback={
-                <Backdrop open={true}>
-                  <CircularProgress color="inherit" />
-                </Backdrop>
-              }
-            >
-              <HomeScreen />
-            </Suspense>
-          }
-        />
         {componentRouter.map(item => (
           <Route
+            index={item.componentPath === '/' ? true : false}
             key={'route'}
             path={item.componentPath}
             element={
@@ -48,4 +32,4 @@ const RouterList = () => {
     </Routes>
   );
 };
-export default React.memo(RouterList);
+export default memo(RouterList);

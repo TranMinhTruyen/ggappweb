@@ -6,9 +6,9 @@ import Drawer from 'components/drawer/Drawer';
 import Header from 'components/Header';
 import { memo } from 'react';
 import { Outlet } from 'react-router-dom';
-import LoginModal from 'screens/main/login/LoginModal';
-import RegisterModal from 'screens/main/register/RegisterModal';
 import MainScreenAlertList from './MainScreenAlertList';
+import LoginModal from './login/LoginModal';
+import RegisterModal from './register/RegisterModal';
 
 const drawerWidth = 250;
 
