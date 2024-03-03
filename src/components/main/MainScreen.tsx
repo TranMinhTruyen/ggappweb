@@ -13,51 +13,51 @@ import RegisterModal from './register/RegisterModal';
 const drawerWidth = 250;
 
 interface ScreenLayoutProps {
-  openDrawer: boolean;
+    openDrawer: boolean;
 }
 
 const ScreenLayout = styled(Box, {
-  shouldForwardProp: prop => prop !== 'openDrawer',
+    shouldForwardProp: prop => prop !== 'openDrawer',
 })<ScreenLayoutProps>(({ theme, openDrawer }) => ({
-  zIndex: theme.zIndex.drawer + 1,
-  marginTop: 75,
-  paddingLeft: 10,
-  paddingRight: 10,
-  transition: theme.transitions.create(['width', 'margin'], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(openDrawer && {
-    marginLeft: drawerWidth,
+    zIndex: theme.zIndex.drawer + 1,
+    marginTop: 75,
+    paddingLeft: 10,
+    paddingRight: 10,
     transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
     }),
-  }),
-  ...(!openDrawer && {
-    marginLeft: `calc(${theme.spacing(8)} + 6px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
+    ...(openDrawer && {
+        marginLeft: drawerWidth,
+        transition: theme.transitions.create(['width', 'margin'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
     }),
-  }),
+    ...(!openDrawer && {
+        marginLeft: `calc(${theme.spacing(8)} + 6px)`,
+        transition: theme.transitions.create(['width', 'margin'], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+    }),
 }));
 
 const MainScreen = () => {
-  const openDrawer = useAppSelector(selectOpenDrawer);
+    const openDrawer = useAppSelector(selectOpenDrawer);
 
-  return (
-    <Box>
-      <Header drawerWidth={drawerWidth} />
-      <Drawer key={'drawer'} drawerWidth={drawerWidth} />
-      <LoginModal />
-      <RegisterModal />
-      <ScreenLayout component={'main'} openDrawer={openDrawer}>
-        <MainScreenAlertList />
-        <Outlet />
-      </ScreenLayout>
-    </Box>
-  );
+    return (
+        <Box>
+            <Header drawerWidth={drawerWidth} />
+            <Drawer key={'drawer'} drawerWidth={drawerWidth} />
+            <LoginModal />
+            <RegisterModal />
+            <ScreenLayout component={'main'} openDrawer={openDrawer}>
+                <MainScreenAlertList />
+                <Outlet />
+            </ScreenLayout>
+        </Box>
+    );
 };
 
 export default memo(MainScreen);

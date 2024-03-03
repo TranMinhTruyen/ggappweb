@@ -4,25 +4,25 @@ import { setAlertInfoHeight } from 'common/sevices/main/mainSlice';
 import { useAppDispatch } from 'app/store';
 
 interface Props {
-  children: React.ReactNode | [];
+    children: React.ReactNode | [];
 }
 
 const AlertPopupList = (props: Props) => {
-  const { children } = props;
-  const ref = useRef<HTMLDivElement>(null);
+    const { children } = props;
+    const ref = useRef<HTMLDivElement>(null);
 
-  const dispatch = useAppDispatch();
+    const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    if (ref.current) {
-      dispatch(setAlertInfoHeight(ref.current.clientHeight));
-    }
-  }, [children]);
+    useEffect(() => {
+        if (ref.current) {
+            dispatch(setAlertInfoHeight(ref.current.clientHeight));
+        }
+    }, [children]);
 
-  return (
-    <Box ref={ref} overflow={'hidden'} sx={{ maxHeight: '100px', overflowY: 'scroll' }}>
-      {children}
-    </Box>
-  );
+    return (
+        <Box ref={ref} overflow={'hidden'} sx={{ maxHeight: '100px', overflowY: 'scroll' }}>
+            {children}
+        </Box>
+    );
 };
 export default memo(AlertPopupList);
