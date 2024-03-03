@@ -1,19 +1,24 @@
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import { Provider } from 'react-redux';
 import { store } from 'app/store';
 import './index.css';
 import { BrowserRouter } from 'react-router-dom';
 import CssBaseline from '@mui/material/CssBaseline';
+import { Provider } from 'react-redux';
 
-const root = ReactDOM.createRoot(
-	document.getElementById('root') as HTMLElement
-);
-root.render(
-	<Provider store={store}>
-		<BrowserRouter>
-			<CssBaseline/>
-			<App/>
-		</BrowserRouter>
-	</Provider>
-);
+async function render() {
+    const rootNode = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+    rootNode.render(
+        <Provider
+            store={store}
+            children={
+                <BrowserRouter>
+                    <CssBaseline />
+                    <App />
+                </BrowserRouter>
+            }
+        ></Provider>
+    );
+}
+
+render();

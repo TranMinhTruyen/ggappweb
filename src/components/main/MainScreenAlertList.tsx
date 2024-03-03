@@ -9,62 +9,62 @@ import { filter } from 'lodash';
 import { memo, useCallback, useEffect } from 'react';
 
 const MainScreenAlertList = () => {
-  const dispatch = useAppDispatch();
+    const dispatch = useAppDispatch();
 
-  const alert = useAppSelector(selectAlert);
+    const alert = useAppSelector(selectAlert);
 
-  useEffect(() => {
-    const defaultAlert: IAlertPrimaryDetail[] = [
-      {
-        alertSeverity: 'error',
-        title: 'Error alert',
-        message: 'This is error alert',
-      },
-      {
-        alertSeverity: 'success',
-        title: 'Success alert',
-        message: 'This is error alert',
-      },
-      {
-        alertSeverity: 'warning',
-        title: 'Warning alert',
-        message: 'This is Warning alert',
-      },
-    ];
-    dispatch(setAlert(defaultAlert));
-  }, [dispatch]);
+    useEffect(() => {
+        const defaultAlert: IAlertPrimaryDetail[] = [
+            {
+                alertSeverity: 'error',
+                title: 'Error alert',
+                message: 'This is error alert',
+            },
+            {
+                alertSeverity: 'success',
+                title: 'Success alert',
+                message: 'This is error alert',
+            },
+            {
+                alertSeverity: 'warning',
+                title: 'Warning alert',
+                message: 'This is Warning alert',
+            },
+        ];
+        dispatch(setAlert(defaultAlert));
+    }, [dispatch]);
 
-  const handleCloseAlert = useCallback(
-    (alertItem: IAlertPrimaryDetail) => () => {
-      dispatch(setAlert(filter(alert, item => item !== alertItem)));
-    },
-    [alert, dispatch]
-  );
+    const handleCloseAlert = useCallback(
+        (alertItem: IAlertPrimaryDetail) => () => {
+            dispatch(setAlert(filter(alert, item => item !== alertItem)));
+        },
+        [alert, dispatch]
+    );
 
-  return (
-    <AlertList>
-      {alert.map(alertItem => (
-        <Alert
-          key={alert.indexOf(alertItem)}
-          severity={alertItem.alertSeverity}
-          variant={'filled'}
-          action={
-            <IconButton
-              aria-label="close"
-              color="inherit"
-              size="small"
-              onClick={handleCloseAlert(alertItem)}
-            >
-              <CloseIcon fontSize="inherit" />
-            </IconButton>
-          }
-          sx={{ mb: 2 }}
-        >
-          <AlertTitle>{alertItem.title}</AlertTitle>
-          {alertItem.message}
-        </Alert>
-      ))}
-    </AlertList>
-  );
+    return (
+        <AlertList>
+            {alert.map(alertItem => (
+                <Alert
+                    key={alert.indexOf(alertItem)}
+                    severity={alertItem.alertSeverity}
+                    variant={'filled'}
+                    action={
+                        <IconButton
+                            aria-label="close"
+                            color="inherit"
+                            size="small"
+                            onClick={handleCloseAlert(alertItem)}
+                        >
+                            <CloseIcon fontSize="inherit" />
+                        </IconButton>
+                    }
+                    sx={{ mb: 2 }}
+                >
+                    <AlertTitle>{alertItem.title}</AlertTitle>
+                    {alertItem.message}
+                </Alert>
+            ))}
+        </AlertList>
+    );
 };
 export default memo(MainScreenAlertList);

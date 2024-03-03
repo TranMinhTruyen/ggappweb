@@ -1,9 +1,9 @@
 import { useAppDispatch, useAppSelector } from 'app/store';
 import { loginAction } from 'common/sevices/login/loginAction';
 import {
-  selectAlertLoginDialog,
-  selectOpenLoginDialog,
-  toggleLoginDialog,
+    selectAlertLoginDialog,
+    selectOpenLoginDialog,
+    toggleLoginDialog,
 } from 'common/sevices/login/loginSlice';
 import Modal from 'components/Modal';
 import { memo, useCallback, useEffect } from 'react';
@@ -13,42 +13,42 @@ import LoginModalFooter from './LoginModalFooter';
 import LoginModalContent from './LoginModalContent';
 
 export interface ILoginForm {
-  account: string;
-  password: string;
-  remember: boolean;
+    account: string;
+    password: string;
+    remember: boolean;
 }
 
 const LoginModal = () => {
-  const { control, getValues, reset, trigger } = useForm<ILoginForm>();
-  const openLoginModal = useAppSelector(selectOpenLoginDialog);
-  const alert = useAppSelector(selectAlertLoginDialog);
-  const navigate = useNavigate();
+    const { control, getValues, reset, trigger } = useForm<ILoginForm>();
+    const openLoginModal = useAppSelector(selectOpenLoginDialog);
+    const alert = useAppSelector(selectAlertLoginDialog);
+    const navigate = useNavigate();
 
-  useEffect(() => {
-    reset();
-  }, [openLoginModal, reset]);
+    useEffect(() => {
+        reset();
+    }, [openLoginModal, reset]);
 
-  const dispatch = useAppDispatch();
+    const dispatch = useAppDispatch();
 
-  const handleClose = useCallback(() => {
-    dispatch(toggleLoginDialog());
-  }, [dispatch]);
+    const handleClose = useCallback(() => {
+        dispatch(toggleLoginDialog());
+    }, [dispatch]);
 
-  const handleLogin = useCallback(async () => {
-    await trigger();
-    await loginAction(getValues, navigate);
-  }, [getValues, navigate, trigger]);
+    const handleLogin = useCallback(async () => {
+        await trigger();
+        await loginAction(getValues, navigate);
+    }, [getValues, navigate, trigger]);
 
-  return (
-    <Modal
-      open={openLoginModal}
-      onClose={handleClose}
-      alert={alert}
-      size={'sm'}
-      dialogContent={<LoginModalContent control={control} />}
-      dialogFooter={<LoginModalFooter onClose={handleClose} onLogin={handleLogin} />}
-    />
-  );
+    return (
+        <Modal
+            open={openLoginModal}
+            onClose={handleClose}
+            alert={alert}
+            size={'sm'}
+            dialogContent={<LoginModalContent control={control} />}
+            dialogFooter={<LoginModalFooter onClose={handleClose} onLogin={handleLogin} />}
+        />
+    );
 };
 
 export default memo(LoginModal);
