@@ -5,7 +5,7 @@ import { DrawerProps } from '@mui/material/Drawer/Drawer';
 import IconButton from '@mui/material/IconButton';
 import { CSSObject, styled, Theme, useTheme } from '@mui/material/styles';
 import { useAppDispatch, useAppSelector } from 'app/store';
-import { selectOpenDrawer, toggleDrawer } from 'common/sevices/main/mainSlice';
+import { selectOpenDrawer, toggleDrawer } from 'services/main/mainSlice';
 import React, { useCallback } from 'react';
 import DrawerMenu from './DrawerMenu';
 

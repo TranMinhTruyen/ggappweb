@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useRef } from 'react';
 import { Box } from '@mui/material';
-import { setAlertInfoHeight } from 'common/sevices/main/mainSlice';
+import { setAlertInfoHeight } from 'services/main/mainSlice';
 import { useAppDispatch } from 'app/store';
 
 interface Props {
@@ -17,7 +17,7 @@ const AlertPopupList = (props: Props) => {
         if (ref.current) {
             dispatch(setAlertInfoHeight(ref.current.clientHeight));
         }
-    }, [children]);
+    }, [children, dispatch]);
 
     return (
         <Box ref={ref} overflow={'hidden'} sx={{ maxHeight: '100px', overflowY: 'scroll' }}>

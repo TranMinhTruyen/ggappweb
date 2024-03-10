@@ -3,7 +3,7 @@ import { AlertTitle } from '@mui/material';
 import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
 import { useAppDispatch, useAppSelector } from 'app/store';
-import { IAlertPrimaryDetail, selectAlert, setAlert } from 'common/sevices/main/mainSlice';
+import { IAlertPrimaryDetail, selectAlert, setAlert } from 'services/main/mainSlice';
 import AlertList from 'components/AlertPopupList';
 import { filter } from 'lodash';
 import { memo, useCallback, useEffect } from 'react';

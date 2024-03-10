@@ -1,10 +1,10 @@
 import { useAppDispatch, useAppSelector } from 'app/store';
-import { loginAction } from 'common/sevices/login/loginAction';
+import { loginAction } from 'services/login/loginAction';
 import {
     selectAlertLoginDialog,
     selectOpenLoginDialog,
     toggleLoginDialog,
-} from 'common/sevices/login/loginSlice';
+} from 'services/login/loginSlice';
 import Modal from 'components/Modal';
 import { memo, useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';

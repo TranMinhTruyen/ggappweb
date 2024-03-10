@@ -7,23 +7,14 @@ import { styled, useTheme } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Grid2 from '@mui/material/Unstable_Grid2';
-import {
-    clearAuth,
-    selectAccessToken,
-    selectIsLogin,
-    selectRole,
-} from 'common/sevices/auth/authSlice';
-import CartService from 'common/sevices/cart/cartService';
-import {
-    resetAmountInCart,
-    selectAmountInCart,
-    setAmountInCart,
-} from 'common/sevices/cart/cartSlice';
-import { toggleLoginDialog } from 'common/sevices/login/loginSlice';
+import { clearAuth, selectAccessToken, selectIsLogin, selectRole } from 'services/auth/authSlice';
+import CartService from 'services/cart/cartService';
+import { resetAmountInCart, selectAmountInCart, setAmountInCart } from 'services/cart/cartSlice';
+import { toggleLoginDialog } from 'services/login/loginSlice';
 import Button from 'components/Button';
 import { memo, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { selectOpenDrawer, toggleDrawer } from 'common/sevices/main/mainSlice';
+import { selectOpenDrawer, toggleDrawer } from 'services/main/mainSlice';
 import { useAppDispatch, useAppSelector } from 'app/store';
 import CartIconButton from 'components/IconButton';
 import StoreSelect from './select/StoreSelect';

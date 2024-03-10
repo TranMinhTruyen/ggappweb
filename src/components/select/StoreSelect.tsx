@@ -1,10 +1,10 @@
-import StoreService from 'common/sevices/store/storeService';
+import StoreService from 'services/store/storeService';
 import {
     selectStoreId,
     selectStoreOption,
     setStoreId,
     setStoreOption,
-} from 'common/sevices/store/storeSlice';
+} from 'services/store/storeSlice';
 import SelectField, { toOptions } from 'components/SelectField';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from 'app/store';

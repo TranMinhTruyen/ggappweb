@@ -1,12 +1,12 @@
 import React, { lazy } from 'react';
 
-const HomeComponent = lazy(() => import('../screens/home/HomeScreen'));
-const DashBoardComponent = lazy(() => import('../screens/DashBoardScreen'));
-const FavoriteComponent = lazy(() => import('../screens/FavoriteScreen'));
-const ApiComponent = lazy(() => import('../screens/ApiScreen'));
-const ChartComponent = lazy(() => import('../screens/ChartScreen'));
-const LogChangeComponent = lazy(() => import('../screens/LogChangeScreen'));
-const NotFoundComponent = lazy(() => import('../screens/NotFoundScreen'));
+const HomeComponent = lazy(() => import('pages/home/HomeScreen'));
+const DashBoardComponent = lazy(() => import('pages/DashBoardScreen'));
+const FavoriteComponent = lazy(() => import('pages/FavoriteScreen'));
+const ApiComponent = lazy(() => import('pages/ApiScreen'));
+const ChartComponent = lazy(() => import('pages/ChartScreen'));
+const LogChangeComponent = lazy(() => import('pages/LogChangeScreen'));
+const NotFoundComponent = lazy(() => import('pages/NotFoundScreen'));
 
 export interface ComponentTabItem {
     componentNode: React.ReactNode;

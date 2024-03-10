@@ -2,7 +2,7 @@ import ErrorIcon from '@mui/icons-material/Error';
 import { FormHelperText } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Grid2 from '@mui/material/Unstable_Grid2';
-import { Error, ErrorType } from 'common/constant';
+import { Error, ErrorType } from 'common/cnst/constant';
 import _ from 'lodash';
 import { memo } from 'react';
 import { FieldError } from 'react-hook-form';

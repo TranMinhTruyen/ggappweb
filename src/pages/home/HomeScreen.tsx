@@ -1,17 +1,17 @@
 import { ProductStoreResponse } from 'common/dto/response/ProductStoreResponse';
-import { selectAccessToken, selectIsLogin } from 'common/sevices/auth/authSlice';
-import CartService from 'common/sevices/cart/cartService';
-import { setAmountInCart } from 'common/sevices/cart/cartSlice';
-import { toggleLoginDialog } from 'common/sevices/login/loginSlice';
-import { selectAlertInfoHeight } from 'common/sevices/main/mainSlice';
-import StoreService from 'common/sevices/store/storeService';
-import { selectStoreId } from 'common/sevices/store/storeSlice';
 import React, { memo, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from 'app/store';
 import ProductCard from './ProductCard';
 import Box from '@mui/material/Box';
 import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 import TablePagination from '@mui/material/TablePagination/TablePagination';
+import { selectStoreId } from 'services/store/storeSlice';
+import { selectAccessToken, selectIsLogin } from 'services/auth/authSlice';
+import { selectAlertInfoHeight } from 'services/main/mainSlice';
+import StoreService from 'services/store/storeService';
+import CartService from 'services/cart/cartService';
+import { setAmountInCart } from 'services/cart/cartSlice';
+import { toggleLoginDialog } from 'services/login/loginSlice';
 
 const HomeScreen = () => {
     const [productList, setProductList] = useState<ProductStoreResponse[]>([]);

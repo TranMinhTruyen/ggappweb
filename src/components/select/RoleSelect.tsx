@@ -8,9 +8,9 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { IMasterResponse } from 'common/dto/response/MasterResponse';
-import { selectRoleMaster, setRoleMaster } from 'common/sevices/master/masterSlice';
+import { selectRoleMaster, setRoleMaster } from 'services/master/masterSlice';
 import { memo, useEffect, useState } from 'react';
-import MasterService from 'common/sevices/master/masterService';
+import MasterService from 'services/master/masterService';
 import { useAppDispatch, useAppSelector } from 'app/store';
 
 const CustomSelectValid = styled(FormControl)({

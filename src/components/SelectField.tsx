@@ -1,7 +1,7 @@
 import { Checkbox, FormControl, ListItemText, MenuItem, MenuProps, Select } from '@mui/material';
 import { SelectChangeEvent } from '@mui/material/Select/SelectInput';
 import { styled } from '@mui/material/styles';
-import { Obj, SelectOption } from 'common/types';
+import { Obj, SelectOption } from 'common/cnst/types';
 import { memo, useCallback, useEffect, useState } from 'react';
 import { Control, Controller } from 'react-hook-form';
 

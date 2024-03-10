@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 import { useAppSelector } from 'app/store';
-import { selectOpenDrawer } from 'common/sevices/main/mainSlice';
+import { selectOpenDrawer } from 'services/main/mainSlice';
 import Drawer from 'components/drawer/Drawer';
 import Header from 'components/Header';
 import { memo } from 'react';

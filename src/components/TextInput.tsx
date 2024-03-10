@@ -4,7 +4,7 @@ import { styled } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import { TextFieldProps, TextFieldPropsSizeOverrides } from '@mui/material/TextField/TextField';
 import { OverridableStringUnion } from '@mui/types';
-import { ErrorType } from 'common/constant';
+import { ErrorType } from 'common/cnst/constant';
 import HelperText from 'components/HelperText';
 import React, { ChangeEvent, memo, useCallback } from 'react';
 import { Control, Controller } from 'react-hook-form';

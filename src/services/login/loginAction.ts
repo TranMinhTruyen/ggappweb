@@ -1,14 +1,17 @@
 import store from 'app/store';
 import { LoginRequest } from 'common/dto/request/LoginRequest';
-import { AuthState, setAuth } from 'common/sevices/auth/authSlice';
-import LoginService from 'common/sevices/login/loginService';
-import { setLoginAlert, toggleLoginDialog } from 'common/sevices/login/loginSlice';
+import { AuthState, setAuth } from 'services/auth/authSlice';
+import LoginService from 'services/login/loginService';
+import { setLoginAlert, toggleLoginDialog } from 'services/login/loginSlice';
 import { ILoginForm } from 'components/main/login/LoginModal';
 import _ from 'lodash';
 import { UseFormGetValues } from 'react-hook-form';
 import { NavigateFunction } from 'react-router/dist/lib/hooks';
 
-export const loginAction = async (getValues: UseFormGetValues<ILoginForm>, navigate: NavigateFunction) => {
+export const loginAction = async (
+    getValues: UseFormGetValues<ILoginForm>,
+    navigate: NavigateFunction
+) => {
     const accountInput: string = getValues().account;
     const passwordInput: string = getValues().password;
     const rememberChecked: boolean = getValues().remember;

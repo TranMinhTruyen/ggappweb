@@ -1,6 +1,6 @@
-import ErrorFallback from 'common/ErrorFallback';
-import { getAuth } from 'common/sevices/auth/authAction';
-import RouterList from './common/RouterList';
+import ErrorFallback from 'components/ErrorFallback';
+import { getAuth } from 'services/auth/authAction';
+import RouterList from 'components/RouterList';
 import { memo } from 'react';
 
 const App = () => {
