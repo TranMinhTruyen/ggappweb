@@ -3,24 +3,24 @@ import { RootState } from 'app/store';
 import { LoginRequest } from 'common/dto/request/LoginRequest';
 import { IAlertDetail } from 'components/AlertPopup';
 
-interface LoginState extends DialogState<LoginRequest>{
-	alert?: IAlertDetail;
+interface LoginState extends DialogState<LoginRequest> {
+    alert?: IAlertDetail;
 }
 
 const initialState: LoginState = {
-	open: false,
-}
+    open: false,
+};
 
 export const loginSlice = createDialogSlice({
-	name: 'loginState',
-	initialState,
-	reducers: {},
+    name: 'loginState',
+    initialState,
+    reducers: {},
 });
 
 export const {
-	toggleDialog: toggleLoginDialog,
-	closeDialog: closeLoginDialog,
-	setAlert: setLoginAlert,
+    toggleDialog: toggleLoginDialog,
+    closeDialog: closeLoginDialog,
+    setAlert: setLoginAlert,
 } = loginSlice.actions;
 
 export const selectOpenLoginDialogItem = (state: RootState) => state.loginState.item;
